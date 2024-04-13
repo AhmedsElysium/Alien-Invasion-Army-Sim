@@ -13,5 +13,21 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="dataStructures">
+      <UniqueIdentifier>{850dc6ec-1e46-4655-8a39-a2d4069c033b}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="dataStructures.h">
+      <Filter>dataStructures</Filter>
+    </ClInclude>
+    <ClInclude Include="ArmyUnits.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="dataStructures.cpp">
+      <Filter>dataStructures</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
