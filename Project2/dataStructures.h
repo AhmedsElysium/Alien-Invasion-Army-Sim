@@ -64,10 +64,10 @@ template <typename T>
 class pQueue {
 private:
 	pNode<T>* head;
-	void print(Node<T>* node);
+	void print(pNode<T>* node);
 public:
 	pQueue();
-	bool enqueue(T& Data);
+	bool enqueue(T& Data, int Priority);
 	bool dequeue(T& topEntry);
 	void print();
 	bool peek(T& topEntry);
@@ -220,20 +220,55 @@ void Queue<T>::print() {
 
 //Priority Queue code
 template<typename T>
-pQueue<T>::pQueue();
+pQueue<T>::pQueue() {
+	head = nullptr;
+}
 
 template<typename T>
-bool pQueue<T>::enqueue(T& Data);
+bool pQueue<T>::enqueue(T& Data,int Priority) {
+	if (isEmpty() || Priority > head->priority) {
+		head = new pNode<T>(Data, Priority, head);
+		return true;
+	};
+	pNode<T>* temp = head;
+	while (temp->next && temp->next->priority >= Priority) {
+		temp = temp->next;
+	};
+	temp->next = new pNode<T>(Data, Priority, temp->next);
+	return true;
+}
 
 template<typename T>
-bool pQueue<T>::dequeue(T& topEntry);
+bool pQueue<T>::dequeue(T& topEntry) {
+	if(isEmpty()) return false;
+	topEntry = head->data;
+	pNode<T>* temp = head;
+	head = head->next;
+	delete temp;
+	return true;
+}
 
 template<typename T>
-void pQueue<T>::print();
+void pQueue<T>::print(pNode<T>* node) {
+	if (!node) return;
+	cout << node->data<<endl;
+	return print(node->next);
+}
 
 template<typename T>
-bool pQueue<T>::peek(T& topEntry);
+void pQueue<T>::print() {
+	print(head);
+}
 
 template<typename T>
-bool pQueue<T>::isEmpty();
+bool pQueue<T>::peek(T& topEntry) {
+	if (isEmpty()) return false;
+	topEntry = head->data;
+	return true;
+}
+
+template<typename T>
+bool pQueue<T>::isEmpty() {
+	return !head;
+}
 
