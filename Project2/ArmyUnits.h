@@ -33,6 +33,7 @@ public:
 
 };
 
+
 class earthSoldier: public ArmyUnit {
 public:
 	earthSoldier(int ID, int Tj, int Health, int Power, int atkCapacity);
@@ -58,6 +59,7 @@ private:
 	 Stack<earthTank*> Tanks;
 	 pQueue<earthGunnery*> Gunnery;
 public:
+	earthArmy();
 	void addSoldier(int ID, int Tj, int Health, int Power, int atkCapacity);
 	void addTank(int ID, int Tj, int Health, int Power, int atkCapacity);
 	void addGunnery(int ID, int Tj, int Health, int Power, int atkCapacity);
@@ -92,6 +94,7 @@ private:
 	Array<alienMonster*> Monsters;
 	dQueue<alienDrone*> Drones;
 public:
+	alienArmy();
 	void addSoldier(int ID, int Tj, int Health, int Power, int atkCapacity);
 	void addMonster(int ID, int Tj, int Health, int Power, int atkCapacity);
 	void addDrone(int ID, int Tj, int Health, int Power, int atkCapacity);

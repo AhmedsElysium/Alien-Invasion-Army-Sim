@@ -130,12 +130,16 @@
     <ClCompile Include="ArmyUnits.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Input.cpp" />
+    <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ArmyUnits.h" />
     <ClInclude Include="dataStructures.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="Input.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="input.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -1,9 +1,11 @@
-#include "Input.h"
-#include <iostream>
-using namespace std;
+#include "Game.h"
 
-int main() {
-	Input* data = input("input.txt");
-	cout << data->Prob;
+
+Game::Game() {
+	inputData = input("input.txt");
+	killedList=new Queue<ArmyUnit*>;
+	EA = new earthArmy;
+	AA=new alienArmy;
 
 }
+
