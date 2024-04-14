@@ -79,7 +79,7 @@ class dQueue {
 private:
 	dNode<T>* head;
 	dNode<T>* rear;
-	void print(Node<T>* node);
+	void print(dNode<T>* node);
 public:
 	dQueue();
 	bool pushHead(T& Data);
@@ -272,3 +272,94 @@ bool pQueue<T>::isEmpty() {
 	return !head;
 }
 
+
+//Doubly linked Queue code
+
+template<typename T>
+dQueue<T>::dQueue() {
+	head = nullptr;
+	rear = nullptr;
+}
+
+template<typename T>
+bool dQueue<T>::pushHead(T& Data) {
+	head = new dNode<T>(Data, nullptr, head);
+	if (isEmpty()) {
+		rear= head;
+	}
+	else{
+		head->prev->next = head;
+	};
+	return true;
+
+}
+
+template<typename T>
+bool dQueue<T>::pushRear(T& Data) {
+	rear = new dNode<T>(Data, rear, nullptr);
+	if (isEmpty()) {
+		head = rear;
+	}
+	else {
+		rear->next->prev= rear;
+	};
+	return true;
+}
+
+template<typename T>
+bool dQueue<T>::popHead(T& headEntry) {
+	if (isEmpty()) return false;
+
+	headEntry = head->data;
+	dNode* temp=head;
+	head = head->prev;
+	if (head == nullptr) { rear = head; }
+	else { head->next = nullptr; };
+	delete temp;
+	return true;
+}
+
+template<typename T>
+bool dQueue<T>::popRear(T& rearEntry) {
+	if (isEmpty()) return false;
+	rearEntry = rear->data;
+	dNode* temp = rear;
+	rear = rear->next;
+	if (rear == nullptr) { head = rear; }
+	else { rear->prev = nullptr; };
+	delete temp;
+	return true;
+}
+
+template<typename T>
+bool dQueue<T>::peekHead(T& headEntry){
+	if (isEmpty()) return false;
+
+	headEntry = head->data;
+	return true;
+}
+
+template<typename T>
+bool dQueue<T>::peekRear(T& rearEntry) {
+	if (isEmpty()) return false;
+
+	rearEntry = rear->data;
+	return true;
+}
+
+template<typename T>
+bool dQueue<T>::isEmpty() {
+	return head;
+}
+
+template<typename T>
+void dQueue<T>::print(dNode<T>* node){
+	if (!node)return;
+	cout << node->data << endl;
+	return print(node->prev);
+}
+
+template<typename T>
+void dQueue<T>::print() {
+	print(head);
+}
