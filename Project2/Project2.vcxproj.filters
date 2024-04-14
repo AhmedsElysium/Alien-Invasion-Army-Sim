@@ -18,20 +18,17 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="dataStructures.h">
-      <Filter>dataStructures</Filter>
-    </ClInclude>
     <ClInclude Include="ArmyUnits.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Game.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="dataStructures.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="dataStructures.cpp">
-      <Filter>dataStructures</Filter>
-    </ClCompile>
     <ClCompile Include="Game.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
