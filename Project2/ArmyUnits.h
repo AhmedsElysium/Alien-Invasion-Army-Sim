@@ -20,5 +20,3 @@ class alienSoldier : public ArmyUnits {};
 class alienMonster : public ArmyUnits {};
 
 class alienDrone : public ArmyUnits {};
-
-
