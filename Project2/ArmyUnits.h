@@ -1,5 +1,6 @@
 #pragma once
 #include "dataStructures.h"
+#include "RandomGenerator.h"
 
 enum UnitType {
 	EarthSoldier,
@@ -28,9 +29,6 @@ public:
 
 	ArmyUnit(int ID, UnitType type, int Tj, int Health, int Power, int atkCapacity);
 	virtual void attack(Army *army) = 0;
-
-
-
 };
 
 class earthSoldier: public ArmyUnit {
