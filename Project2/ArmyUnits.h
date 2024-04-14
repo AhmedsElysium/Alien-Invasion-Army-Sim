@@ -11,7 +11,9 @@ enum UnitType {
 	AlienMonster
 };
 
-class Army{};
+class Army{
+
+};
 
 
 class ArmyUnit{
@@ -25,22 +27,28 @@ private:
 public:
 
 	ArmyUnit(int ID, UnitType type, int Tj, int Health, int Power, int atkCapacity);
-	virtual void attack(Army army) = 0;
+	virtual void attack(Army *army) = 0;
 
 
 
 };
 
 class earthSoldier: public ArmyUnit {
-
+public:
+	earthSoldier(int ID, int Tj, int Health, int Power, int atkCapacity);
+	void attack(Army *army) override;
 };
 
 class earthGunnery : public ArmyUnit {
-
+public:
+	earthGunnery(int ID, int Tj, int Health, int Power, int atkCapacity);
+	void attack(Army *army) override;
 };
 
 class earthTank: public ArmyUnit {
-	
+public:
+	earthTank(int ID, int Tj, int Health, int Power, int atkCapacity);
+	void attack(Army *army) override;
 };
 
 
@@ -49,24 +57,43 @@ private:
 	 Queue<earthSoldier*> Soldiers;
 	 Stack<earthTank*> Tanks;
 	 pQueue<earthGunnery*> Gunnery;
-
-
+public:
+	void addSoldier(int ID, int Tj, int Health, int Power, int atkCapacity);
+	void addTank(int ID, int Tj, int Health, int Power, int atkCapacity);
+	void addGunnery(int ID, int Tj, int Health, int Power, int atkCapacity);
 };
 
 
 
-class alienSoldier : public ArmyUnit {};
+class alienSoldier : public ArmyUnit {
+public:
+	alienSoldier(int ID, int Tj, int Health, int Power, int atkCapacity);
+	void attack(Army *army) override;
 
-class alienMonster : public ArmyUnit {};
+};
 
-class alienDrone : public ArmyUnit {};
+class alienMonster : public ArmyUnit {
+public:
+	alienMonster(int ID, int Tj, int Health, int Power, int atkCapacity);
+	void attack(Army *army) override;
+};
+
+class alienDrone : public ArmyUnit {
+public:
+	alienDrone(int ID, int Tj, int Health, int Power, int atkCapacity);
+	void attack(Army *army) override;
+
+};
 
 
 class alienArmy :public Army {
 private:
 	Queue<alienSoldier*> Soldiers;
-	alienMonster** Monsters;
-	dQueue<alienDrone> Drones;
-
+	Array<alienMonster*> Monsters;
+	dQueue<alienDrone*A> Drones;
+public:
+	void addSoldier(int ID, int Tj, int Health, int Power, int atkCapacity);
+	void addMonster(int ID, int Tj, int Health, int Power, int atkCapacity);
+	void addDrone(int ID, int Tj, int Health, int Power, int atkCapacity);
 };
 
