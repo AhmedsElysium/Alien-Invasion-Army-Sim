@@ -1,5 +1,6 @@
 #pragma once
 #include <iostream>
+#include <cstdlib>
 using namespace std;
 
 
@@ -27,6 +28,21 @@ struct pNode {
 	int priority;
 	pNode<T>* next;
 	pNode(T data, int priority, pNode<T>* next);
+};
+
+
+template <typename T>
+class Array {
+private:
+	T* Arr;
+	int size;
+	int count;
+public:
+	Array(int size);
+	bool insert(T& Data);
+	bool remove(T& random);
+	void print();
+	bool isEmpty();
 };
 
 
@@ -362,4 +378,30 @@ void dQueue<T>::print(dNode<T>* node){
 template<typename T>
 void dQueue<T>::print() {
 	print(head);
+}
+
+
+//Array Code
+
+template<typename T>
+Array<T>::Array(int size) :size(size) {
+	Arr = new T[size];
+	count = 0;
+}
+
+template<typename T>
+bool Array<T>::insert(T& Data) {
+	Arr[count] = Data;
+	count++;
+}
+
+template<typename T>
+bool Array<T>::remove(T& random) {
+	if (isEmpty()) return false;
+	srand(time(0));
+	int temp = rand() % (count + 1);
+	random = Arr[temp];
+	Arr[temp] = Arr[count - 1];
+	count--;
+	return true;
 }
