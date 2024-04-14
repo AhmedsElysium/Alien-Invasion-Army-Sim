@@ -29,7 +29,7 @@ public:
 	ArmyUnit(int ID, UnitType type, int Tj, int Health, int Power, int atkCapacity);
 	virtual void attack(Army *army) = 0;
 
-class alienSoldier : public ArmyUnits {};
+
 
 };
 
