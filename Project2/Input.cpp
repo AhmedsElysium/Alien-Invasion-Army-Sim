@@ -1,4 +1,4 @@
-#include "Input.h"
+ #include "Input.h"
 
 
 void insert(string& line, string& variable, int(&values)[20], int& index, int& num) {
@@ -19,6 +19,8 @@ void insert(string& line, string& variable, int(&values)[20], int& index, int& n
     variable = "";
 }
 
+
+
 Input* input(string file_name) {
     string variable = "";
     int values[20];
@@ -35,6 +37,7 @@ Input* input(string file_name) {
         }
         Input_File.close();
     }
+    else return nullptr;
     int j = 0;
     Data->N = values[j++];
     Data->ES = values[j++];

@@ -405,3 +405,17 @@ bool Array<T>::remove(T& random) {
 	count--;
 	return true;
 }
+
+template<typename T>
+void Array<T>::print() {
+	int i = 0;
+	while (i < count) {
+		cout << arr[i] << endl;
+		i++
+	};
+}
+
+template<typename T>
+bool Array<T>::isEmpty() {
+	return !count;
+}

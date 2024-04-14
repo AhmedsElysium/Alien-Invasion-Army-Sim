@@ -31,3 +31,4 @@ void alienArmy::addMonster(int ID, int Tj, int Health, int Power, int atkCapacit
 void alienArmy::addDrone(int ID, int Tj, int Health, int Power, int atkCapacity) {
 	Drones.pushRear(new alienDrone(ID, Tj, Health, Power, atkCapacity));
 }
+
