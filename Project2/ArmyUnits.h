@@ -15,7 +15,6 @@ class earthGunnery : public ArmyUnits {};
 
 class earthTank: public ArmyUnits {};
 
-
 class alienSoldier : public ArmyUnits {};
 
 class alienMonster : public ArmyUnits {};
