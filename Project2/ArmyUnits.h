@@ -1,11 +1,19 @@
 #pragma once
 #include "dataStructures.h"
+#include "RandomGenerator.h"
 
+enum UnitType {
+	EarthSoldier,
+	EarthGunnery,
+	EarthTank,
 
-
+	AlienSoldier,
+	AlienDrone,
+	AlienMonster
+};
 
 struct Data {
-	int ID, Tj, Health, Power, atkCapacity;
+	int ID, Tj, Health, Power, atkCapacity; UnitType type;
 };
 
 class Army{
