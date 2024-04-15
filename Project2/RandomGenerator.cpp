@@ -135,7 +135,6 @@ void RandomGenerator::AssignAData(UnitType unit)
 		else
 			army->addTank(dynamic_cast<earthTank*>(unit));
 	}
-	return army;
 }
 
  void RandomGenerator::GenerateAA(alienArmy* army)
@@ -152,7 +151,6 @@ void RandomGenerator::AssignAData(UnitType unit)
 		else
 			army->addDrone(dynamic_cast<alienDrone*>(unit));
 	}
-	return army;
 }
 
 RandomGenerator::~RandomGenerator()
