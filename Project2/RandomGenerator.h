@@ -30,9 +30,9 @@ public:
 
 	ArmyUnit* GenerateAU();
 
-	earthArmy* GenerateEA();
+	void GenerateEA(earthArmy*);
 
-	alienArmy* GenerateAA();
+	void GenerateAA(alienArmy*);
 
 	void AssignEData(UnitType);
 

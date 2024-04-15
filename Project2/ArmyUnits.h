@@ -5,7 +5,7 @@
 
 
 struct Data {
-	int ID, Tj, Health, Power, atkCapacity;
+	int ID, Tj, Health, Power, atkCapacity; UnitType type;
 };
 
 class Army{

@@ -123,9 +123,8 @@ void RandomGenerator::AssignAData(UnitType unit)
 
 }
 
-earthArmy* RandomGenerator::GenerateEA()
+ void RandomGenerator::GenerateEA(earthArmy* army)
 {
-	earthArmy* army = new earthArmy;
 	for (int i = 0; i < p->N; i++)
 	{
 		ArmyUnit* unit = GenerateEU();
@@ -139,9 +138,8 @@ earthArmy* RandomGenerator::GenerateEA()
 	return army;
 }
 
-alienArmy* RandomGenerator::GenerateAA()
+ void RandomGenerator::GenerateAA(alienArmy* army)
 {
-	alienArmy* army = new alienArmy;
 	for (int i = 0; i < p->N; i++)
 	{
 		ArmyUnit* unit = GenerateAU();
