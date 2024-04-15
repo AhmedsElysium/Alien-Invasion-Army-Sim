@@ -2,7 +2,7 @@
 
 int RandomGenerator::Tj = 0;
 
-RandomGenerator::RandomGenerator(Input* p)
+RandomGenerator::RandomGenerator(const Input* p)
 {
 	Tj++;
 	this->p = p;
