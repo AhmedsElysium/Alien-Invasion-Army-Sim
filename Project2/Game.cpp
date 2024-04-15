@@ -10,6 +10,10 @@ Game::Game() {
 }
 
 
+void Game::go() {
+
+}
+
 void Game::testCode() {
 
 }

@@ -53,6 +53,16 @@ void earthArmy::addTank(int ID, int Tj, int Health, int Power, int atkCapacity) 
 	Tanks.push(temp);
 }
 
+Queue<earthSoldier*> earthArmy::getSoldiers() {
+	return Soldiers;
+}
+Stack<earthTank*> earthArmy::getTanks() {
+	return Tanks;
+}
+pQueue<earthGunnery*> earthArmy::getGunnery() {
+	return Gunnery;
+}
+
 void alienArmy::addSoldier(int ID, int Tj, int Health, int Power, int atkCapacity) {
 	alienSoldier* temp = new alienSoldier(ID, Tj, Health, Power, atkCapacity);
 	Soldiers.enqueue(temp);
@@ -66,7 +76,15 @@ void alienArmy::addDrone(int ID, int Tj, int Health, int Power, int atkCapacity)
 	Drones.pushRear(temp);
 }
 
-
+Queue<alienSoldier*> alienArmy::getSoldiers() {
+	return Soldiers;
+}
+Array<alienMonster*>* alienArmy::getMonsters() {
+	return Monsters;
+}
+dQueue<alienDrone*> alienArmy::getDrones() {
+	return Drones;
+}
 
 void earthSoldier::attack(Army* army) {
 
@@ -91,4 +109,7 @@ void alienDrone::attack(Army* army) {
 void alienMonster::attack(Army* army) {
 
 }
+
+
+
 

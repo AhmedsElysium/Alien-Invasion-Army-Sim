@@ -66,6 +66,10 @@ public:
 	void addSoldier(int ID, int Tj, int Health, int Power, int atkCapacity);
 	void addTank(int ID, int Tj, int Health, int Power, int atkCapacity);
 	void addGunnery(int ID, int Tj, int Health, int Power, int atkCapacity);
+
+	Queue<earthSoldier*> getSoldiers();
+	Stack<earthTank*> getTanks();
+	pQueue<earthGunnery*> getGunnery();
 };
 
 
@@ -103,7 +107,7 @@ public:
 	void addDrone(int ID, int Tj, int Health, int Power, int atkCapacity);
 
 	Queue<alienSoldier*> getSoldiers();
-	Array<alienMonster*> getMonsters();
+	Array<alienMonster*>* getMonsters();
 	dQueue<alienDrone*> getDrones();
 };
 
