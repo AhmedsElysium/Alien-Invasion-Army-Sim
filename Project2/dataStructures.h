@@ -31,6 +31,7 @@ struct pNode {
 };
 
 
+//Array
 template <typename T>
 class Array {
 private:
@@ -46,6 +47,7 @@ public:
 };
 
 
+//Stack
 template <typename T>
 class Stack{
 private:
@@ -60,6 +62,8 @@ public:
 	bool isEmpty();
 };
 
+
+//Queue
 template <typename T>
 class Queue{
 private:
@@ -76,6 +80,7 @@ public:
 };
 
 
+//Priority Queue
 template <typename T>
 class pQueue {
 private:
@@ -90,6 +95,8 @@ public:
 	bool isEmpty();
 };
 
+
+//Doubly linked Queue
 template <typename T>
 class dQueue {
 private:

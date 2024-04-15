@@ -36,6 +36,7 @@ public:
 	virtual void attack(Army *army)=0;
 	int* getHealth();
 	const int getTj();
+	const UnitType getType();
 	int getPower();
 	int getAtkCapacity();
 

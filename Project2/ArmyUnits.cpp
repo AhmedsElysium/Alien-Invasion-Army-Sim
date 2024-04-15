@@ -25,6 +25,9 @@ int* ArmyUnit::getHealth() {
 const int ArmyUnit::getTj(){
 	return *Tj;
 }
+const UnitType ArmyUnit::getType() {
+	return type;
+}
 int ArmyUnit::getPower() {
 	return *Power;
 }
