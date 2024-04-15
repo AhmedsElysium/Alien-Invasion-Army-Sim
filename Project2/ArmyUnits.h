@@ -1,20 +1,6 @@
 #pragma once
 #include "dataStructures.h"
-#include "RandomGenerator.h"
-
-enum UnitType {
-	EarthSoldier,
-	EarthGunnery,
-	EarthTank,
-
-	AlienSoldier,
-	AlienDrone,
-	AlienMonster
-};
-
-struct Data {
-	int ID, Tj, Health, Power, atkCapacity; UnitType type;
-};
+#include "dataTypes.h"
 
 class Army{
 
@@ -38,8 +24,6 @@ public:
 	const UnitType getType();
 	int getPower();
 	int getAtkCapacity();
-
-
 };
 
 
@@ -86,8 +70,6 @@ public:
 	pQueue<earthGunnery*> getGunnery();
 };
 
-
-
 class alienSoldier : public ArmyUnit {
 public:
 	alienSoldier(int ID, int Tj, int Health, int Power, int atkCapacity);
@@ -111,7 +93,6 @@ public:
 
 };
 
-
 class alienArmy :public Army {
 private:
 	Queue<alienSoldier*> Soldiers;
@@ -131,4 +112,3 @@ public:
 	Array<alienMonster*>* getMonsters();
 	dQueue<alienDrone*> getDrones();
 };
-

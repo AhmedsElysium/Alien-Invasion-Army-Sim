@@ -2,17 +2,19 @@
 #include "ArmyUnits.h"
 #include "Input.h"
 #include <cstdlib>
+#include "dataTypes.h"
 using namespace std;
-
 
 
 
 
 class RandomGenerator
 {
+private:
 	static int Tj;
 	Data* data = new Data;
 	const Input* p;
+
 public:
 	RandomGenerator(const Input* fd);
 
@@ -22,11 +24,11 @@ public:
 
 	ArmyUnit* GenerateAU();
 
-	void GenerateEA(earthArmy*);
+	void GenerateEA(earthArmy* );
 
-	void GenerateAA(alienArmy*);
+	void GenerateAA(alienArmy* );
 
-	void AssignEData(UnitType);
+	void AssignEData(UnitType );
 
 	void AssignAData(UnitType);
 
