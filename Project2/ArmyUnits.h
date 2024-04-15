@@ -1,6 +1,6 @@
 #pragma once
 #include "dataStructures.h"
-
+#include "RandomGenerator.h"
 
 
 
