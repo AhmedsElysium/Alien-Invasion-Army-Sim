@@ -18,17 +18,20 @@ class Army{
 
 class ArmyUnit{
 private:
-	int ID;
+	int *ID;
 	UnitType type;
-	int Tj;
-	int Health;
-	int Power;
-	int atkCapacity;
+	int *Tj;
+	int *Health;
+	int *Power;
+	int *atkCapacity;
 public:
 
 	ArmyUnit(int ID, UnitType type, int Tj, int Health, int Power, int atkCapacity);
-	virtual void attack(Army *army) = 0;
-
+	virtual void attack(Army *army)=0;
+	int* getHealth();
+	const int getTj();
+	int getPower();
+	int getAtkCapacity();
 
 
 };
@@ -91,12 +94,16 @@ public:
 class alienArmy :public Army {
 private:
 	Queue<alienSoldier*> Soldiers;
-	Array<alienMonster*> Monsters;
+	Array<alienMonster*>* Monsters;
 	dQueue<alienDrone*> Drones;
 public:
 	alienArmy();
 	void addSoldier(int ID, int Tj, int Health, int Power, int atkCapacity);
 	void addMonster(int ID, int Tj, int Health, int Power, int atkCapacity);
 	void addDrone(int ID, int Tj, int Health, int Power, int atkCapacity);
+
+	Queue<alienSoldier*> getSoldiers();
+	Array<alienMonster*> getMonsters();
+	dQueue<alienDrone*> getDrones();
 };
 

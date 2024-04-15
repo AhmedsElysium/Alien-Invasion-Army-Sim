@@ -393,6 +393,7 @@ template<typename T>
 bool Array<T>::insert(T& Data) {
 	Arr[count] = Data;
 	count++;
+	return true;
 }
 
 template<typename T>
@@ -410,8 +411,8 @@ template<typename T>
 void Array<T>::print() {
 	int i = 0;
 	while (i < count) {
-		cout << arr[i] << endl;
-		i++
+		cout << Arr[i] << endl;
+		i++;
 	};
 }
 

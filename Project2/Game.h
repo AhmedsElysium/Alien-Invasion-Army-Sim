@@ -11,5 +11,8 @@ private:
 public:
 	Game();
 	void go();
+	
+	void testCode();
+
 
 };
