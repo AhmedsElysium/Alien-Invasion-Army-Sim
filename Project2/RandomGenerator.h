@@ -4,10 +4,7 @@
 #include <cstdlib>
 using namespace std;
 
-struct Data { 
-	UnitType type;
-	int ID, Tj, Health, Power, atkCapacity;
-};
+
 
 class RandomGenerator
 {

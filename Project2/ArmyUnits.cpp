@@ -9,6 +9,16 @@ ArmyUnit::ArmyUnit(int ID, UnitType type, int Tj, int Health, int Power, int atk
 	this->atkCapacity = new int(atkCapacity);
 };
 
+ArmyUnit::ArmyUnit(Data* data, UnitType type) {
+	this->ID = new int(data->ID);
+	this->type = type;
+	this->Tj = new int(data->Tj);
+	this->Health = new int(data->Health);
+	this->Power = new int(data->Power);
+	this->atkCapacity = new int(data->atkCapacity);
+};
+
+
 int* ArmyUnit::getHealth() {
 	return Health;
 }
@@ -32,10 +42,18 @@ earthSoldier::earthSoldier(int ID, int Tj, int Health, int Power, int atkCapacit
 earthGunnery::earthGunnery(int ID, int Tj, int Health, int Power, int atkCapacity) :ArmyUnit(ID, EarthGunnery, Tj, Health, Power, atkCapacity) {};
 earthTank::earthTank(int ID, int Tj, int Health, int Power, int atkCapacity):ArmyUnit(ID, EarthTank, Tj, Health, Power, atkCapacity) {}
 
+earthSoldier::earthSoldier(Data* data) :ArmyUnit(data,EarthSoldier) {}
+earthGunnery::earthGunnery(Data* data) :ArmyUnit(data,EarthGunnery) {}
+earthTank::earthTank(Data* data) :ArmyUnit(data, EarthTank) {}
+
+
 alienSoldier::alienSoldier(int ID, int Tj, int Health, int Power, int atkCapacity) : ArmyUnit(ID, AlienSoldier, Tj, Health, Power, atkCapacity) {};
 alienMonster::alienMonster(int ID, int Tj, int Health, int Power, int atkCapacity) : ArmyUnit(ID, AlienMonster, Tj, Health, Power, atkCapacity) {};
 alienDrone::alienDrone(int ID, int Tj, int Health, int Power, int atkCapacity) : ArmyUnit(ID, AlienDrone, Tj, Health, Power, atkCapacity) {};
 
+alienSoldier::alienSoldier(Data* data) :ArmyUnit(data,AlienSoldier) {}
+alienMonster::alienMonster(Data* data) :ArmyUnit(data, AlienMonster) {}
+alienDrone::alienDrone(Data* data) :ArmyUnit(data, AlienDrone) {}
 
 
 

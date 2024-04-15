@@ -1,6 +1,6 @@
 #pragma once
 #include "dataStructures.h"
-#include "RandomGenerator.h"
+
 
 enum UnitType {
 	EarthSoldier,
@@ -10,6 +10,10 @@ enum UnitType {
 	AlienSoldier,
 	AlienDrone,
 	AlienMonster
+};
+
+struct Data {
+	int ID, Tj, Health, Power, atkCapacity;
 };
 
 class Army{
@@ -28,6 +32,7 @@ private:
 public:
 
 	ArmyUnit(int ID, UnitType type, int Tj, int Health, int Power, int atkCapacity);
+	ArmyUnit(Data* data, UnitType type);
 	virtual void attack(Army *army)=0;
 	int* getHealth();
 	const int getTj();
@@ -41,18 +46,21 @@ public:
 class earthSoldier: public ArmyUnit {
 public:
 	earthSoldier(int ID, int Tj, int Health, int Power, int atkCapacity);
+	earthSoldier(Data* data);
 	void attack(Army *army) override;
 };
 
 class earthGunnery : public ArmyUnit {
 public:
 	earthGunnery(int ID, int Tj, int Health, int Power, int atkCapacity);
+	earthGunnery(Data* data);
 	void attack(Army *army) override;
 };
 
 class earthTank: public ArmyUnit {
 public:
 	earthTank(int ID, int Tj, int Health, int Power, int atkCapacity);
+	earthTank(Data* data);
 	void attack(Army *army) override;
 };
 
@@ -78,6 +86,7 @@ public:
 class alienSoldier : public ArmyUnit {
 public:
 	alienSoldier(int ID, int Tj, int Health, int Power, int atkCapacity);
+	alienSoldier(Data* data);
 	void attack(Army *army) override;
 
 };
@@ -85,12 +94,14 @@ public:
 class alienMonster : public ArmyUnit {
 public:
 	alienMonster(int ID, int Tj, int Health, int Power, int atkCapacity);
+	alienMonster(Data* data);
 	void attack(Army *army) override;
 };
 
 class alienDrone : public ArmyUnit {
 public:
 	alienDrone(int ID, int Tj, int Health, int Power, int atkCapacity);
+	alienDrone(Data* data);
 	void attack(Army *army) override;
 
 };

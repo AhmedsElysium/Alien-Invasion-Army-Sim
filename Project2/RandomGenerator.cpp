@@ -51,14 +51,12 @@ ArmyUnit* RandomGenerator::Generate(int* c)
 	if (*c == p->ES)
 	{
 		AssignEData();
-		data->type = EarthSoldier;
 		data->Tj = Tj;
 		earthSoldier* S = new earthSoldier(data);
 		return S;
 	}
 	else if (*c == p->EG)
 	{
-		data->type = EarthGunnery;
 		data->Tj = Tj;
 		AssignEData();
 		earthGunnery* G = new earthGunnery(data);
@@ -66,7 +64,6 @@ ArmyUnit* RandomGenerator::Generate(int* c)
 	}
 	else if (*c == p->ET)
 	{
-		data->type = EarthTank;
 		data->Tj = Tj;
 		AssignEData();
 		earthTank* T = new earthTank(data);
@@ -74,7 +71,6 @@ ArmyUnit* RandomGenerator::Generate(int* c)
 	}
 	else if (*c == p->AS)
 	{
-		data->type = AlienSoldier;
 		data->Tj = Tj;
 		AssignAData();
 		alienSoldier* S = new alienSoldier(data);
@@ -82,7 +78,6 @@ ArmyUnit* RandomGenerator::Generate(int* c)
 	}
 	else if (*c == p->AM)
 	{
-		data->type = AlienMonster;
 		data->Tj = Tj;
 		AssignAData();
 		alienMonster* M = new alienMonster(data);
@@ -90,7 +85,6 @@ ArmyUnit* RandomGenerator::Generate(int* c)
 	}
 	else if (*c == p->AD)
 	{
-		data->type = AlienDrone;
 		data->Tj = Tj;
 		AssignAData();
 		alienDrone* D = new alienDrone(data);
