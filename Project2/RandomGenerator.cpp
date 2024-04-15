@@ -32,18 +32,19 @@ ArmyUnit* RandomGenerator::Generate(UnitType unit)
 	else if (unit == AlienSoldier)
 	{
 		AssignAData(unit);
+		AssignAData();
 		alienSoldier* S = new alienSoldier(data);
 		return S;
 	}
 	else if (unit == AlienMonster)
-	{
 		AssignAData(unit);
+		AssignAData();
 		alienMonster* M = new alienMonster(data);
 		return M;
 	}
 	else if (unit == AlienDrone)
-	{
 		AssignAData(unit);
+		AssignAData();
 		alienDrone* D = new alienDrone(data);
 		return D;
 	}
