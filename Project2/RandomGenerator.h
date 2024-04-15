@@ -6,25 +6,37 @@ using namespace std;
 
 
 
+enum UnitType {
+	EarthSoldier,
+	EarthGunnery,
+	EarthTank,
+
+	AlienSoldier,
+	AlienDrone,
+	AlienMonster
+};
+
 class RandomGenerator
 {
 	static int Tj;
 	Data* data = new Data;
 	Input* p;
-	int** sortE = new int* [3];
-	int** sortA = new int* [3];
-
 public:
 	RandomGenerator(Input* fd);
 
-	ArmyUnit* Generate(int* c);
+	ArmyUnit* Generate(UnitType unit);
 
-	ArmyUnit* GenerateEA();
+	ArmyUnit* GenerateEU();
 
-	ArmyUnit* GenerateAA();
+	ArmyUnit* GenerateAU();
 
-	void AssignEData();
+	earthArmy* GenerateEA();
 
-	void AssignAData();
+	alienArmy* GenerateAA();
 
+	void AssignEData(UnitType);
+
+	void AssignAData(UnitType);
+
+	~RandomGenerator();
 };

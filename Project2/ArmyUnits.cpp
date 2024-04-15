@@ -41,9 +41,6 @@ alienArmy::alienArmy() {
 }
 
 
-earthSoldier::earthSoldier(int ID, int Tj, int Health, int Power, int atkCapacity) :ArmyUnit(ID, EarthSoldier, Tj, Health, Power, atkCapacity) {};
-earthGunnery::earthGunnery(int ID, int Tj, int Health, int Power, int atkCapacity) :ArmyUnit(ID, EarthGunnery, Tj, Health, Power, atkCapacity) {};
-earthTank::earthTank(int ID, int Tj, int Health, int Power, int atkCapacity):ArmyUnit(ID, EarthTank, Tj, Health, Power, atkCapacity) {}
 
 earthSoldier::earthSoldier(Data* data) :ArmyUnit(data,EarthSoldier) {}
 earthGunnery::earthGunnery(Data* data) :ArmyUnit(data,EarthGunnery) {}

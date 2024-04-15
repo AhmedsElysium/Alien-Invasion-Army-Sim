@@ -2,15 +2,7 @@
 #include "dataStructures.h"
 
 
-enum UnitType {
-	EarthSoldier,
-	EarthGunnery,
-	EarthTank,
 
-	AlienSoldier,
-	AlienDrone,
-	AlienMonster
-};
 
 struct Data {
 	int ID, Tj, Health, Power, atkCapacity;
@@ -19,7 +11,6 @@ struct Data {
 class Army{
 
 };
-
 
 class ArmyUnit{
 private:
