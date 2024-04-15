@@ -1,11 +1,18 @@
 #pragma once
 #include "ArmyUnits.h"
+#include "Input.h"
 
 class Game {
 private:
-	Queue<ArmyUnit*> killedList;
-	earthArmy* EA;
-	alienArmy* AA;
+	const Queue<ArmyUnit*>* killedList;
+	const earthArmy* EA;
+	const alienArmy* AA;
+	const Input* inputData;
+public:
+	Game();
+	void go();
+	
+	void testCode();
 
 
 };

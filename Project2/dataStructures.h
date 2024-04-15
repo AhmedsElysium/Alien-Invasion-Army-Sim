@@ -31,6 +31,7 @@ struct pNode {
 };
 
 
+//Array
 template <typename T>
 class Array {
 private:
@@ -46,6 +47,7 @@ public:
 };
 
 
+//Stack
 template <typename T>
 class Stack{
 private:
@@ -60,6 +62,8 @@ public:
 	bool isEmpty();
 };
 
+
+//Queue
 template <typename T>
 class Queue{
 private:
@@ -76,6 +80,7 @@ public:
 };
 
 
+//Priority Queue
 template <typename T>
 class pQueue {
 private:
@@ -90,6 +95,8 @@ public:
 	bool isEmpty();
 };
 
+
+//Doubly linked Queue
 template <typename T>
 class dQueue {
 private:
@@ -393,6 +400,7 @@ template<typename T>
 bool Array<T>::insert(T& Data) {
 	Arr[count] = Data;
 	count++;
+	return true;
 }
 
 template<typename T>
@@ -404,4 +412,18 @@ bool Array<T>::remove(T& random) {
 	Arr[temp] = Arr[count - 1];
 	count--;
 	return true;
+}
+
+template<typename T>
+void Array<T>::print() {
+	int i = 0;
+	while (i < count) {
+		cout << Arr[i] << endl;
+		i++;
+	};
+}
+
+template<typename T>
+bool Array<T>::isEmpty() {
+	return !count;
 }
