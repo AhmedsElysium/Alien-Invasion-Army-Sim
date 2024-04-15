@@ -74,6 +74,20 @@ void earthArmy::addTank(int ID, int Tj, int Health, int Power, int atkCapacity) 
 	Tanks.push(temp);
 }
 
+void earthArmy::addSoldier(earthSoldier* Unit) {
+
+	Soldiers.enqueue(Unit);
+}
+void earthArmy::addGunnery(earthGunnery* Unit) {
+
+	Gunnery.enqueue(Unit, *Unit->getHealth() + Unit->getPower());
+}
+void earthArmy::addTank(earthTank* Unit) {
+
+	Tanks.push(Unit);
+}
+
+
 Queue<earthSoldier*> earthArmy::getSoldiers() {
 	return Soldiers;
 }
@@ -96,6 +110,20 @@ void alienArmy::addDrone(int ID, int Tj, int Health, int Power, int atkCapacity)
 	alienDrone* temp = new alienDrone(ID, Tj, Health, Power, atkCapacity);
 	Drones.pushRear(temp);
 }
+
+void alienArmy::addSoldier(alienSoldier* Unit) {
+
+	Soldiers.enqueue(Unit);
+}
+void alienArmy::addMonster(alienMonster* Unit) {
+	Monsters->insert(Unit);
+}
+void alienArmy::addDrone(alienDrone* Unit) {
+
+	Drones.pushRear(Unit);
+}
+
+
 
 Queue<alienSoldier*> alienArmy::getSoldiers() {
 	return Soldiers;

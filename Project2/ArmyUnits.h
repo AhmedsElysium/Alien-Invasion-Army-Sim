@@ -77,6 +77,11 @@ public:
 	void addTank(int ID, int Tj, int Health, int Power, int atkCapacity);
 	void addGunnery(int ID, int Tj, int Health, int Power, int atkCapacity);
 
+	void addSoldier(earthSoldier* Unit);
+	void addTank(earthTank* Unit);
+	void addGunnery(earthGunnery* Unit);
+
+
 	Queue<earthSoldier*> getSoldiers();
 	Stack<earthTank*> getTanks();
 	pQueue<earthGunnery*> getGunnery();
@@ -118,6 +123,10 @@ public:
 	void addSoldier(int ID, int Tj, int Health, int Power, int atkCapacity);
 	void addMonster(int ID, int Tj, int Health, int Power, int atkCapacity);
 	void addDrone(int ID, int Tj, int Health, int Power, int atkCapacity);
+
+	void addSoldier(alienSoldier* Unit);
+	void addMonster(alienMonster* Unit);
+	void addDrone(alienDrone* Unit);
 
 	Queue<alienSoldier*> getSoldiers();
 	Array<alienMonster*>* getMonsters();

@@ -24,6 +24,7 @@ void insert(string& line, string& variable, int(&values)[20], int& index, int& n
 Input* input(string file_name) {
     string variable = "";
     int values[20];
+    values[0] = -1;
     int index = 0;
     int num;
     Input* Data = new Input;
