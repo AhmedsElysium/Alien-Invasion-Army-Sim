@@ -6,15 +6,7 @@ using namespace std;
 
 
 
-enum UnitType {
-	EarthSoldier,
-	EarthGunnery,
-	EarthTank,
 
-	AlienSoldier,
-	AlienDrone,
-	AlienMonster
-};
 
 class RandomGenerator
 {

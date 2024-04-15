@@ -7,6 +7,10 @@ enum UnitType {
 	EarthGunnery,
 	EarthTank,
 
+	AlienSoldier,
+	AlienDrone,
+	AlienMonster
+};
 
 struct Data {
 	int ID, Tj, Health, Power, atkCapacity;
