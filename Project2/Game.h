@@ -1,6 +1,7 @@
 #pragma once
 #include "ArmyUnits.h"
 #include "Input.h"
+#include "RandomGenerator.h"
 
 class Game {
 private:
@@ -8,6 +9,7 @@ private:
 	const earthArmy* EA;
 	const alienArmy* AA;
 	const Input* inputData;
+	RandomGenerator* ranGen;
 public:
 	Game();
 	void go();

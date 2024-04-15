@@ -6,23 +6,15 @@ using namespace std;
 
 
 
-enum UnitType {
-	EarthSoldier,
-	EarthGunnery,
-	EarthTank,
 
-	AlienSoldier,
-	AlienDrone,
-	AlienMonster
-};
 
 class RandomGenerator
 {
 	static int Tj;
 	Data* data = new Data;
-	Input* p;
+	const Input* p;
 public:
-	RandomGenerator(Input* fd);
+	RandomGenerator(const Input* fd);
 
 	ArmyUnit* Generate(UnitType unit);
 
