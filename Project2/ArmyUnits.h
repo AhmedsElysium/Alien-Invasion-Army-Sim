@@ -1,5 +1,6 @@
 #pragma once
 #include "dataStructures.h"
+#include "RandomGenerator.h"
 
 enum UnitType {
 	EarthSoldier,
