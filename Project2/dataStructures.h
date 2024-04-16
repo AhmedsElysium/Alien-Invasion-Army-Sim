@@ -45,6 +45,7 @@ public:
 	void print();
 	bool isEmpty();
 	int getCount();
+	bool peekIndex(T& data,int index);
 };
 
 
@@ -432,4 +433,13 @@ bool Array<T>::isEmpty() {
 template<typename T>
 int Array<T>::getCount() {
 	return count;
+}
+
+template<typename T>
+bool Array<T>::peekIndex(T& data, int index) {
+	if (index < count&&index>-1) {
+		data = Arr[index];
+		return true;
+	};
+	return false;
 }
