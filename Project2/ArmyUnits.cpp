@@ -22,6 +22,9 @@ ArmyUnit::ArmyUnit(Data* data, UnitType type) {
 int* ArmyUnit::getHealth() {
 	return Health;
 }
+int ArmyUnit::getID() {
+	return *ID;
+}
 const int ArmyUnit::getTj(){
 	return *Tj;
 }

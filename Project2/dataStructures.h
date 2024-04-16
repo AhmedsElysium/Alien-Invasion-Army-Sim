@@ -44,6 +44,7 @@ public:
 	bool remove(T& random);
 	void print();
 	bool isEmpty();
+	int getCount();
 };
 
 
@@ -334,7 +335,7 @@ bool dQueue<T>::popHead(T& headEntry) {
 	if (isEmpty()) return false;
 
 	headEntry = head->data;
-	dNode* temp=head;
+	dNode<T>* temp = head;
 	head = head->prev;
 	if (head == nullptr) { rear = head; }
 	else { head->next = nullptr; };
@@ -346,7 +347,7 @@ template<typename T>
 bool dQueue<T>::popRear(T& rearEntry) {
 	if (isEmpty()) return false;
 	rearEntry = rear->data;
-	dNode* temp = rear;
+	dNode<T>* temp = rear;
 	rear = rear->next;
 	if (rear == nullptr) { head = rear; }
 	else { rear->prev = nullptr; };
@@ -372,7 +373,7 @@ bool dQueue<T>::peekRear(T& rearEntry) {
 
 template<typename T>
 bool dQueue<T>::isEmpty() {
-	return head;
+	return !head;
 }
 
 template<typename T>
@@ -426,4 +427,9 @@ void Array<T>::print() {
 template<typename T>
 bool Array<T>::isEmpty() {
 	return !count;
+}
+
+template<typename T>
+int Array<T>::getCount() {
+	return count;
 }

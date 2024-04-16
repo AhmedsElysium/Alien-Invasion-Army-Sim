@@ -20,6 +20,7 @@ public:
 	ArmyUnit(Data* data, UnitType type);
 	virtual void attack(Army *army)=0;
 	int* getHealth();
+	int getID();
 	const int getTj();
 	const UnitType getType();
 	int getPower();
