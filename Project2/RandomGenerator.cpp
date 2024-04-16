@@ -2,7 +2,7 @@
 
 int RandomGenerator::Tj = 0;
 
-RandomGenerator::RandomGenerator(const Input* p)
+RandomGenerator::RandomGenerator(Input* p)
 {
 	Tj++;
 	this->p = p;
@@ -69,6 +69,7 @@ ArmyUnit* RandomGenerator::GenerateEU()
 			return Generate(EarthTank);
 		}
 	}
+	else return nullptr;
 }
 
 ArmyUnit* RandomGenerator::GenerateAU()
@@ -91,6 +92,7 @@ ArmyUnit* RandomGenerator::GenerateAU()
 			return Generate(AlienDrone);
 		}
 	}
+	else return nullptr;
 }
 
 void RandomGenerator::AssignEData(UnitType unit)
@@ -128,6 +130,7 @@ void RandomGenerator::AssignAData(UnitType unit)
 	for (int i = 0; i < p->N; i++)
 	{
 		ArmyUnit* unit = GenerateEU();
+		if (unit) {
 		if (unit->getType() == EarthSoldier)
 			army->addSoldier(dynamic_cast<earthSoldier*>(unit));
 		else if (unit->getType() == EarthGunnery)
@@ -136,12 +139,15 @@ void RandomGenerator::AssignAData(UnitType unit)
 			army->addTank(dynamic_cast<earthTank*>(unit));
 	}
 }
+}
 
  void RandomGenerator::GenerateAA(alienArmy* army)
 {
 	for (int i = 0; i < p->N; i++)
 	{
 		ArmyUnit* unit = GenerateAU();
+		if (unit) {
+
 		if (unit->getType() == AlienSoldier) {
 			army->addSoldier(dynamic_cast<alienSoldier*>(unit));
 		}
@@ -151,6 +157,7 @@ void RandomGenerator::AssignAData(UnitType unit)
 		else
 			army->addDrone(dynamic_cast<alienDrone*>(unit));
 	}
+}
 }
 
 RandomGenerator::~RandomGenerator()

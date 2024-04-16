@@ -16,7 +16,7 @@ private:
 	const Input* p;
 
 public:
-	RandomGenerator(const Input* fd);
+	RandomGenerator(Input* fd);
 
 	ArmyUnit* Generate(UnitType unit);
 

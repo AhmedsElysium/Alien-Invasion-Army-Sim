@@ -5,10 +5,10 @@
 
 class Game {
 private:
-	const Queue<ArmyUnit*>* killedList;
-	const earthArmy* EA;
-	const alienArmy* AA;
-	const Input* inputData;
+	Queue<ArmyUnit*>* killedList;
+	earthArmy* EA;
+	alienArmy* AA;
+	Input* inputData;
 	RandomGenerator* ranGen;
 public:
 	Game();
