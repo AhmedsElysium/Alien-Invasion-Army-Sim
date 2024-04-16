@@ -52,9 +52,9 @@ public:
 
 class earthArmy:public Army {
 private:
-	 Queue<earthSoldier*> Soldiers;
-	 Stack<earthTank*> Tanks;
-	 pQueue<earthGunnery*> Gunnery;
+	 Queue<earthSoldier*>* Soldiers;
+	 Stack<earthTank*>* Tanks;
+	 pQueue<earthGunnery*>* Gunnery;
 public:
 	earthArmy();
 	void addSoldier(int ID, int Tj, int Health, int Power, int atkCapacity);
@@ -66,9 +66,10 @@ public:
 	void addGunnery(earthGunnery* Unit);
 
 
-	Queue<earthSoldier*> getSoldiers();
-	Stack<earthTank*> getTanks();
-	pQueue<earthGunnery*> getGunnery();
+	Queue<earthSoldier*>* getSoldiers();
+	Stack<earthTank*>* getTanks();
+	pQueue<earthGunnery*>* getGunnery();
+
 };
 
 class alienSoldier : public ArmyUnit {
@@ -96,9 +97,9 @@ public:
 
 class alienArmy :public Army {
 private:
-	Queue<alienSoldier*> Soldiers;
+	Queue<alienSoldier*>* Soldiers;
 	Array<alienMonster*>* Monsters;
-	dQueue<alienDrone*> Drones;
+	dQueue<alienDrone*>* Drones;
 public:
 	alienArmy();
 	void addSoldier(int ID, int Tj, int Health, int Power, int atkCapacity);
@@ -109,7 +110,7 @@ public:
 	void addMonster(alienMonster* Unit);
 	void addDrone(alienDrone* Unit);
 
-	Queue<alienSoldier*> getSoldiers();
+	Queue<alienSoldier*>* getSoldiers();
 	Array<alienMonster*>* getMonsters();
-	dQueue<alienDrone*> getDrones();
+	dQueue<alienDrone*>* getDrones();
 };
