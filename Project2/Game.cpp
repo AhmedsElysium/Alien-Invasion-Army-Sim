@@ -26,7 +26,7 @@ void Game::testCode() {
 
 
         // Generate a number X from 1 to 100 and perform operations accordingly
-        int X = rand() % 60 + 1;
+        int X = rand() % 100 + 1;
         cout << X << endl;
         if (0 < X && X < 10) {
             // Reinsert earth soldiers
@@ -207,25 +207,4 @@ void Game::testCode() {
         cout << endl;
 
     }
-
-
-    cout << "Killed List:" << endl;
-    Queue<ArmyUnit*>* tempKilledList = new Queue<ArmyUnit*>(); // Create a temporary queue to store items
-
-    // Print and re-enqueue items from the killed list
-    while (!killedList->isEmpty()) {
-        ArmyUnit* unit = nullptr;
-        if (killedList->dequeue(unit)) {
-            cout << "ID: " << unit->getID() << ", Type: " << unit->getType() << endl;
-            tempKilledList->enqueue(unit); // Store the unit temporarily
-        }
-    }
-
-    // Re-enqueue the units back to the original killed list
-    while (!tempKilledList->isEmpty()) {
-        ArmyUnit* unitTemp = nullptr;
-        tempKilledList->dequeue(unitTemp);
-        killedList->enqueue(unitTemp); // Re-enqueue the unit back to the killed list
-    }
-
 }
