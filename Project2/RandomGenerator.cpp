@@ -2,7 +2,7 @@
 
 int RandomGenerator::Tj = 0;
 
-RandomGenerator::RandomGenerator(const Input* p)
+RandomGenerator::RandomGenerator(Input* p)
 {
 	Tj++;
 	this->p = p;
@@ -66,7 +66,6 @@ ArmyUnit* RandomGenerator::GenerateEU()
 		{
 			return Generate(EarthTank);
 		}
-	
 }
 
 ArmyUnit* RandomGenerator::GenerateAU()
@@ -87,7 +86,6 @@ ArmyUnit* RandomGenerator::GenerateAU()
 		{
 			return Generate(AlienDrone);
 		}
-	
 }
 
 void RandomGenerator::AssignEData(UnitType unit)
@@ -139,6 +137,7 @@ void RandomGenerator::AssignAData(UnitType unit)
 	 }
 }
 
+
  void RandomGenerator::GenerateAA(alienArmy* army)
 {
 	 int A;
@@ -159,6 +158,7 @@ void RandomGenerator::AssignAData(UnitType unit)
 		 }
 	 }
 }
+
 
 RandomGenerator::~RandomGenerator()
 {

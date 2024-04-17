@@ -22,6 +22,9 @@ ArmyUnit::ArmyUnit(Data* data, UnitType type) {
 int* ArmyUnit::getHealth() {
 	return Health;
 }
+int ArmyUnit::getID() {
+	return *ID;
+}
 const int ArmyUnit::getTj(){
 	return *Tj;
 }
@@ -35,9 +38,15 @@ int ArmyUnit::getAtkCapacity() {
 	return *atkCapacity;
 }
 
-earthArmy::earthArmy() {}
+earthArmy::earthArmy() {
+	Soldiers=new Queue<earthSoldier*>;
+	Tanks= new Stack<earthTank*>;
+	Gunnery = new pQueue<earthGunnery*>;
+}
 alienArmy::alienArmy() {
+	Soldiers = new Queue<alienSoldier*>;
 	Monsters = new Array<alienMonster*>(100);
+	Drones = new dQueue<alienDrone*>;
 }
 
 
@@ -63,45 +72,45 @@ alienDrone::alienDrone(Data* data) :ArmyUnit(data, AlienDrone) {}
 
 void earthArmy::addSoldier(int ID, int Tj, int Health, int Power, int atkCapacity) {
 	earthSoldier* temp = new earthSoldier(ID, Tj, Health, Power, atkCapacity);
-	Soldiers.enqueue(temp);
+	Soldiers->enqueue(temp);
 }
 
 void earthArmy::addGunnery(int ID, int Tj, int Health, int Power, int atkCapacity) {
 	earthGunnery* temp = new earthGunnery(ID, Tj, Health, Power, atkCapacity);
-	Gunnery.enqueue(temp, Health + Power);
+	Gunnery->enqueue(temp, Health + Power);
 }
 void earthArmy::addTank(int ID, int Tj, int Health, int Power, int atkCapacity) {
 	earthTank* temp = new earthTank(ID, Tj, Health, Power, atkCapacity);
-	Tanks.push(temp);
+	Tanks->push(temp);
 }
 
 void earthArmy::addSoldier(earthSoldier* Unit) {
 
-	Soldiers.enqueue(Unit);
+	Soldiers->enqueue(Unit);
 }
 void earthArmy::addGunnery(earthGunnery* Unit) {
 
-	Gunnery.enqueue(Unit, *Unit->getHealth() + Unit->getPower());
+	Gunnery->enqueue(Unit, *Unit->getHealth() + Unit->getPower());
 }
 void earthArmy::addTank(earthTank* Unit) {
 
-	Tanks.push(Unit);
+	Tanks->push(Unit);
 }
 
 
-Queue<earthSoldier*> earthArmy::getSoldiers() {
+Queue<earthSoldier*>* earthArmy::getSoldiers() {
 	return Soldiers;
 }
-Stack<earthTank*> earthArmy::getTanks() {
+Stack<earthTank*>* earthArmy::getTanks() {
 	return Tanks;
 }
-pQueue<earthGunnery*> earthArmy::getGunnery() {
+pQueue<earthGunnery*>* earthArmy::getGunnery() {
 	return Gunnery;
 }
 
 void alienArmy::addSoldier(int ID, int Tj, int Health, int Power, int atkCapacity) {
 	alienSoldier* temp = new alienSoldier(ID, Tj, Health, Power, atkCapacity);
-	Soldiers.enqueue(temp);
+	Soldiers->enqueue(temp);
 }
 void alienArmy::addMonster(int ID, int Tj, int Health, int Power, int atkCapacity) {
 	alienMonster* temp = new alienMonster(ID, Tj, Health, Power, atkCapacity);
@@ -109,30 +118,30 @@ void alienArmy::addMonster(int ID, int Tj, int Health, int Power, int atkCapacit
 }
 void alienArmy::addDrone(int ID, int Tj, int Health, int Power, int atkCapacity) {
 	alienDrone* temp = new alienDrone(ID, Tj, Health, Power, atkCapacity);
-	Drones.pushRear(temp);
+	Drones->pushRear(temp);
 }
 
 void alienArmy::addSoldier(alienSoldier* Unit) {
 
-	Soldiers.enqueue(Unit);
+	Soldiers->enqueue(Unit);
 }
 void alienArmy::addMonster(alienMonster* Unit) {
 	Monsters->insert(Unit);
 }
 void alienArmy::addDrone(alienDrone* Unit) {
 
-	Drones.pushRear(Unit);
+	Drones->pushRear(Unit);
 }
 
 
 
-Queue<alienSoldier*> alienArmy::getSoldiers() {
+Queue<alienSoldier*>* alienArmy::getSoldiers() {
 	return Soldiers;
 }
 Array<alienMonster*>* alienArmy::getMonsters() {
 	return Monsters;
 }
-dQueue<alienDrone*> alienArmy::getDrones() {
+dQueue<alienDrone*>* alienArmy::getDrones() {
 	return Drones;
 }
 
