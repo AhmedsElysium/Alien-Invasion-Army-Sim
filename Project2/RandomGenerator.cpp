@@ -51,10 +51,8 @@ ArmyUnit* RandomGenerator::Generate(UnitType unit)
 
 ArmyUnit* RandomGenerator::GenerateEU()
 {
-	int A, B;
-	A = (rand() % 100) + 1;
-	if (A <= p->Prob)
-	{
+	int  B;
+	
 		B = (rand() % 100) + 1;
 		if (B <= p->ES)
 		{
@@ -68,15 +66,14 @@ ArmyUnit* RandomGenerator::GenerateEU()
 		{
 			return Generate(EarthTank);
 		}
-	}
+	
 }
 
 ArmyUnit* RandomGenerator::GenerateAU()
 {
-	int A, B;
-	A = (rand() % 100) + 1;
-	if (A <= p->Prob)
-	{
+	int  B;
+	
+	
 		B = (rand() % 100) + 1;
 		if (B <= p->AS)
 		{
@@ -90,7 +87,7 @@ ArmyUnit* RandomGenerator::GenerateAU()
 		{
 			return Generate(AlienDrone);
 		}
-	}
+	
 }
 
 void RandomGenerator::AssignEData(UnitType unit)
@@ -125,32 +122,42 @@ void RandomGenerator::AssignAData(UnitType unit)
 
  void RandomGenerator::GenerateEA(earthArmy* army)
 {
-	for (int i = 0; i < p->N; i++)
-	{
-		ArmyUnit* unit = GenerateEU();
-		if (unit->getType() == EarthSoldier)
-			army->addSoldier(dynamic_cast<earthSoldier*>(unit));
-		else if (unit->getType() == EarthGunnery)
-			army->addGunnery(dynamic_cast<earthGunnery*>(unit));
-		else
-			army->addTank(dynamic_cast<earthTank*>(unit));
-	}
+	 int A;
+	 A = (rand() % 100) + 1;
+	 if (A <= p->Prob)
+	 {
+		 for (int i = 0; i < p->N; i++)
+		 {
+			 ArmyUnit* unit = GenerateEU();
+			 if (unit->getType() == EarthSoldier)
+				 army->addSoldier(dynamic_cast<earthSoldier*>(unit));
+			 else if (unit->getType() == EarthGunnery)
+				 army->addGunnery(dynamic_cast<earthGunnery*>(unit));
+			 else
+				 army->addTank(dynamic_cast<earthTank*>(unit));
+		 }
+	 }
 }
 
  void RandomGenerator::GenerateAA(alienArmy* army)
 {
-	for (int i = 0; i < p->N; i++)
-	{
-		ArmyUnit* unit = GenerateAU();
-		if (unit->getType() == AlienSoldier) {
-			army->addSoldier(dynamic_cast<alienSoldier*>(unit));
-		}
-		else if (unit->getType() == AlienMonster) {
-			army->addMonster(dynamic_cast<alienMonster*>(unit));
-		}
-		else
-			army->addDrone(dynamic_cast<alienDrone*>(unit));
-	}
+	 int A;
+	 A = (rand() % 100) + 1;
+	 if (A <= p->Prob)
+	 {
+		 for (int i = 0; i < p->N; i++)
+		 {
+			 ArmyUnit* unit = GenerateAU();
+			 if (unit->getType() == AlienSoldier) {
+				 army->addSoldier(dynamic_cast<alienSoldier*>(unit));
+			 }
+			 else if (unit->getType() == AlienMonster) {
+				 army->addMonster(dynamic_cast<alienMonster*>(unit));
+			 }
+			 else
+				 army->addDrone(dynamic_cast<alienDrone*>(unit));
+		 }
+	 }
 }
 
 RandomGenerator::~RandomGenerator()
