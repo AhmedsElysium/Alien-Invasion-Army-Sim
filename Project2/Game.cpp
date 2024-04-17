@@ -2,11 +2,11 @@
 
 
 Game::Game() {
-	inputData = input("input.txt");
-	killedList=new Queue<ArmyUnit*>;
-	EA = new earthArmy;
-	AA=new alienArmy;
-	ranGen = new RandomGenerator(inputData);
+    inputData = input("input.txt");
+    killedList=new Queue<ArmyUnit*>;
+    EA = new earthArmy;
+    AA=new alienArmy;
+    ranGen = new RandomGenerator(inputData);
 }
 
 
@@ -28,31 +28,39 @@ void Game::testCode() {
 
         if (0 < X && X < 10) {
             // Reinsert earth soldiers
-            Queue<earthSoldier*> earthSoldiers = EA->getSoldiers();
-            earthSoldier* es;
-            earthSoldiers.enqueue(es);
-        } else if (10 < X && X < 20) {
+            Queue<earthSoldier*>* earthSoldiers = EA->getSoldiers();
+            earthSoldier* es = nullptr;
+            if(earthSoldiers->dequeue(es))
+                earthSoldiers->enqueue(es);
+        }
+        else if (10 < X && X < 20) {
             // Move earth tank to the killed list
-            Stack<earthTank*> earthTanks = EA->getTanks();
-            earthTank* et;
-            earthTanks.pop(et);
-            ArmyUnit* armyUnit = static_cast<ArmyUnit*>(et);
-            killedList->enqueue(armyUnit);
+            Stack<earthTank*>* earthTanks = EA->getTanks();
+            earthTank* et = nullptr;
+            if (earthTanks->pop(et)) {
 
-        } else if (20 < X && X < 30) {
+                ArmyUnit* armyUnit = static_cast<ArmyUnit*>(et);
+                killedList->enqueue(armyUnit);
+            }
+
+        }
+        else if (20 < X && X < 30) {
             // Decrement earth gunnery's health and reinsert
-            pQueue<earthGunnery*> egQueue = EA->getGunnery();
-            earthGunnery* eg;
-            egQueue.dequeue(eg);
-            *(eg->getHealth())= *eg->getHealth() - 1;
-            egQueue.enqueue(eg, *eg->getHealth());
-        } else if (30 < X && X < 40) {
+            pQueue<earthGunnery*>* egQueue= EA->getGunnery();
+            earthGunnery* eg=nullptr;
+            egQueue->dequeue(eg);
+            if (eg) {
+                *(eg->getHealth()) = *eg->getHealth() - 1;
+                egQueue->enqueue(eg, *eg->getHealth() + eg->getPower());
+            };
+        }
+        else if (30 < X && X < 40) {
             // Pick 5 Alien Soldiers, decrement their health, and store them temporarily
-            Queue<alienSoldier*> alienSoldiers = AA->getSoldiers();
+            Queue<alienSoldier*>* alienSoldiers = AA->getSoldiers();
             Queue<alienSoldier*> tempSoldiers;
-            for (int i = 0; i < 5 && !alienSoldiers.isEmpty(); ++i) {
+            for (int i = 0; i < 5 && !alienSoldiers->isEmpty(); ++i) {
                 alienSoldier* as;
-                alienSoldiers.dequeue(as);
+                alienSoldiers->dequeue(as);
                 // Decrement health
                 int currentHealth = *(as->getHealth());
                 int newHealth = currentHealth - 1; // Decrement health by 1 (adjust as needed)
@@ -63,26 +71,28 @@ void Game::testCode() {
 
             // Put the temporarily stored soldiers back into their original list
             while (!tempSoldiers.isEmpty()) {
-                alienSoldier* asTemp;
+                alienSoldier* asTemp = nullptr;
                 tempSoldiers.dequeue(asTemp);
-                alienSoldiers.enqueue(asTemp);
+                alienSoldiers->enqueue(asTemp);
             }
         }
         else if (40 < X && X < 50) {
             // Reinsert 5 monsters into alien army
-            /*  Array<alienMonster*>* alienMonsters = AA->getMonsters();
-              for (int i = 0; i < 5; ++i) {
-                  alienMonster* am = (*alienMonsters)[i];
-                  alienMonsters->insert(am);
-              }*/
-        } else if (50 < X && X < 60) {
+            Array<alienMonster*>* alienMonsters = AA->getMonsters();
+            alienMonster* am = nullptr;
+            for (int i = 0; i < 5; ++i) {
+                if(alienMonsters->remove(am))
+                    alienMonsters->insert(am);
+            }
+        }
+        else if (50 < X && X < 60) {
             // Move 6 drones to the killed list
-            dQueue<alienDrone*> alienDrones = AA->getDrones();
+            dQueue<alienDrone*>* alienDrones = AA->getDrones();
             for (int i = 0; i < 3; ++i) {
-                alienDrone* adFront;
-                alienDrone* adRear;
-                alienDrones.popHead(adFront);
-                alienDrones.popRear(adRear);
+                alienDrone* adFront = nullptr;
+                alienDrone* adRear = nullptr;
+                alienDrones->popHead(adFront);
+                alienDrones->popRear(adRear);
                 ArmyUnit* armyUnitFront = static_cast<ArmyUnit*>(adFront);
                 ArmyUnit* armyUnitRear = static_cast<ArmyUnit*>(adRear);
                 killedList->enqueue(armyUnitFront);
@@ -90,48 +100,78 @@ void Game::testCode() {
             }
         }
 
-        // Print information except the units fighting part
-        cout << "Earth Army Status:" << endl;
-        // Print status of earth soldiers
-        Queue<earthSoldier*> earthSoldiersStatus = EA->getSoldiers();
-        while (!earthSoldiersStatus.isEmpty()) {
-            earthSoldier* es;
-            earthSoldiersStatus.dequeue(es);
-            cout << "Earth Soldier " << *es->getID() << ": Health: " << *(es->getHealth()) << ", Power: " << es->getPower() << ", Attack Capacity: " << es->getAtkCapacity() << endl;
-        }
-        // Print status of earth tanks
-        Stack<earthTank*> earthTanksStatus = EA->getTanks();
-        while (!earthTanksStatus.isEmpty()) {
-            earthTank* et;
-            earthTanksStatus.pop(et);
-            cout << "Earth Tank " << et->getID() << ": Health: " << *(et->getHealth()) << ", Power: " << et->getPower() << ", Attack Capacity: " << et->getAtkCapacity() << endl;
-        }
-        // Print status of earth gunnery
-        pQueue<earthGunnery*> earthGunneryStatus = EA->getGunnery();
-        while (!earthGunneryStatus.isEmpty()) {
-            earthGunnery* eg;
-            earthGunneryStatus.dequeue(eg);
-            cout << "Earth Gunnery " << *eg->getID() << ": Health: " << *(eg->getHealth()) << ", Power: " << eg->getPower() << ", Attack Capacity: " << eg->getAtkCapacity() << endl;
+// Print status of earth tanks
+        Stack<earthTank*>* earthTanksStatus = EA->getTanks();
+        Stack<earthTank*> tempEarthTanks; // Temporary stack to store elements
+        while (!earthTanksStatus->isEmpty()) {
+            earthTank* et = nullptr;
+            if(earthTanksStatus->pop(et)) {
+                cout << "Earth Tank " << et->getID() << ": Health: " << *(et->getHealth()) << ", Power: " << et->getPower() << ", Attack Capacity: " << et->getAtkCapacity() << endl;
+                tempEarthTanks.push(et); // Store the element temporarily
+            }
         }
 
-        cout << "Alien Army Status:" << endl;
-        // Print status of alien soldiers
-        Queue<alienSoldier*> alienSoldiersStatus = AA->getSoldiers();
-        while (!alienSoldiersStatus.isEmpty()) {
-            alienSoldier* as;
-            alienSoldiersStatus.dequeue(as);
-            cout << "Alien Soldier " << as->getID() << ": Health: " << *(as->getHealth()) << ", Power: " << as->getPower() << ", Attack Capacity: " << as->getAtkCapacity() << endl;
+// Re-push the elements back to the original stack
+        while (!tempEarthTanks.isEmpty()) {
+            earthTank* etTemp = nullptr;
+            tempEarthTanks.pop(etTemp);
+            earthTanksStatus->push(etTemp);
         }
-        // Print status of alien monsters
-        Array<alienMonster*>* alienMonstersStatus = AA->getMonsters();
-        alienMonstersStatus->print();
 
-        // Print status of alien drones
-        dQueue<alienDrone*> alienDronesStatus = AA->getDrones();
-        while (!alienDronesStatus.isEmpty()) {
-            alienDrone* ad;
-            alienDronesStatus.popRear(ad);
-            cout << "Alien Drone " << ad->getID() << ": Health: " << *(ad->getHealth()) << ", Power: " << ad->getPower() << ", Attack Capacity: " << ad->getAtkCapacity() << endl;
+// Print status of earth gunnery
+        pQueue<earthGunnery*>* earthGunneryStatus = EA->getGunnery();
+        pQueue<earthGunnery*> tempEarthGunnery; // Temporary priority queue to store elements
+        while (!earthGunneryStatus->isEmpty()) {
+            earthGunnery* eg = nullptr;
+            if (earthGunneryStatus->dequeue(eg)) {
+                cout << "Earth Gunnery " << eg->getID() << ": Health: " << *(eg->getHealth()) << ", Power: " << eg->getPower() << ", Attack Capacity: " << eg->getAtkCapacity() << endl;
+                tempEarthGunnery.enqueue(eg, *eg->getHealth() + eg->getPower()); // Store the element temporarily
+            }
+        }
+
+// Re-enqueue the elements back to the original priority queue
+        while (!tempEarthGunnery.isEmpty()) {
+            earthGunnery* egTemp = nullptr;
+            int priority;
+            tempEarthGunnery.dequeue(egTemp);
+            earthGunneryStatus->enqueue(egTemp, priority);
+        }
+
+// Print status of alien soldiers
+        Queue<alienSoldier*>* alienSoldiersStatus = AA->getSoldiers();
+        Queue<alienSoldier*> tempAlienSoldiers; // Temporary queue to store elements
+        while (!alienSoldiersStatus->isEmpty()) {
+            alienSoldier* as = nullptr;
+            if(alienSoldiersStatus->dequeue(as)) {
+                cout << "Alien Soldier " << as->getID() << ": Health: " << *(as->getHealth()) << ", Power: " << as->getPower() << ", Attack Capacity: " << as->getAtkCapacity() << endl;
+                tempAlienSoldiers.enqueue(as); // Store the element temporarily
+            }
+        }
+
+// Re-enqueue the elements back to the original queue
+        while (!tempAlienSoldiers.isEmpty()) {
+            alienSoldier* asTemp = nullptr;
+            tempAlienSoldiers.dequeue(asTemp);
+            alienSoldiersStatus->enqueue(asTemp);
+        }
+
+// Print status of alien drones
+        dQueue<alienDrone*>* alienDronesStatus = AA->getDrones();
+        dQueue<alienDrone*> tempAlienDrones; // Temporary double-ended queue to store elements
+        while (!alienDronesStatus->isEmpty()) {
+            alienDrone* ad=nullptr;
+            alienDronesStatus->popRear(ad);
+            if (ad) {
+                cout << "Alien Drone " << ad->getID() << ": Health: " << *(ad->getHealth()) << ", Power: " << ad->getPower() << ", Attack Capacity: " << ad->getAtkCapacity() << endl;
+                tempAlienDrones.pushRear(ad); // Store the element temporarily
+            }
+        }
+
+// Re-push the elements back to the original double-ended queue
+        while (!tempAlienDrones.isEmpty()) {
+            alienDrone* adTemp = nullptr;
+            tempAlienDrones.popRear(adTemp);
+            alienDronesStatus->pushRear(adTemp);
         }
 
         cout << endl;
