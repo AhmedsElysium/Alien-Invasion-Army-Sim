@@ -15,17 +15,19 @@ void Game::go() {
 }
 
 void Game::testCode() {
+
+    // Generate units for both Earth and Alien armies
+    ranGen->GenerateEA(EA);
+    ranGen->GenerateAA(AA);
+
     // Simulate battles for 50 time steps
     for (int timestep = 1; timestep <= 50; ++timestep) {
         cout << "Time Step: " << timestep << endl;
 
-        // Generate units for both Earth and Alien armies
-        ranGen->GenerateEA(EA);
-        ranGen->GenerateAA(AA);
 
         // Generate a number X from 1 to 100 and perform operations accordingly
-        int X = rand() % 100 + 1;
-
+        int X = rand() % 60 + 1;
+        cout << X << endl;
         if (0 < X && X < 10) {
             // Reinsert earth soldiers
             Queue<earthSoldier*>* earthSoldiers = EA->getSoldiers();
@@ -55,34 +57,33 @@ void Game::testCode() {
             };
         }
         else if (30 < X && X < 40) {
-            // Pick 5 Alien Soldiers, decrement their health, and store them temporarily
+            // Decrement the health of Alien Soldiers directly
             Queue<alienSoldier*>* alienSoldiers = AA->getSoldiers();
-            Queue<alienSoldier*> tempSoldiers;
             for (int i = 0; i < 5 && !alienSoldiers->isEmpty(); ++i) {
                 alienSoldier* as;
-                alienSoldiers->dequeue(as);
-                // Decrement health
-                int currentHealth = *(as->getHealth());
-                int newHealth = currentHealth - 1; // Decrement health by 1 (adjust as needed)
-                *(as->getHealth()) = newHealth;
-                // Store temporarily
-                tempSoldiers.enqueue(as);
-            }
-
-            // Put the temporarily stored soldiers back into their original list
-            while (!tempSoldiers.isEmpty()) {
-                alienSoldier* asTemp = nullptr;
-                tempSoldiers.dequeue(asTemp);
-                alienSoldiers->enqueue(asTemp);
+                if (alienSoldiers->dequeue(as)) {
+                    // Decrement health
+                    int currentHealth = *(as->getHealth());
+                    int newHealth = currentHealth - 1; // Decrement health by 1 (adjust as needed)
+                    *(as->getHealth()) = newHealth;
+                    // Reinsert into the same queue
+                    alienSoldiers->enqueue(as);
+                }
             }
         }
         else if (40 < X && X < 50) {
             // Reinsert 5 monsters into alien army
             Array<alienMonster*>* alienMonsters = AA->getMonsters();
-            alienMonster* am = nullptr;
             for (int i = 0; i < 5; ++i) {
-                if(alienMonsters->remove(am))
-                    alienMonsters->insert(am);
+                int numMonsters = alienMonsters->getCount();
+                if (numMonsters > 0) {
+                    int randomIndex = rand() % numMonsters;
+                    alienMonster* selectedMonster = nullptr;
+                    alienMonsters->peekIndex(selectedMonster, randomIndex);
+                    if(alienMonsters->remove(selectedMonster)){
+                    AA->addMonster(selectedMonster);
+                    }
+                }
             }
         }
         else if (50 < X && X < 60) {
@@ -99,6 +100,25 @@ void Game::testCode() {
                 killedList->enqueue(armyUnitRear);
             }
         }
+
+        Queue<earthSoldier*>* earthSoldiersStatus = EA->getSoldiers();
+        Queue<earthSoldier*> tempEarthSoldiers; // Temporary queue to store elements
+
+        while (!earthSoldiersStatus->isEmpty()) {
+            earthSoldier* es = nullptr;
+            if (earthSoldiersStatus->dequeue(es)) {
+                cout << "Earth Soldier " << es->getID() << ": Health: " << *(es->getHealth()) << ", Power: " << es->getPower() << ", Attack Capacity: " << es->getAtkCapacity() << endl;
+                tempEarthSoldiers.enqueue(es); // Store the element temporarily
+            }
+        }
+
+        // Re-enqueue the elements back to the original queue
+        while (!tempEarthSoldiers.isEmpty()) {
+            earthSoldier* esTemp = nullptr;
+            tempEarthSoldiers.dequeue(esTemp);
+            earthSoldiersStatus->enqueue(esTemp);
+        }
+        cout << endl;
 
 // Print status of earth tanks
         Stack<earthTank*>* earthTanksStatus = EA->getTanks();
@@ -175,5 +195,37 @@ void Game::testCode() {
         }
 
         cout << endl;
+
+        Array<alienMonster*>* alienMonstersStatus = AA->getMonsters();
+        cout << "Enemy Monsters Status:" << endl;
+        for (int i = 0; i < alienMonstersStatus->getCount(); ++i) {
+            alienMonster* am = nullptr;
+            if (alienMonstersStatus->peekIndex(am, i)) {
+                cout << "Enemy Monster " << am->getID() << ": Health: " << *(am->getHealth()) << ", Power: " << am->getPower() << ", Attack Capacity: " << am->getAtkCapacity() << endl;
+            }
+        }
+        cout << endl;
+
     }
+
+
+    cout << "Killed List:" << endl;
+    Queue<ArmyUnit*>* tempKilledList = new Queue<ArmyUnit*>(); // Create a temporary queue to store items
+
+    // Print and re-enqueue items from the killed list
+    while (!killedList->isEmpty()) {
+        ArmyUnit* unit = nullptr;
+        if (killedList->dequeue(unit)) {
+            cout << "ID: " << unit->getID() << ", Type: " << unit->getType() << endl;
+            tempKilledList->enqueue(unit); // Store the unit temporarily
+        }
+    }
+
+    // Re-enqueue the units back to the original killed list
+    while (!tempKilledList->isEmpty()) {
+        ArmyUnit* unitTemp = nullptr;
+        tempKilledList->dequeue(unitTemp);
+        killedList->enqueue(unitTemp); // Re-enqueue the unit back to the killed list
+    }
+
 }
