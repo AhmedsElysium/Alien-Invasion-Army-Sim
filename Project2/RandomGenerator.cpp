@@ -1,10 +1,7 @@
 #include "RandomGenerator.h"
 
-int RandomGenerator::Tj = 0;
-
 RandomGenerator::RandomGenerator(Input* p)
 {
-    Tj++;
     this->p = p;
 }
 
@@ -24,7 +21,6 @@ ArmyUnit* RandomGenerator::Generate(UnitType unit)
     }
     else if (unit == EarthTank)
     {
-
         AssignEData(unit);
         earthTank* T = new earthTank(data);
         return T;
@@ -57,7 +53,7 @@ ArmyUnit* RandomGenerator::GenerateEU()
     {
         return Generate(EarthSoldier);
     }
-    else if (p->ES <= B <= p->ES + p->EG)
+    else if (B > p->ES  && B <= p->ES + p->EG)
     {
         return Generate(EarthGunnery);
     }
@@ -77,7 +73,7 @@ ArmyUnit* RandomGenerator::GenerateAU()
     {
         return Generate(AlienSoldier);
     }
-    else if (p->AS <= B <= p->AS + p->AM)
+    else if (B>p->AS && B<= p->AS + p->AM)
     {
         return Generate(AlienMonster);
     }

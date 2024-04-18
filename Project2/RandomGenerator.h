@@ -5,13 +5,10 @@
 #include "dataTypes.h"
 using namespace std;
 
-
-
-
 class RandomGenerator
 {
 private:
-	static int Tj;
+	int Tj = 0;
 	Data* data = new Data;
 	const Input* p;
 

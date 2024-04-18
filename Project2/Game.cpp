@@ -152,7 +152,7 @@ void Game::testCode() {
 // Re-enqueue the elements back to the original priority queue
         while (!tempEarthGunnery.isEmpty()) {
             earthGunnery* egTemp = nullptr;
-            int priority;
+            int priority = 0;
             tempEarthGunnery.dequeue(egTemp);
             earthGunneryStatus->enqueue(egTemp, priority);
         }
