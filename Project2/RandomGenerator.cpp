@@ -1,9 +1,9 @@
 #include "RandomGenerator.h"
 
-
 RandomGenerator::RandomGenerator(Input* p)
 {
     this->p = p;
+    srand((unsigned)time(NULL));
 }
 
 ArmyUnit* RandomGenerator::Generate(UnitType unit)
@@ -49,7 +49,6 @@ ArmyUnit* RandomGenerator::Generate(UnitType unit)
 ArmyUnit* RandomGenerator::GenerateEU()
 {
     int B;
-    srand((unsigned)time(NULL));
     B =  (rand() % 100) + 1;
     if (B <= p->ES)
     {
@@ -68,7 +67,6 @@ ArmyUnit* RandomGenerator::GenerateEU()
 ArmyUnit* RandomGenerator::GenerateAU()
 {
     int B;
-    srand((unsigned)time(NULL));
     B = (rand() % 100) + 1;
     if (B <= p->AS)
     {
@@ -86,16 +84,12 @@ ArmyUnit* RandomGenerator::GenerateAU()
 
 void RandomGenerator::AssignEData(UnitType unit)
 {
-   
     static int Eid_index = 1;
-    srand((unsigned)time(NULL));
-
     if (Eid_index < 1000)
     {
         data->ID = Eid_index;
         Eid_index++;
     }
-
     else
         return ;
     data->Health = (rand() % p->A_Health_Range_end) + p->A_Health_Range_start;
@@ -109,26 +103,20 @@ void RandomGenerator::AssignEData(UnitType unit)
 
 void RandomGenerator::AssignAData(UnitType unit)
 {
-    
     static int Aid_index = 2000;
     if (Aid_index < 3000)
         data->ID = Aid_index++;
     else
         return ;
-    srand((unsigned)time(0));
     data->Health = (rand() % p->E_Health_Range_end) + p->E_Health_Range_start;
     data->atkCapacity = (rand() % p->E_Capacity_Range_end) + p->E_Capacity_Range_start;
     data->Power = (rand() % p->E_Power_Range_end) + p->E_Power_Range_start;
     //data->type = unit;
     data->Tj = Tj;
-    
-
 }
 
 void RandomGenerator::GenerateEA(earthArmy* army)
 {
-   
-    srand((unsigned)time(NULL));
     int A;
     A = (rand() % 100) + 1;
      if (A <= p->Prob)
@@ -151,7 +139,6 @@ void RandomGenerator::GenerateEA(earthArmy* army)
 
 void RandomGenerator::GenerateAA(alienArmy* army)
 {
-    srand((unsigned)time(NULL));
     int A;
     A = (rand() % 100) + 1;
     if (A <= p->Prob)
