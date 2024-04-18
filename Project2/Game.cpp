@@ -15,17 +15,14 @@ void Game::go() {
 }
 
 void Game::testCode() {
-
     // Generate units for both Earth and Alien armies
     ranGen->GenerateEA(EA);
     ranGen->GenerateAA(AA);
-
     // Simulate battles for 50 time steps
     for (int timestep = 1; timestep <= 50; ++timestep) {
         cout << "Time Step: " << timestep << endl;
-
-
         // Generate a number X from 1 to 100 and perform operations accordingly
+  
         int X = rand() % 100 + 1;
         cout << X << endl;
         if (0 < X && X < 10) {
@@ -152,10 +149,10 @@ void Game::testCode() {
 // Re-enqueue the elements back to the original priority queue
         while (!tempEarthGunnery.isEmpty()) {
             earthGunnery* egTemp = nullptr;
-            int priority;
+            int priority = 0;
             tempEarthGunnery.dequeue(egTemp);
             earthGunneryStatus->enqueue(egTemp, priority);
-        }
+        } 
 
 // Print status of alien soldiers
         Queue<alienSoldier*>* alienSoldiersStatus = AA->getSoldiers();

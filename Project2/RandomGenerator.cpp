@@ -1,10 +1,8 @@
 #include "RandomGenerator.h"
 
-int RandomGenerator::Tj = 0;
 
 RandomGenerator::RandomGenerator(Input* p)
 {
-    Tj++;
     this->p = p;
 }
 
@@ -24,7 +22,6 @@ ArmyUnit* RandomGenerator::Generate(UnitType unit)
     }
     else if (unit == EarthTank)
     {
-
         AssignEData(unit);
         earthTank* T = new earthTank(data);
         return T;
@@ -52,32 +49,32 @@ ArmyUnit* RandomGenerator::Generate(UnitType unit)
 ArmyUnit* RandomGenerator::GenerateEU()
 {
     int B;
-    B = (rand() % 100) + 1;
+    srand((unsigned)time(NULL));
+    B =  (rand() % 100) + 1;
     if (B <= p->ES)
     {
-        return Generate(EarthSoldier);
+         return Generate(EarthSoldier);
     }
-    else if (p->ES <= B <= p->ES + p->EG)
+    else if (B > p->ES  && B <= p->ES + p->EG)
     {
         return Generate(EarthGunnery);
     }
-    else
+    else 
     {
         return Generate(EarthTank);
     }
 }
 
-
-
 ArmyUnit* RandomGenerator::GenerateAU()
 {
     int B;
+    srand((unsigned)time(NULL));
     B = (rand() % 100) + 1;
     if (B <= p->AS)
     {
         return Generate(AlienSoldier);
     }
-    else if (p->AS <= B <= p->AS + p->AM)
+    else if (B > p->AS  && B <= p->AS + p->AM)
     {
         return Generate(AlienMonster);
     }
@@ -87,68 +84,92 @@ ArmyUnit* RandomGenerator::GenerateAU()
     }
 }
 
-
 void RandomGenerator::AssignEData(UnitType unit)
 {
+   
     static int Eid_index = 1;
+    srand((unsigned)time(NULL));
+
     if (Eid_index < 1000)
-        data->ID = Eid_index++;
+    {
+        data->ID = Eid_index;
+        Eid_index++;
+    }
+
     else
-        return;
+        return ;
     data->Health = (rand() % p->A_Health_Range_end) + p->A_Health_Range_start;
+    ;
     data->atkCapacity = (rand() % p->A_Capacity_Range_end) + p->A_Capacity_Range_start;
     data->Power = (rand() % p->A_Power_Range_end) + p->A_Power_Range_start;
-    //data->type = unit;
+    data->type = unit;
     data->Tj = Tj;
-
+ 
 }
 
 void RandomGenerator::AssignAData(UnitType unit)
 {
+    
     static int Aid_index = 2000;
     if (Aid_index < 3000)
         data->ID = Aid_index++;
     else
-        return;
+        return ;
+    srand((unsigned)time(0));
     data->Health = (rand() % p->E_Health_Range_end) + p->E_Health_Range_start;
     data->atkCapacity = (rand() % p->E_Capacity_Range_end) + p->E_Capacity_Range_start;
     data->Power = (rand() % p->E_Power_Range_end) + p->E_Power_Range_start;
     //data->type = unit;
     data->Tj = Tj;
+    
 
 }
 
 void RandomGenerator::GenerateEA(earthArmy* army)
 {
-    for (int i = 0; i < p->N; i++)
+   
+    srand((unsigned)time(NULL));
+    int A;
+    A = (rand() % 100) + 1;
+     if (A <= p->Prob)
     {
-        ArmyUnit* unit = GenerateEU();
-        if (unit) {
-            if (unit->getType() == EarthSoldier)
-                army->addSoldier(dynamic_cast<earthSoldier*>(unit));
-            else if (unit->getType() == EarthGunnery)
-                army->addGunnery(dynamic_cast<earthGunnery*>(unit));
-            else
-                army->addTank(dynamic_cast<earthTank*>(unit));
+        ArmyUnit* unit;
+        for (int i = 0; i < p->N; i++)
+        {
+             unit = GenerateEU();
+            if (unit) {
+                if (unit->getType() == EarthSoldier)
+                    army->addSoldier(dynamic_cast<earthSoldier*>(unit));
+                else if (unit->getType() == EarthGunnery)
+                    army->addGunnery(dynamic_cast<earthGunnery*>(unit));
+                else
+                    army->addTank(dynamic_cast<earthTank*>(unit));
+            }
         }
     }
 }
 
 void RandomGenerator::GenerateAA(alienArmy* army)
 {
-    for (int i = 0; i < p->N; i++)
+    srand((unsigned)time(NULL));
+    int A;
+    A = (rand() % 100) + 1;
+    if (A <= p->Prob)
     {
-        ArmyUnit* unit = GenerateAU();
-        if (unit) {
+        for (int i = 0; i < p->N; i++)
+        {
+            ArmyUnit* unit = GenerateAU();
+            if (unit) {
 
-            if (unit->getType() == AlienSoldier) {
-                army->addSoldier(dynamic_cast<alienSoldier*>(unit));
+                if (unit->getType() == AlienSoldier) {
+                    army->addSoldier(dynamic_cast<alienSoldier*>(unit));
+                }
+                else if (unit->getType() == AlienMonster) {
+                    army->addMonster(dynamic_cast<alienMonster*>(unit));
+                }
+                else
+                    army->addDrone(dynamic_cast<alienDrone*>(unit));
             }
-            else if (unit->getType() == AlienMonster) {
-                army->addMonster(dynamic_cast<alienMonster*>(unit));
-            }
-            else
-                army->addDrone(dynamic_cast<alienDrone*>(unit));
         }
     }
 }

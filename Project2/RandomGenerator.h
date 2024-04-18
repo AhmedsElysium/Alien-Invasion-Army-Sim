@@ -11,9 +11,10 @@ using namespace std;
 class RandomGenerator
 {
 private:
-	static int Tj;
-	Data* data = new Data;
+	int Tj = 0;
+	Data* data = new Data{};
 	const Input* p;
+	
 
 public:
 	RandomGenerator(Input* fd);
