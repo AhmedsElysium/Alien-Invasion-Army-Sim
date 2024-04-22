@@ -13,7 +13,7 @@ private:
 public:
 	Game();
 	void go();
-	
+	void printKilledList();
 	void testCode();
 
 

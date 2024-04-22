@@ -1,5 +1,7 @@
 #include "ArmyUnits.h"
 
+
+//constructors
 ArmyUnit::ArmyUnit(int ID, UnitType type, int Tj, int Health, int Power, int atkCapacity) {
 	this->ID = new int(ID); 
 	this->type = type;
@@ -8,7 +10,6 @@ ArmyUnit::ArmyUnit(int ID, UnitType type, int Tj, int Health, int Power, int atk
 	this->Power = new int(Power); 
 	this->atkCapacity = new int(atkCapacity);
 };
-
 ArmyUnit::ArmyUnit(Data* data, UnitType type) {
 	this->ID = new int(data->ID);
 	this->type = type;
@@ -18,7 +19,7 @@ ArmyUnit::ArmyUnit(Data* data, UnitType type) {
 	this->atkCapacity = new int(data->atkCapacity);
 };
 
-
+//getters
 int* ArmyUnit::getHealth() {
 	return Health;
 }
@@ -38,6 +39,8 @@ int ArmyUnit::getAtkCapacity() {
 	return *atkCapacity;
 }
 
+//constructors
+
 earthArmy::earthArmy() {
 	Soldiers=new Queue<earthSoldier*>;
 	Tanks= new Stack<earthTank*>;
@@ -49,7 +52,6 @@ alienArmy::alienArmy() {
 	Drones = new dQueue<alienDrone*>;
 }
 
-
 earthSoldier::earthSoldier(int ID, int Tj, int Health, int Power, int atkCapacity) :ArmyUnit(ID, EarthSoldier, Tj, Health, Power, atkCapacity) {};
 earthGunnery::earthGunnery(int ID, int Tj, int Health, int Power, int atkCapacity) :ArmyUnit(ID, EarthGunnery, Tj, Health, Power, atkCapacity) {};
 earthTank::earthTank(int ID, int Tj, int Health, int Power, int atkCapacity):ArmyUnit(ID, EarthTank, Tj, Health, Power, atkCapacity) {}
@@ -57,7 +59,6 @@ earthTank::earthTank(int ID, int Tj, int Health, int Power, int atkCapacity):Arm
 earthSoldier::earthSoldier(Data* data) :ArmyUnit(data,EarthSoldier) {}
 earthGunnery::earthGunnery(Data* data) :ArmyUnit(data,EarthGunnery) {}
 earthTank::earthTank(Data* data) :ArmyUnit(data, EarthTank) {}
-
 
 alienSoldier::alienSoldier(int ID, int Tj, int Health, int Power, int atkCapacity) : ArmyUnit(ID, AlienSoldier, Tj, Health, Power, atkCapacity) {};
 alienMonster::alienMonster(int ID, int Tj, int Health, int Power, int atkCapacity) : ArmyUnit(ID, AlienMonster, Tj, Health, Power, atkCapacity) {};
@@ -69,12 +70,11 @@ alienDrone::alienDrone(Data* data) :ArmyUnit(data, AlienDrone) {}
 
 
 
-
+//adders
 void earthArmy::addSoldier(int ID, int Tj, int Health, int Power, int atkCapacity) {
 	earthSoldier* temp = new earthSoldier(ID, Tj, Health, Power, atkCapacity);
 	Soldiers->enqueue(temp);
 }
-
 void earthArmy::addGunnery(int ID, int Tj, int Health, int Power, int atkCapacity) {
 	earthGunnery* temp = new earthGunnery(ID, Tj, Health, Power, atkCapacity);
 	Gunnery->enqueue(temp, Health + Power);
@@ -97,7 +97,7 @@ void earthArmy::addTank(earthTank* Unit) {
 	Tanks->push(Unit);
 }
 
-
+//getters
 Queue<earthSoldier*>* earthArmy::getSoldiers() {
 	return Soldiers;
 }
@@ -108,6 +108,7 @@ pQueue<earthGunnery*>* earthArmy::getGunnery() {
 	return Gunnery;
 }
 
+//adders
 void alienArmy::addSoldier(int ID, int Tj, int Health, int Power, int atkCapacity) {
 	alienSoldier* temp = new alienSoldier(ID, Tj, Health, Power, atkCapacity);
 	Soldiers->enqueue(temp);
@@ -134,7 +135,7 @@ void alienArmy::addDrone(alienDrone* Unit) {
 }
 
 
-
+//getters
 Queue<alienSoldier*>* alienArmy::getSoldiers() {
 	return Soldiers;
 }
@@ -145,6 +146,8 @@ dQueue<alienDrone*>* alienArmy::getDrones() {
 	return Drones;
 }
 
+
+//attack
 void earthSoldier::attack(Army* army) {
 
 }
@@ -170,5 +173,120 @@ void alienMonster::attack(Army* army) {
 }
 
 
+//printers
+
+void earthArmy::printSoldiers() {
+	// Print status of earth soldiers
+
+	Queue<earthSoldier*> tempEarthSoldiers; // Temporary queue to store elements
+
+	while (!Soldiers->isEmpty()) {
+		earthSoldier* es = nullptr;
+		if (Soldiers->dequeue(es)) {
+			cout << "Earth Soldier " << es->getID() << ": Health: " << *(es->getHealth()) << ", Power: " << es->getPower() << ", Attack Capacity: " << es->getAtkCapacity() << endl;
+			tempEarthSoldiers.enqueue(es); // Store the element temporarily
+		}
+	}
+
+	// Re-enqueue the elements back to the original queue
+	while (!tempEarthSoldiers.isEmpty()) {
+		earthSoldier* esTemp = nullptr;
+		tempEarthSoldiers.dequeue(esTemp);
+		Soldiers->enqueue(esTemp);
+	}
+	cout << endl;
+}
+void earthArmy::printTanks() {
+
+	// Print status of earth tanks
+	Stack<earthTank*> tempEarthTanks; // Temporary stack to store elements
+	earthTank* et = nullptr;
+	while (!Tanks->isEmpty()) {
+		if (Tanks->pop(et)) {
+			cout << "Earth Tank " << et->getID() << ": Health: " << *(et->getHealth()) << ", Power: " << et->getPower() << ", Attack Capacity: " << et->getAtkCapacity() << endl;
+			tempEarthTanks.push(et); // Store the element temporarily
+		}
+	}
+	cout << endl;
 
 
+	// Re-push the elements back to the original stack
+	while (!tempEarthTanks.isEmpty()) {
+		earthTank* etTemp = nullptr;
+		tempEarthTanks.pop(etTemp);
+		Tanks->push(etTemp);
+	}
+}
+void earthArmy::printGunnery() {
+	// Print status of earth gunnery
+	pQueue<earthGunnery*> tempEarthGunnery; // Temporary priority queue to store elements
+	while (!Gunnery->isEmpty()) {
+		earthGunnery* eg = nullptr;
+		if (Gunnery->dequeue(eg)) {
+			cout << "Earth Gunnery " << eg->getID() << ": Health: " << *(eg->getHealth()) << ", Power: " << eg->getPower() << ", Attack Capacity: " << eg->getAtkCapacity() << endl;
+			tempEarthGunnery.enqueue(eg, *eg->getHealth() + eg->getPower()); // Store the element temporarily
+		}
+	}
+	cout << endl;
+
+	// Re-enqueue the elements back to the original priority queue
+	while (!tempEarthGunnery.isEmpty()) {
+		earthGunnery* egTemp = nullptr;
+		tempEarthGunnery.dequeue(egTemp);
+		Gunnery->enqueue(egTemp, egTemp->getPower() + *egTemp->getHealth());
+	}
+
+}
+
+void alienArmy::printSoldiers() {
+	// Print status of alien soldiers
+	Queue<alienSoldier*> tempAlienSoldiers; // Temporary queue to store elements
+	while (!Soldiers->isEmpty()) {
+		alienSoldier* as = nullptr;
+		if (Soldiers->dequeue(as)) {
+			cout << "Alien Soldier " << as->getID() << ": Health: " << *(as->getHealth()) << ", Power: " << as->getPower() << ", Attack Capacity: " << as->getAtkCapacity() << endl;
+			tempAlienSoldiers.enqueue(as); // Store the element temporarily
+		}
+	}
+	cout << endl;
+
+	// Re-enqueue the elements back to the original queue
+	while (!tempAlienSoldiers.isEmpty()) {
+		alienSoldier* asTemp = nullptr;
+		tempAlienSoldiers.dequeue(asTemp);
+		Soldiers->enqueue(asTemp);
+	}
+}
+void alienArmy::printMonsters() {
+	// Print status of alien monsters
+	alienMonster* am = nullptr;
+	for (int i = 0; i < Monsters->getCount(); i++) {
+		if (Monsters->peekIndex(am, i)) {
+			cout << "Enemy Monster " << am->getID() << ": Health: " << *(am->getHealth()) << ", Power: " << am->getPower() << ", Attack Capacity: " << am->getAtkCapacity() << endl;
+		}
+	}
+	cout << endl;
+}
+void alienArmy::printDrones() {
+	// Print status of alien drones
+	dQueue<alienDrone*> tempAlienDrones; // Temporary double-ended queue to store elements
+	while (!Drones->isEmpty()) {
+		alienDrone* ad = nullptr;
+		Drones->popRear(ad);
+		if (ad) {
+			cout << "Alien Drone " << ad->getID() << ": Health: " << *(ad->getHealth()) << ", Power: " << ad->getPower() << ", Attack Capacity: " << ad->getAtkCapacity() << endl;
+			tempAlienDrones.pushRear(ad); // Store the element temporarily
+		}
+	}
+	cout << endl;
+
+	// Re-push the elements back to the original double-ended queue
+	while (!tempAlienDrones.isEmpty()) {
+		alienDrone* adTemp = nullptr;
+		tempAlienDrones.popRear(adTemp);
+		Drones->pushRear(adTemp);
+	}
+
+	cout << endl;
+
+}

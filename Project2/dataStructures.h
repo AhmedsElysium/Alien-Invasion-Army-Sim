@@ -409,7 +409,7 @@ template<typename T>
 bool Array<T>::remove(T& random) {
 	if (isEmpty()) return false;
 	srand(time(0));
-	int temp = rand() % (count + 1);
+	int temp = rand() % (count);
 	random = Arr[temp];
 	Arr[temp] = Arr[count - 1];
 	count--;

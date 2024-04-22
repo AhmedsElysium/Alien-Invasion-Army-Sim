@@ -70,6 +70,10 @@ public:
 	Stack<earthTank*>* getTanks();
 	pQueue<earthGunnery*>* getGunnery();
 
+
+	void printSoldiers();
+	void printTanks();
+	void printGunnery();
 };
 
 class alienSoldier : public ArmyUnit {
@@ -113,4 +117,9 @@ public:
 	Queue<alienSoldier*>* getSoldiers();
 	Array<alienMonster*>* getMonsters();
 	dQueue<alienDrone*>* getDrones();
+
+
+	void printSoldiers();
+	void printMonsters();
+	void printDrones();
 };
