@@ -62,6 +62,7 @@ public:
 	void print();
 	bool peek(T& topEntry);
 	bool isEmpty();
+	~Stack();
 };
 
 
@@ -79,6 +80,7 @@ public:
 	void print();
 	bool peek(T& topEntry);
 	bool isEmpty();
+	~Queue();
 };
 
 
@@ -95,6 +97,7 @@ public:
 	void print();
 	bool peek(T& topEntry);
 	bool isEmpty();
+	~pQueue();
 };
 
 
@@ -118,6 +121,7 @@ public:
 
 	bool isEmpty();
 	void print();
+	~dQueue();
 
 };
 
@@ -125,6 +129,7 @@ public:
 //Node code
 template <typename T>
 Node<T>::Node(T data, Node<T>* next) :data(data), next(next) {};
+
 
 
 //Doubly Linked Node code
@@ -141,6 +146,16 @@ pNode<T>::pNode(T data, int priority, pNode<T>* next) :data(data), priority(prio
 template <typename T>
 Stack<T>::Stack() {
 	top = nullptr;
+};
+
+template <typename T>
+Stack<T>::~Stack() {
+	Node<T>* temp;
+	while (top) {
+		temp = top->next;
+		delete top;
+		top = temp;
+	};
 };
 
 template <typename T>
@@ -193,6 +208,16 @@ Queue<T>::Queue() {
 }
 
 template<typename T>
+Queue<T>::~Queue() {
+	Node<T>* temp;
+	while (head) {
+		temp = head->next;
+		delete head;
+		head = temp;
+	};
+}
+
+template<typename T>
 bool Queue<T>::isEmpty() {
 	return !head;
 }
@@ -217,7 +242,9 @@ bool Queue<T>::dequeue(T& topEntry) {
 	};
 
 	topEntry = head->data;
+	Node<T>* temp = head;
 	head = head->next;
+	delete temp;
 	return true;
 }
 
@@ -248,6 +275,18 @@ template<typename T>
 pQueue<T>::pQueue() {
 	head = nullptr;
 }
+
+template<typename T>
+pQueue<T>::~pQueue() {
+	pNode<T>* temp;
+	while (head) {
+		temp = head->next;
+		delete head;
+		head = temp;
+	};
+
+}
+
 
 template<typename T>
 bool pQueue<T>::enqueue(T& Data,int Priority) {
@@ -304,6 +343,17 @@ template<typename T>
 dQueue<T>::dQueue() {
 	head = nullptr;
 	rear = nullptr;
+}
+
+template<typename T>
+dQueue<T>::~dQueue() {
+	dNode<T>* temp;
+	while (head) {
+		temp = head->next;
+		delete head;
+		head = temp;
+	};
+
 }
 
 template<typename T>

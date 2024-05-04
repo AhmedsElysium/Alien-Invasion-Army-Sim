@@ -1,7 +1,7 @@
 #include "ArmyUnits.h"
 
 
-//constructors
+//Constructors of ArmyUnit
 ArmyUnit::ArmyUnit(int ID, UnitType type, int Tj, int Health, int Power, int atkCapacity) {
 	this->ID = new int(ID); 
 	this->type = type;
@@ -19,7 +19,16 @@ ArmyUnit::ArmyUnit(Data* data, UnitType type) {
 	this->atkCapacity = new int(data->atkCapacity);
 };
 
-//getters
+//Destructor of ArmyUnit
+ArmyUnit::~ArmyUnit() {
+	delete ID;
+	delete Tj;
+	delete Health;
+	delete Power;
+	delete atkCapacity;
+}
+
+//Getters of ArmyUnit
 int* ArmyUnit::getHealth() {
 	return Health;
 }
@@ -39,7 +48,7 @@ int ArmyUnit::getAtkCapacity() {
 	return *atkCapacity;
 }
 
-//constructors
+//Constructors of Army and Units
 
 earthArmy::earthArmy() {
 	Soldiers=new Queue<earthSoldier*>;
@@ -68,9 +77,51 @@ alienSoldier::alienSoldier(Data* data) :ArmyUnit(data,AlienSoldier) {}
 alienMonster::alienMonster(Data* data) :ArmyUnit(data, AlienMonster) {}
 alienDrone::alienDrone(Data* data) :ArmyUnit(data, AlienDrone) {}
 
+//Destructors of Army and Units
+earthArmy::~earthArmy() {
+	earthSoldier* temp;
+	while (Soldiers->dequeue(temp)) {
+		delete temp;
+	};
+
+	earthTank* temp2;
+	while (Tanks->pop(temp2)) {
+		delete temp2;
+	};
+
+	earthGunnery* temp3;
+	while (Gunnery->dequeue(temp3)) {
+		delete temp3;
+	};
+
+	delete Soldiers;
+	delete Tanks;
+	delete Gunnery;
+}
+alienArmy::~alienArmy() {
+	alienSoldier* temp;
+	while (Soldiers->dequeue(temp)) {
+		delete temp;
+	};
+
+	alienMonster* temp2;
+	while (Monsters->remove(temp2)) {
+		delete temp2;
+	};
+
+	alienDrone* temp3;
+	while (Drones->popHead(temp3)) {
+		delete temp3;
+	};
+
+	delete Soldiers;
+	delete Monsters;
+	delete Drones;
+}
 
 
-//adders
+
+//Adders
 void earthArmy::addSoldier(int ID, int Tj, int Health, int Power, int atkCapacity) {
 	earthSoldier* temp = new earthSoldier(ID, Tj, Health, Power, atkCapacity);
 	Soldiers->enqueue(temp);
@@ -97,7 +148,7 @@ void earthArmy::addTank(earthTank* Unit) {
 	Tanks->push(Unit);
 }
 
-//getters
+//Getters
 Queue<earthSoldier*>* earthArmy::getSoldiers() {
 	return Soldiers;
 }
@@ -108,7 +159,7 @@ pQueue<earthGunnery*>* earthArmy::getGunnery() {
 	return Gunnery;
 }
 
-//adders
+//Adders
 void alienArmy::addSoldier(int ID, int Tj, int Health, int Power, int atkCapacity) {
 	alienSoldier* temp = new alienSoldier(ID, Tj, Health, Power, atkCapacity);
 	Soldiers->enqueue(temp);
@@ -135,7 +186,7 @@ void alienArmy::addDrone(alienDrone* Unit) {
 }
 
 
-//getters
+//Getters
 Queue<alienSoldier*>* alienArmy::getSoldiers() {
 	return Soldiers;
 }
@@ -147,7 +198,7 @@ dQueue<alienDrone*>* alienArmy::getDrones() {
 }
 
 
-//attack
+//Attack
 void earthSoldier::attack(Army* army) {
 
 }
@@ -173,7 +224,7 @@ void alienMonster::attack(Army* army) {
 }
 
 
-//printers
+//Printers
 
 void earthArmy::printSoldiers() {
 	// Print status of earth soldiers

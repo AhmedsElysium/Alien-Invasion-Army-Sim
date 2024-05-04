@@ -12,6 +12,7 @@ private:
 	RandomGenerator* ranGen;
 public:
 	Game();
+	~Game();
 	void go();
 	void printKilledList();
 	void testCode();

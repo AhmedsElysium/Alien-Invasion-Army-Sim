@@ -9,7 +9,7 @@ class RandomGenerator
 {
 private:
 	int Tj = 0;
-	Data* data = new Data{};
+	Data* data = new Data;
 	const Input* p;
 
 public:

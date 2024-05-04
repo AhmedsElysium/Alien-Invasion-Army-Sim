@@ -25,6 +25,7 @@ public:
 	const UnitType getType();
 	int getPower();
 	int getAtkCapacity();
+	~ArmyUnit();
 };
 
 
@@ -57,6 +58,7 @@ private:
 	 pQueue<earthGunnery*>* Gunnery;
 public:
 	earthArmy();
+	~earthArmy();
 	void addSoldier(int ID, int Tj, int Health, int Power, int atkCapacity);
 	void addTank(int ID, int Tj, int Health, int Power, int atkCapacity);
 	void addGunnery(int ID, int Tj, int Health, int Power, int atkCapacity);
@@ -106,6 +108,7 @@ private:
 	dQueue<alienDrone*>* Drones;
 public:
 	alienArmy();
+	~alienArmy();
 	void addSoldier(int ID, int Tj, int Health, int Power, int atkCapacity);
 	void addMonster(int ID, int Tj, int Health, int Power, int atkCapacity);
 	void addDrone(int ID, int Tj, int Health, int Power, int atkCapacity);

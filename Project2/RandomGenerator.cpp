@@ -8,7 +8,7 @@ RandomGenerator::RandomGenerator(Input* p)
 
 ArmyUnit* RandomGenerator::Generate(UnitType unit)
 {
-    if ( unit == EarthSoldier)
+    if (unit == EarthSoldier)
     {
         AssignEData(unit);
         earthSoldier* S = new earthSoldier(data);
@@ -44,6 +44,7 @@ ArmyUnit* RandomGenerator::Generate(UnitType unit)
         alienDrone* D = new alienDrone(data);
         return D;
     }
+    else return nullptr;
 }
 
 ArmyUnit* RandomGenerator::GenerateEU()
@@ -119,9 +120,9 @@ void RandomGenerator::GenerateEA(earthArmy* army)
 {
     int A;
     A = (rand() % 100) + 1;
+    ArmyUnit* unit;
      if (A <= p->Prob)
     {
-        ArmyUnit* unit;
         for (int i = 0; i < p->N; i++)
         {
              unit = GenerateEU();
@@ -141,11 +142,12 @@ void RandomGenerator::GenerateAA(alienArmy* army)
 {
     int A;
     A = (rand() % 100) + 1;
+    ArmyUnit* unit;
     if (A <= p->Prob)
     {
         for (int i = 0; i < p->N; i++)
         {
-            ArmyUnit* unit = GenerateAU();
+            unit = GenerateAU();
             if (unit) {
 
                 if (unit->getType() == AlienSoldier) {
