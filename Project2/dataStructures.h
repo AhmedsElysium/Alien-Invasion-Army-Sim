@@ -243,7 +243,7 @@ template<typename T>
 Queue<T>::Queue() { 
 	rear = nullptr;
 	head = nullptr;
-	int count = 0;
+	count = 0;
 }
 
 template<typename T>
