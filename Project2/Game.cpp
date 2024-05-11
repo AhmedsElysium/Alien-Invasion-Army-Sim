@@ -8,6 +8,7 @@ Game::Game() {
     AA=new alienArmy(this);
     TimeStep=new int(0);
     ranGen = new RandomGenerator(inputData,TimeStep);
+    Mode = new gameMode(Interactive_Mode);
 }
 
 Game::~Game() {
@@ -22,6 +23,7 @@ Game::~Game() {
     delete ranGen;
     delete inputData;
     delete TimeStep;
+    delete Mode;
 }
 
 Queue<ArmyUnit*>* Game::getKilledList() {
@@ -40,13 +42,70 @@ void Game::printKilledList() {
         killedList->enqueue(tempUnit);
     }
 }
-
+gameMode Game::getMode() {
+    return *Mode;
+}
 int Game::getTimeStep() {
     return *this->TimeStep;
 }
 
 void Game::go() {
     try {
+        cout << "Select Mode:" << endl << "1.Interactive Mode"<<endl<<"2.Silent Mode"<<endl<<"Enter: ";
+        int temp;
+        cin >> temp;
+        while (temp != 1 && temp!= 2) {
+            cout << "Please enter a valid game mode" << endl << "Enter: ";
+            cin >> temp;
+        };
+        *Mode = gameMode(temp);
+        if (*Mode == Interactive_Mode) cout << "Interactive Mode" << endl;
+        else cout << "Silent Mode" << endl;
+
+        cout << "Start simulation" << endl;
+        while (true) {
+            (*this->TimeStep)++;
+            //Generating army units
+            ranGen->GenerateEA(EA);
+            ranGen->GenerateAA(AA);
+            cout << *TimeStep<<endl;
+
+            if (*Mode == 1) {
+
+                //Print Current Timestep
+                //Print all the alive units in each Army
+                    //Print count, unit type, list of id's 
+
+
+                //Print "units fighting at current time step
+                    //IMPLEMENT THIS PRINT FUNCTION IN THE ATTACK FUNCTIONS 
+                    //IMPLEMENT THE PRINT ONLY IF GAME MODE IS INTERACTIVE
+                        //USE getMode BY THE GAME POINTER STORED IN THE ARMY
+
+            };
+                
+            //Begin attack simulations
+            EA->attack(AA);
+            AA->attack(EA);
+
+            if (*TimeStep >= 40) {
+                //Check Win/Loss/Draw
+                break;
+            };
+
+
+            if (*Mode == Interactive_Mode) {
+                //Print killed/destructed list
+                    //count of units and id's
+                cin.ignore();
+            };
+        }
+
+
+
+        cout << "End simulation" << endl;
+        //produce output file
+
 
     }
     catch (string s) {

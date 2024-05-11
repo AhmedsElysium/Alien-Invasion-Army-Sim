@@ -11,6 +11,8 @@ private:
 	Input* inputData;
 	RandomGenerator* ranGen;
 	int* TimeStep;
+	gameMode* Mode;
+
 public:
 	Game();
 	~Game();
@@ -20,5 +22,6 @@ public:
 
 	Queue<ArmyUnit*>* getKilledList();
 	int getTimeStep();
+	gameMode getMode();
 
 };

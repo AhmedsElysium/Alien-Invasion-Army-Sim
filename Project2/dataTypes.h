@@ -15,3 +15,9 @@ struct Data {
 	const int* TimeStep;
 	UnitType type;
 };
+
+enum gameMode
+{
+	Interactive_Mode=1,
+	Silent_Mode
+};
