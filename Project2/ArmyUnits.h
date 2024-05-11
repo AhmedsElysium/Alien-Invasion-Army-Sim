@@ -5,7 +5,8 @@
 class Army;
 class ArmyUnit;
 class Game;
-
+class alienArmy;
+class earthArmy;
 
 class ArmyUnit{
 private:
@@ -29,10 +30,10 @@ public:
 	const int getTj();
 	int* getTa();
 	int* getTd();
-	const UnitType getType();
+	const UnitType getType() const;
 	int getPower();
 	int getAtkCapacity();
-	int getInitialHealth();
+	int getInitialHealth() const;
 	~ArmyUnit();
 };
 
@@ -98,6 +99,7 @@ public:
 	Army(Game* game);
 	virtual bool CheckUnitHealth(ArmyUnit* Unit)=0;
 	Game* getGame();
+	virtual void attack(Army* army) = 0;
 };
 
 class earthArmy:public Army {
@@ -119,13 +121,20 @@ public:
 	void addGunnery(earthGunnery* Unit);
 	void addHealer(earthHealer* Unit);
 
-
 	Queue<earthSoldier*>* getSoldiers();
 	Stack<earthTank*>* getTanks();
 	pQueue<earthGunnery*>* getGunnery();
 	Stack<earthHealer*>* getHealers();
 
 	bool CheckUnitHealth(ArmyUnit* Unit) override;
+
+	void attack(Army* army) override;
+
+	void SoldiersAttack(alienArmy* Enemy);
+	void TanksAttack(alienArmy* Enemy);
+	void GunneryAttack(alienArmy* Enemy);
+
+	void Heal();
 
 	void printSoldiers();
 	void printTanks();
@@ -154,6 +163,12 @@ public:
 	dQueue<alienDrone*>* getDrones();
 
 	bool CheckUnitHealth(ArmyUnit* Unit) override;
+
+	void attack(Army* army) override;
+
+	void SoldiersAttack(earthArmy* Enemy);
+	void MonstersAttack(earthArmy* Enemy);
+	void DronesAttack(earthArmy* Enemy);
 
 	void printSoldiers();
 	void printMonsters();

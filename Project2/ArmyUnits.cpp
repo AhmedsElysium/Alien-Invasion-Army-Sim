@@ -1,6 +1,8 @@
 #include "ArmyUnits.h"
 #include "Game.h"
 
+
+#pragma region "Army Unit Class: Constructors, Destructors, Getters"
 //Constructors of ArmyUnit
 ArmyUnit::ArmyUnit(int ID, UnitType type, int* TimeStep, int Health, int Power, int atkCapacity) {
 	this->ID = new int(ID); 
@@ -54,7 +56,7 @@ int* ArmyUnit::getTa() {
 int* ArmyUnit::getTd() {
 	return this->Td;
 }
-const UnitType ArmyUnit::getType() {
+const UnitType ArmyUnit::getType() const {
 	return type;
 }
 int ArmyUnit::getPower() {
@@ -63,10 +65,15 @@ int ArmyUnit::getPower() {
 int ArmyUnit::getAtkCapacity() {
 	return *atkCapacity;
 }
-int ArmyUnit::getInitialHealth() {
+int ArmyUnit::getInitialHealth() const {
 	return initialHealth;
 }
+#pragma endregion
 
+
+
+
+#pragma region "Parent Army Class: Constuctor, Getter"
 //Army Class and Getters
 Army::Army(Game* game) {
 	this->gamePtr = game;
@@ -74,6 +81,13 @@ Army::Army(Game* game) {
 Game* Army::getGame() {
 	return this->gamePtr;
 }
+
+#pragma endregion
+
+
+
+
+#pragma region "Army Constructors and Destructors"
 
 //Constructors of Army and Units
 earthArmy::earthArmy(Game* game) :Army(game) {
@@ -87,24 +101,6 @@ alienArmy::alienArmy(Game* game) :Army(game) {
 	Monsters = new Array<alienMonster*>(100);
 	Drones = new dQueue<alienDrone*>;
 }
-
-earthSoldier::earthSoldier(int ID, int* TimeStep, int Health, int Power, int atkCapacity) :ArmyUnit(ID, EarthSoldier, TimeStep, Health, Power, atkCapacity) {}
-earthGunnery::earthGunnery(int ID, int* TimeStep, int Health, int Power, int atkCapacity) :ArmyUnit(ID, EarthGunnery, TimeStep, Health, Power, atkCapacity) {}
-earthTank::earthTank(int ID, int* TimeStep, int Health, int Power, int atkCapacity) :ArmyUnit(ID, EarthTank, TimeStep, Health, Power, atkCapacity) {}
-earthHealer::earthHealer(int ID, int* TimeStep, int Health, int Power, int atkCapacity) :ArmyUnit(ID, EarthHealer, TimeStep, Health, Power, atkCapacity) {}
-
-earthSoldier::earthSoldier(Data* data) :ArmyUnit(data,EarthSoldier) {}
-earthGunnery::earthGunnery(Data* data) :ArmyUnit(data,EarthGunnery) {}
-earthTank::earthTank(Data* data) :ArmyUnit(data, EarthTank) {}
-earthHealer::earthHealer(Data* data) :ArmyUnit(data, EarthHealer) {}
-
-alienSoldier::alienSoldier(int ID, int* TimeStep, int Health, int Power, int atkCapacity) : ArmyUnit(ID, AlienSoldier, TimeStep, Health, Power, atkCapacity) {}
-alienMonster::alienMonster(int ID, int* TimeStep, int Health, int Power, int atkCapacity) : ArmyUnit(ID, AlienMonster, TimeStep, Health, Power, atkCapacity) {}
-alienDrone::alienDrone(int ID, int* TimeStep, int Health, int Power, int atkCapacity) : ArmyUnit(ID, AlienDrone, TimeStep, Health, Power, atkCapacity) {}
-
-alienSoldier::alienSoldier(Data* data) :ArmyUnit(data,AlienSoldier) {}
-alienMonster::alienMonster(Data* data) :ArmyUnit(data, AlienMonster) {}
-alienDrone::alienDrone(Data* data) :ArmyUnit(data, AlienDrone) {}
 
 //Destructors of Army and Units
 earthArmy::~earthArmy() {
@@ -152,10 +148,38 @@ alienArmy::~alienArmy() {
 	delete Monsters;
 	delete Drones;
 }
+#pragma endregion
 
 
 
-//Adders
+
+#pragma region "Army Units Constructors"
+//Earth Units
+earthSoldier::earthSoldier(int ID, int* TimeStep, int Health, int Power, int atkCapacity) :ArmyUnit(ID, EarthSoldier, TimeStep, Health, Power, atkCapacity) {}
+earthGunnery::earthGunnery(int ID, int* TimeStep, int Health, int Power, int atkCapacity) :ArmyUnit(ID, EarthGunnery, TimeStep, Health, Power, atkCapacity) {}
+earthTank::earthTank(int ID, int* TimeStep, int Health, int Power, int atkCapacity) :ArmyUnit(ID, EarthTank, TimeStep, Health, Power, atkCapacity) {}
+earthHealer::earthHealer(int ID, int* TimeStep, int Health, int Power, int atkCapacity) :ArmyUnit(ID, EarthHealer, TimeStep, Health, Power, atkCapacity) {}
+
+earthSoldier::earthSoldier(Data* data) :ArmyUnit(data,EarthSoldier) {}
+earthGunnery::earthGunnery(Data* data) :ArmyUnit(data,EarthGunnery) {}
+earthTank::earthTank(Data* data) :ArmyUnit(data, EarthTank) {}
+earthHealer::earthHealer(Data* data) :ArmyUnit(data, EarthHealer) {}
+
+//Alien Units
+alienSoldier::alienSoldier(int ID, int* TimeStep, int Health, int Power, int atkCapacity) : ArmyUnit(ID, AlienSoldier, TimeStep, Health, Power, atkCapacity) {}
+alienMonster::alienMonster(int ID, int* TimeStep, int Health, int Power, int atkCapacity) : ArmyUnit(ID, AlienMonster, TimeStep, Health, Power, atkCapacity) {}
+alienDrone::alienDrone(int ID, int* TimeStep, int Health, int Power, int atkCapacity) : ArmyUnit(ID, AlienDrone, TimeStep, Health, Power, atkCapacity) {}
+
+alienSoldier::alienSoldier(Data* data) :ArmyUnit(data,AlienSoldier) {}
+alienMonster::alienMonster(Data* data) :ArmyUnit(data, AlienMonster) {}
+alienDrone::alienDrone(Data* data) :ArmyUnit(data, AlienDrone) {}
+#pragma endregion
+
+
+
+
+#pragma region "Army Unit Adders"
+//Adders of Earth Units
 void earthArmy::addSoldier(int ID, int* TimeStep, int Health, int Power, int atkCapacity) {
 	earthSoldier* temp = new earthSoldier(ID, TimeStep, Health, Power, atkCapacity);
 	Soldiers->enqueue(temp);
@@ -190,21 +214,7 @@ void earthArmy::addHealer(earthHealer* Unit) {
 	Healers->push(Unit);
 }
 
-//Getters
-Queue<earthSoldier*>* earthArmy::getSoldiers() {
-	return Soldiers;
-}
-Stack<earthTank*>* earthArmy::getTanks() {
-	return Tanks;
-}
-pQueue<earthGunnery*>* earthArmy::getGunnery() {
-	return Gunnery;
-}
-Stack<earthHealer*>* earthArmy::getHealers() {
-	return Healers;
-}
-
-//Adders
+//Adders of Alien Units
 void alienArmy::addSoldier(int ID, int* TimeStep, int Health, int Power, int atkCapacity) {
 	alienSoldier* temp = new alienSoldier(ID, TimeStep, Health, Power, atkCapacity);
 	Soldiers->enqueue(temp);
@@ -230,8 +240,28 @@ void alienArmy::addDrone(alienDrone* Unit) {
 	Drones->pushRear(Unit);
 }
 
+#pragma endregion
 
-//Getters
+
+
+
+#pragma region "Army Lists Getters"
+//Getters of Earth Units
+Queue<earthSoldier*>* earthArmy::getSoldiers() {
+	return Soldiers;
+}
+Stack<earthTank*>* earthArmy::getTanks() {
+	return Tanks;
+}
+pQueue<earthGunnery*>* earthArmy::getGunnery() {
+	return Gunnery;
+}
+Stack<earthHealer*>* earthArmy::getHealers() {
+	return Healers;
+}
+
+
+//Getters of Alien Units
 Queue<alienSoldier*>* alienArmy::getSoldiers() {
 	return Soldiers;
 }
@@ -241,50 +271,170 @@ Array<alienMonster*>* alienArmy::getMonsters() {
 dQueue<alienDrone*>* alienArmy::getDrones() {
 	return Drones;
 }
+#pragma endregion
 
 
-//Earth Attacks
-void earthSoldier::attack(Army* army) {
-	alienArmy* armyPtr=dynamic_cast <alienArmy*>(army);
-	if (!armyPtr) throw ("armyPtr is invalid");
-	
 
+#pragma region "Earth Army Attacks"
+//Earth Army Parent Attack Function
+void earthArmy::attack(Army* army) {
+	alienArmy* armyPtr = dynamic_cast <alienArmy*>(army);
+	if (!armyPtr) throw ("armyPtr is invalid");	
 
+	//attacks
+	SoldiersAttack(armyPtr);
+	TanksAttack(armyPtr);
+	GunneryAttack(armyPtr);
+	//heal
+	Heal();
+}
+
+//Earth Army Base Attack Functions
+void earthArmy::SoldiersAttack(alienArmy* Enemy) {
 
 }
+void earthArmy::TanksAttack(alienArmy* Enemy) {
+
+}
+void earthArmy::GunneryAttack(alienArmy* Enemy) {
+
+}
+
+void earthArmy::Heal() {
+
+}
+
+#pragma endregion
+
+
+
+
+#pragma region "Earth Unit Attacks"
+//Earth Unit Attacks
+void earthSoldier::attack(Army* army) {
+	alienArmy* armyPtr=dynamic_cast <alienArmy*>(army);
+	
+}
+
+#pragma region "Earth Soldier attacks"
+
+
+#pragma endregion
+
 
 void earthGunnery::attack(Army* army)  {
 	alienArmy* armyPtr = dynamic_cast <alienArmy*>(army);
-	if (!armyPtr) return;
 }
+
+#pragma region "Earth Gunnery attacks"
+
+#pragma endregion
+
 
 void earthTank::attack(Army* army)  {
 	alienArmy* armyPtr = dynamic_cast <alienArmy*>(army);
-	if (!armyPtr) return;
 }
 
+#pragma region "Earth Tank attacks"
+
+#pragma endregion
+
+
+//Earth Unit Heals
 void earthHealer::attack(Army* army) {
 
 }
 
+#pragma region "Earth Healer Functions"
+//put any healer functions here
 
-//Alien Attacks
+
+#pragma endregion
+
+
+
+#pragma endregion
+
+
+
+
+#pragma region "Alien Army Attacks"
+//Alien Army Parent Attack Function
+void alienArmy::attack(Army* army) {
+	earthArmy* armyPtr = dynamic_cast <earthArmy*>(army);
+	if (!armyPtr) throw ("armyPtr is invalid");
+
+	//Attacks
+	SoldiersAttack(armyPtr);
+	MonstersAttack(armyPtr);
+	DronesAttack(armyPtr);
+
+
+}
+
+//Alien Army Base Attack functions
+void alienArmy::SoldiersAttack(earthArmy* Enemy) {
+
+}
+
+
+void alienArmy::MonstersAttack(earthArmy* Enemy) {
+
+}
+
+
+void alienArmy::DronesAttack(earthArmy* Enemy) {
+
+}
+
+
+#pragma endregion
+
+
+
+
+#pragma region "Alien Army Unit Attacks"
+//Alien Unit Attacks
 void alienSoldier::attack(Army* army) {
 	earthArmy* armyPtr = dynamic_cast <earthArmy*>(army);
 	if (!armyPtr) return;
 }
+
+#pragma region "Alien Soldier Attacks"
+
+
+#pragma endregion
+
 
 void alienDrone::attack(Army* army) {
 	earthArmy* armyPtr = dynamic_cast <earthArmy*>(army);
 	if (!armyPtr) return;
 }
 
+#pragma region "Alien Drone Attacks"
+
+
+#pragma endregion
+
+
 void alienMonster::attack(Army* army) {
 	earthArmy* armyPtr = dynamic_cast <earthArmy*>(army);
 	if (!armyPtr) return;
 }
 
+#pragma region "Alien Monster Attacks"
 
+
+#pragma endregion
+
+
+
+#pragma endregion
+
+
+
+
+#pragma region "Health Checkers"
 //Health Checkers
 bool earthArmy::CheckUnitHealth(ArmyUnit* Unit) {
 	if (*Unit->getHealth() >= 0.20 * Unit->getInitialHealth()) {
@@ -318,10 +468,13 @@ bool alienArmy::CheckUnitHealth(ArmyUnit* Unit) {
 		return false;
 	}
 }
+#pragma endregion 
 
 
+
+
+#pragma region "Printers"
 //Printers
-
 void earthArmy::printSoldiers() {
 	// Print status of earth soldiers
 
@@ -458,3 +611,6 @@ void alienArmy::printDrones() {
 	cout << endl;
 
 }
+#pragma endregion
+
+
