@@ -10,6 +10,7 @@ private:
 	alienArmy* AA;
 	Input* inputData;
 	RandomGenerator* ranGen;
+	int* TimeStep;
 public:
 	Game();
 	~Game();
@@ -17,5 +18,7 @@ public:
 	void printKilledList();
 	void testCode();
 
+	Queue<ArmyUnit*>* getKilledList();
+	int getTimeStep();
 
 };

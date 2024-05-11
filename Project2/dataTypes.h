@@ -3,6 +3,7 @@ enum UnitType {
 	EarthSoldier,
 	EarthGunnery,
 	EarthTank,
+	EarthHealer,
 
 	AlienSoldier,
 	AlienDrone,
@@ -10,6 +11,7 @@ enum UnitType {
 };
 
 struct Data {
-	int ID, Tj, Health, Power, atkCapacity;
+	int ID, Health, Power, atkCapacity;
+	const int* TimeStep;
 	UnitType type;
 };

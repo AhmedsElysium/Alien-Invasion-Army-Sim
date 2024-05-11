@@ -1,8 +1,9 @@
 #include "RandomGenerator.h"
 
-RandomGenerator::RandomGenerator(Input* p)
+RandomGenerator::RandomGenerator(Input* p,int* TimeStep)
 {
     this->p = p;
+    this->TimeStep = TimeStep;
     srand((unsigned)time(NULL));
 }
 
@@ -98,7 +99,7 @@ void RandomGenerator::AssignEData(UnitType unit)
     data->atkCapacity = (rand() % p->A_Capacity_Range_end) + p->A_Capacity_Range_start;
     data->Power = (rand() % p->A_Power_Range_end) + p->A_Power_Range_start;
     data->type = unit;
-    data->Tj = Tj;
+    data->TimeStep = this->TimeStep;
  
 }
 
@@ -113,7 +114,7 @@ void RandomGenerator::AssignAData(UnitType unit)
     data->atkCapacity = (rand() % p->E_Capacity_Range_end) + p->E_Capacity_Range_start;
     data->Power = (rand() % p->E_Power_Range_end) + p->E_Power_Range_start;
     //data->type = unit;
-    data->Tj = Tj;
+    data->TimeStep = TimeStep;
 }
 
 void RandomGenerator::GenerateEA(earthArmy* army)

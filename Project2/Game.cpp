@@ -4,9 +4,10 @@
 Game::Game() {
     inputData = input("input.txt");
     killedList=new Queue<ArmyUnit*>;
-    EA = new earthArmy;
-    AA=new alienArmy;
-    ranGen = new RandomGenerator(inputData);
+    EA = new earthArmy(this);
+    AA=new alienArmy(this);
+    TimeStep=new int(0);
+    ranGen = new RandomGenerator(inputData,TimeStep);
 }
 
 Game::~Game() {
@@ -20,8 +21,12 @@ Game::~Game() {
     delete AA;
     delete ranGen;
     delete inputData;
+    delete TimeStep;
 }
 
+Queue<ArmyUnit*>* Game::getKilledList() {
+    return killedList;
+}
 void Game::printKilledList() {
     cout << "[";
     Queue<ArmyUnit*> tempQueue;
@@ -36,20 +41,30 @@ void Game::printKilledList() {
     }
 }
 
+int Game::getTimeStep() {
+    return *this->TimeStep;
+}
 
 void Game::go() {
+    try {
+
+    }
+    catch (string s) {
+        cout << s;
+    }
+
 
 }
 
 void Game::testCode() {
     // Generate units for both Earth and Alien armies
     // Simulate battles for 50 time steps
-
+    *this->TimeStep = 1;
     int X;
-    for (int timestep = 1; timestep <= 50; ++timestep) {
+    for (*TimeStep; *TimeStep <= 50; ++*TimeStep) {
         ranGen->GenerateEA(EA);
         ranGen->GenerateAA(AA);
-        cout << "Time Step: " << timestep << endl;
+        cout << "Time Step: " << *TimeStep << endl;
         // Generate a number X from 1 to 100 and perform operations accordingly
   
         X = rand() % 100 + 1;

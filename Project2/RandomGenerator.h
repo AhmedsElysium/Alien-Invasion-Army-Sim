@@ -8,12 +8,12 @@ using namespace std;
 class RandomGenerator
 {
 private:
-	int Tj = 0;
 	Data* data = new Data;
 	const Input* p;
+	const int* TimeStep;
 
 public:
-	RandomGenerator(Input* fd);
+	RandomGenerator(Input* fd, int* TimeStep);
 
 	ArmyUnit* Generate(UnitType unit);
 
