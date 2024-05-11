@@ -59,18 +59,18 @@ void Game::go() {
             cin >> temp;
         };
         *Mode = gameMode(temp);
+        *TimeStep = 1;
         if (*Mode == Interactive_Mode) cout << "Interactive Mode" << endl;
         else cout << "Silent Mode" << endl;
 
         cout << "Start simulation" << endl;
         while (true) {
-            (*this->TimeStep)++;
             //Generating army units
             ranGen->GenerateEA(EA);
             ranGen->GenerateAA(AA);
             cout << *TimeStep<<endl;
 
-            if (*Mode == 1) {
+            if (*Mode == Interactive_Mode) {
 
                 //Print Current Timestep
                 //Print all the alive units in each Army
@@ -94,10 +94,13 @@ void Game::go() {
             };
 
 
+            (*this->TimeStep)++;
+
             if (*Mode == Interactive_Mode) {
                 //Print killed/destructed list
                     //count of units and id's
-                cin.ignore();
+                system("pause");
+
             };
         }
 
