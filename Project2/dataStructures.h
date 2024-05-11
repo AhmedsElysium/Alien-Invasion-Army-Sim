@@ -3,7 +3,7 @@
 #include <cstdlib>
 using namespace std;
 
-
+#pragma region "Nodes Classes Definition"
 //Nodes
 template <typename T>
 struct Node {
@@ -30,7 +30,10 @@ struct pNode {
 	pNode(T data, int priority, pNode<T>* next);
 };
 
+#pragma endregion
 
+
+#pragma region "Array Class Definition"
 //Array
 template <typename T>
 class Array {
@@ -48,12 +51,16 @@ public:
 	bool peekIndex(T& data,int index);
 };
 
+#pragma endregion
 
+
+#pragma region "Stack Class Definition"
 //Stack
 template <typename T>
 class Stack{
 private:
 	Node<T>* top;
+	int count;
 	void print(Node<T>* node);
 public:
 	Stack();
@@ -62,16 +69,21 @@ public:
 	void print();
 	bool peek(T& topEntry);
 	bool isEmpty();
+	int getCount();
 	~Stack();
 };
 
+#pragma endregion
 
+
+#pragma region "Queue Class Definition"
 //Queue
 template <typename T>
 class Queue{
 private:
 	Node<T>* head;
 	Node<T>* rear;
+	int count;
 	void print(Node<T>* node);
 public:
 	Queue();
@@ -80,16 +92,21 @@ public:
 	void print();
 	bool peek(T& topEntry);
 	bool isEmpty();
+	int getCount();
 	~Queue();
 };
 
+#pragma endregion
 
+
+#pragma region "Priority Queue Class Definition"
 //Priority Queue
 template <typename T>
 class pQueue {
 private:
 	pNode<T>* head;
 	void print(pNode<T>* node);
+	int count;
 public:
 	pQueue();
 	bool enqueue(T& Data, int Priority);
@@ -97,16 +114,21 @@ public:
 	void print();
 	bool peek(T& topEntry);
 	bool isEmpty();
+	int getCount();
 	~pQueue();
 };
 
+#pragma endregion
 
+
+#pragma region "Doubly Linked Queue Class Definition"
 //Doubly linked Queue
 template <typename T>
 class dQueue {
 private:
 	dNode<T>* head;
 	dNode<T>* rear;
+	int count;
 	void print(dNode<T>* node);
 public:
 	dQueue();
@@ -119,17 +141,20 @@ public:
 	bool peekHead(T& headEntry);
 	bool peekRear(T& rearEntry);
 
+	int getCount();
 	bool isEmpty();
 	void print();
 	~dQueue();
 
 };
 
+#pragma endregion
 
+
+#pragma region "Node Constructors and Functions"
 //Node code
 template <typename T>
 Node<T>::Node(T data, Node<T>* next) :data(data), next(next) {};
-
 
 
 //Doubly Linked Node code
@@ -141,11 +166,15 @@ dNode<T>::dNode(T data, dNode<T>* next, dNode<T>* prev) :data(data), next(next),
 template <typename T>
 pNode<T>::pNode(T data, int priority, pNode<T>* next) :data(data), priority(priority), next(next) {};
 
+#pragma endregion 
 
+
+#pragma region "Stack Constructors and Functions"
 //Stack code
 template <typename T>
 Stack<T>::Stack() {
 	top = nullptr;
+	count = 0;
 };
 
 template <typename T>
@@ -166,6 +195,7 @@ bool Stack<T>::isEmpty() {
 template<typename T>
 bool Stack<T>::push(T& Data) {
 	top = new Node<T>(Data, top);
+	count++;
 	return true;
 }
 
@@ -177,6 +207,7 @@ bool Stack<T>::pop(T& Data) {
 	temp = top;
 	top = top->next;
 	delete temp;
+	count--;
 	return true;
 }
 
@@ -185,6 +216,11 @@ bool Stack<T>::peek(T& Data) {
 	if (isEmpty()) { return false; };
 	Data = top->data;
 	return true;
+}
+
+template<typename T>
+int Stack<T>::getCount() {
+	return count;
 }
 
 template<typename T>
@@ -198,13 +234,16 @@ template<typename T>
 void Stack<T>::print() {
 	print(top);
 }
+#pragma endregion 
 
 
+#pragma region "Queue Constructors and Functions"
 //Queue code
 template<typename T>
 Queue<T>::Queue() { 
 	rear = nullptr;
 	head = nullptr;
+	int count = 0;
 }
 
 template<typename T>
@@ -232,6 +271,7 @@ bool Queue<T>::enqueue(T& Data) {
 		rear->next = new Node<T>(Data, nullptr);
 		rear = rear->next;
 	};
+	count++;
 	return true;
 }
 
@@ -245,6 +285,7 @@ bool Queue<T>::dequeue(T& topEntry) {
 	Node<T>* temp = head;
 	head = head->next;
 	delete temp;
+	count--;
 	return true;
 }
 
@@ -255,6 +296,11 @@ bool Queue<T>::peek(T& topEntry) {
 	};
 	topEntry = head->data;
 	return true;
+}
+
+template<typename T>
+int Queue<T>::getCount() {
+	return count;
 }
 
 template<typename T>
@@ -269,11 +315,15 @@ void Queue<T>::print() {
 	print(head);
 }
 
+#pragma endregion 
 
+
+#pragma region "Priority Queue Constructors and Functions"
 //Priority Queue code
 template<typename T>
 pQueue<T>::pQueue() {
 	head = nullptr;
+	count = 0;
 }
 
 template<typename T>
@@ -292,6 +342,7 @@ template<typename T>
 bool pQueue<T>::enqueue(T& Data,int Priority) {
 	if (isEmpty() || Priority > head->priority) {
 		head = new pNode<T>(Data, Priority, head);
+		count++;
 		return true;
 	};
 	pNode<T>* temp = head;
@@ -299,6 +350,7 @@ bool pQueue<T>::enqueue(T& Data,int Priority) {
 		temp = temp->next;
 	};
 	temp->next = new pNode<T>(Data, Priority, temp->next);
+	count++;
 	return true;
 }
 
@@ -309,6 +361,7 @@ bool pQueue<T>::dequeue(T& topEntry) {
 	pNode<T>* temp = head;
 	head = head->next;
 	delete temp;
+	count--;
 	return true;
 }
 
@@ -332,17 +385,26 @@ bool pQueue<T>::peek(T& topEntry) {
 }
 
 template<typename T>
+int pQueue<T>::getCount() {
+	return count;
+}
+
+template<typename T>
 bool pQueue<T>::isEmpty() {
 	return !head;
 }
 
+#pragma endregion 
 
+
+#pragma region "Doubly Linked Queue Constructors and Functions"
 //Doubly linked Queue code
 
 template<typename T>
 dQueue<T>::dQueue() {
 	head = nullptr;
 	rear = nullptr;
+	count = 0;
 }
 
 template<typename T>
@@ -365,6 +427,7 @@ bool dQueue<T>::pushHead(T& Data) {
 	else{
 		head->prev->next = head;
 	};
+	count++;
 	return true;
 
 }
@@ -378,6 +441,7 @@ bool dQueue<T>::pushRear(T& Data) {
 	else {
 		rear->next->prev= rear;
 	};
+	count++;
 	return true;
 }
 
@@ -391,6 +455,7 @@ bool dQueue<T>::popHead(T& headEntry) {
 	if (head == nullptr) { rear = head; }
 	else { head->next = nullptr; };
 	delete temp;
+	count--;
 	return true;
 }
 
@@ -403,6 +468,7 @@ bool dQueue<T>::popRear(T& rearEntry) {
 	if (rear == nullptr) { head = rear; }
 	else { rear->prev = nullptr; };
 	delete temp;
+	count--;
 	return true;
 }
 
@@ -428,6 +494,11 @@ bool dQueue<T>::isEmpty() {
 }
 
 template<typename T>
+int dQueue<T>::getCount() {
+	return count;
+}
+
+template<typename T>
 void dQueue<T>::print(dNode<T>* node){
 	if (!node)return;
 	cout << node->data << endl;
@@ -439,7 +510,10 @@ void dQueue<T>::print() {
 	print(head);
 }
 
+#pragma endregion 
 
+
+#pragma region "Array Constructors and Functions"
 //Array Code
 
 template<typename T>
@@ -492,3 +566,8 @@ bool Array<T>::peekIndex(T& data, int index) {
 	};
 	return false;
 }
+
+#pragma endregion 
+
+
+
