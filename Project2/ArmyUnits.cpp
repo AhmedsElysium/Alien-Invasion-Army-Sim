@@ -56,6 +56,9 @@ int* ArmyUnit::getTa() {
 int* ArmyUnit::getTd() {
 	return this->Td;
 }
+const int ArmyUnit::getTimeStep() {
+	return *TimeStep;
+}
 const UnitType ArmyUnit::getType() const {
 	return type;
 }
@@ -336,6 +339,8 @@ void earthSoldier::attack(Army* army) {
 void earthSoldier::attackSoldier(alienArmy* army){
 	alienSoldier* enemy;
 	if (army->getSoldiers()->dequeue(enemy)) {
+		if (!*enemy->getTa()) *enemy->getTa() = this->getTimeStep();
+		
 		double damage = ((*this->getHealth()) * (this->getPower()) / 100.0) / sqrt(*enemy->getHealth());
 		(*enemy->getHealth()) -= damage;
 		cout << " "<<enemy->getID() << ",";
@@ -366,14 +371,14 @@ void earthGunnery::attack(Army* army)  {
 
 }
 
-//IMPLEMENT ATTACK DRONES
 #pragma region "Earth Gunnery attacks"
 void earthGunnery::attackMonster(alienArmy* army) {
 	alienMonster* enemy;
 	if (army->getMonsters()->remove(enemy)) {
+		if (!*enemy->getTa()) *enemy->getTa() = this->getTimeStep();
 		double damage = ((*this->getHealth()) * (this->getPower()) / 100.0) / sqrt(*enemy->getHealth());
 		(*enemy->getHealth()) -= damage;
-		cout << " " << enemy->getID() << " " << enemy->getType() << ",";
+		cout << " " << enemy->getID() << ",";
 		if (army->CheckUnitHealth(enemy)) {
 			army->getMonsters()->insert(enemy);
 		};
@@ -381,7 +386,31 @@ void earthGunnery::attackMonster(alienArmy* army) {
 
 }
 void earthGunnery::attackDrones(alienArmy* army) {
-	//TBD
+	alienDrone* enemy1;
+	alienDrone* enemy2;
+	if (army->getDrones()->popHead(enemy1)) {
+		if (!*enemy1->getTa()) *enemy1->getTa() = this->getTimeStep();
+
+		double damage = ((*this->getHealth()) * (this->getPower()) / 100.0) / sqrt(*enemy1->getHealth());
+		(*enemy1->getHealth()) -= damage;
+		cout << " " << enemy1->getID() << ",";
+
+		if (army->getDrones()->popRear(enemy2)) {
+			if (!*enemy2->getTa()) *enemy2->getTa() = this->getTimeStep();
+			
+			damage = ((*this->getHealth()) * (this->getPower()) / 100.0) / sqrt(*enemy2->getHealth());
+			(*enemy2->getHealth()) -= damage;
+			cout << " " << enemy2->getID() << ",";
+
+			if (army->CheckUnitHealth(enemy2)) {
+				army->getDrones()->pushRear(enemy2);
+			};
+		};
+
+		if (army->CheckUnitHealth(enemy1)) {
+			army->getDrones()->pushHead(enemy1);
+		};
+	}
 }
 
 #pragma endregion
@@ -408,9 +437,10 @@ void earthTank::attack(Army* army)  {
 void earthTank::attackSoldier(alienArmy* army) {
 	alienSoldier* enemy;
 	if (army->getSoldiers()->dequeue(enemy)) {
+		if (!*enemy->getTa()) *enemy->getTa() = this->getTimeStep();
 		double damage = ((*this->getHealth()) * (this->getPower()) / 100.0) / sqrt(*enemy->getHealth());
 		(*enemy->getHealth()) -= damage;
-		cout << " "<<enemy->getID() << " " << enemy->getType() << ",";
+		cout << " "<<enemy->getID() << ",";
 		if (army->CheckUnitHealth(enemy)) {
 			army->getSoldiers()->enqueue(enemy);
 		};
@@ -420,9 +450,11 @@ void earthTank::attackSoldier(alienArmy* army) {
 void earthTank::attackMonster(alienArmy* army) {
 	alienMonster* enemy;
 	if (army->getMonsters()->remove(enemy)) {
+		if (!*enemy->getTa()) *enemy->getTa() = this->getTimeStep();
+
 		double damage = ((*this->getHealth()) * (this->getPower()) / 100.0) / sqrt(*enemy->getHealth());
 		(*enemy->getHealth()) -= damage;
-		cout << " " << enemy->getID()<< " "<< enemy->getType() << ",";
+		cout << " " << enemy->getID() << ",";
 		if (army->CheckUnitHealth(enemy)) {
 			army->getMonsters()->insert(enemy);
 		};

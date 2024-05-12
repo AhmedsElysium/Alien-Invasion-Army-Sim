@@ -27,6 +27,7 @@ public:
 	virtual void attack(Army *army)=0;
 	int* getHealth();
 	int getID();
+	const int getTimeStep();
 	const int getTj();
 	int* getTa();
 	int* getTd();
