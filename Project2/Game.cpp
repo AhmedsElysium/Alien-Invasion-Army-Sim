@@ -48,6 +48,12 @@ gameMode Game::getMode() {
 int Game::getTimeStep() {
     return *this->TimeStep;
 }
+earthArmy* Game::getEarthArmy() {
+    return EA;
+}
+alienArmy* Game::getAlienArmy() {
+    return AA;
+}
 
 void Game::go() {
     try {

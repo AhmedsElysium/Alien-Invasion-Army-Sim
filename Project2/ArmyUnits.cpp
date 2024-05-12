@@ -165,6 +165,8 @@ earthGunnery::earthGunnery(Data* data) :ArmyUnit(data,EarthGunnery) {}
 earthTank::earthTank(Data* data) :ArmyUnit(data, EarthTank) {}
 earthHealer::earthHealer(Data* data) :ArmyUnit(data, EarthHealer) {}
 
+bool earthTank::underSiege = false;
+
 //Alien Units
 alienSoldier::alienSoldier(int ID, int* TimeStep, int Health, int Power, int atkCapacity) : ArmyUnit(ID, AlienSoldier, TimeStep, Health, Power, atkCapacity) {}
 alienMonster::alienMonster(int ID, int* TimeStep, int Health, int Power, int atkCapacity) : ArmyUnit(ID, AlienMonster, TimeStep, Health, Power, atkCapacity) {}
@@ -291,10 +293,19 @@ void earthArmy::attack(Army* army) {
 
 //Earth Army Base Attack Functions
 void earthArmy::SoldiersAttack(alienArmy* Enemy) {
-
+	earthSoldier* soldier;
+	if (this->Soldiers->dequeue(soldier)) {
+		soldier->attack(Enemy);
+		this->Soldiers->enqueue(soldier);
+	}
 }
 void earthArmy::TanksAttack(alienArmy* Enemy) {
-
+	earthTank* tank;
+	if (this->Tanks->pop(tank)) {
+		tank->attack(Enemy);
+		this->Tanks->push(tank);
+	};
+	return;
 }
 void earthArmy::GunneryAttack(alienArmy* Enemy) {
 
@@ -313,30 +324,122 @@ void earthArmy::Heal() {
 //Earth Unit Attacks
 void earthSoldier::attack(Army* army) {
 	alienArmy* armyPtr=dynamic_cast <alienArmy*>(army);
-	
+	cout << this->getID() << " shoots [ ";
+	for (int i = 0; i < this->getAtkCapacity(); i++) {
+		attackSoldier(armyPtr);
+	};
+	cout << "] " << endl;
+
 }
 
 #pragma region "Earth Soldier attacks"
-
+void earthSoldier::attackSoldier(alienArmy* army){
+	alienSoldier* enemy;
+	if (army->getSoldiers()->dequeue(enemy)) {
+		double damage = ((*this->getHealth()) * (this->getPower()) / 100.0) / sqrt(*enemy->getHealth());
+		(*enemy->getHealth()) -= damage;
+		cout << " "<<enemy->getID() << ",";
+		if (army->CheckUnitHealth(enemy)) {
+			army->getSoldiers()->enqueue(enemy);
+		};
+	}
+}
 
 #pragma endregion
 
 
 void earthGunnery::attack(Army* army)  {
 	alienArmy* armyPtr = dynamic_cast <alienArmy*>(army);
+	cout << this->getID() << " shoots [ ";
+	for (int i = 0; i < this->getAtkCapacity(); i++) {
+		if (rand() % 2) {
+			this->attackDrones(armyPtr);
+
+		}
+		else {
+			this->attackMonster(armyPtr);
+
+		};
+	};
+
+	cout << "\b" << "] " << endl;
+
 }
 
+//IMPLEMENT ATTACK DRONES
 #pragma region "Earth Gunnery attacks"
+void earthGunnery::attackMonster(alienArmy* army) {
+	alienMonster* enemy;
+	if (army->getMonsters()->remove(enemy)) {
+		double damage = ((*this->getHealth()) * (this->getPower()) / 100.0) / sqrt(*enemy->getHealth());
+		(*enemy->getHealth()) -= damage;
+		cout << " " << enemy->getID() << " " << enemy->getType() << ",";
+		if (army->CheckUnitHealth(enemy)) {
+			army->getMonsters()->insert(enemy);
+		};
+	}
+
+}
+void earthGunnery::attackDrones(alienArmy* army) {
+	//TBD
+}
 
 #pragma endregion
 
 
 void earthTank::attack(Army* army)  {
 	alienArmy* armyPtr = dynamic_cast <alienArmy*>(army);
+	cout << this->getID() << " shoots [ ";
+	for (int i = 0; i < this->getAtkCapacity(); i++) {
+		if (checkSiege(armyPtr) && rand() % 2) {
+			this->attackSoldier(armyPtr);
+
+		}
+		else {
+			this->attackMonster(armyPtr);
+
+		};
+	};
+	
+	cout <<"\b"<< "] " << endl;
 }
 
 #pragma region "Earth Tank attacks"
+void earthTank::attackSoldier(alienArmy* army) {
+	alienSoldier* enemy;
+	if (army->getSoldiers()->dequeue(enemy)) {
+		double damage = ((*this->getHealth()) * (this->getPower()) / 100.0) / sqrt(*enemy->getHealth());
+		(*enemy->getHealth()) -= damage;
+		cout << " "<<enemy->getID() << " " << enemy->getType() << ",";
+		if (army->CheckUnitHealth(enemy)) {
+			army->getSoldiers()->enqueue(enemy);
+		};
+	}
+}
 
+void earthTank::attackMonster(alienArmy* army) {
+	alienMonster* enemy;
+	if (army->getMonsters()->remove(enemy)) {
+		double damage = ((*this->getHealth()) * (this->getPower()) / 100.0) / sqrt(*enemy->getHealth());
+		(*enemy->getHealth()) -= damage;
+		cout << " " << enemy->getID()<< " "<< enemy->getType() << ",";
+		if (army->CheckUnitHealth(enemy)) {
+			army->getMonsters()->insert(enemy);
+		};
+	}
+}
+
+bool earthTank::checkSiege(alienArmy* AA) {
+	earthArmy* EA = AA->getGame()->getEarthArmy();
+	if (this->underSiege&& (EA->getSoldiers()->getCount() >= 0.8 * (AA->getSoldiers()->getCount()))) {
+		this->underSiege = false;		
+	}
+	else if (EA->getSoldiers()->getCount() < 0.3 * (AA->getSoldiers()->getCount())) {
+		this->underSiege = true;
+	};
+	return this->underSiege;
+
+}
 #pragma endregion
 
 

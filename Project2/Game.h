@@ -23,5 +23,8 @@ public:
 	Queue<ArmyUnit*>* getKilledList();
 	int getTimeStep();
 	gameMode getMode();
+	earthArmy* getEarthArmy();
+	alienArmy* getAlienArmy();
+
 
 };

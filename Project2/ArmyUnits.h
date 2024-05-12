@@ -39,10 +39,14 @@ public:
 
 //Earth Units
 class earthSoldier: public ArmyUnit {
+private:
+	void attackSoldier(alienArmy* army);
+
 public:
 	earthSoldier(int ID, int* TimeStep, int Health, int Power, int atkCapacity);
 	earthSoldier(Data* data);
 	void attack(Army *army) override;
+
 };
 
 class earthHealer: public ArmyUnit {
@@ -53,6 +57,9 @@ public:
 };
 
 class earthGunnery : public ArmyUnit {
+private:
+	void attackMonster(alienArmy* army);
+	void attackDrones(alienArmy* army);
 public:
 	earthGunnery(int ID, int* TimeStep, int Health, int Power, int atkCapacity);
 	earthGunnery(Data* data);
@@ -60,10 +67,15 @@ public:
 };
 
 class earthTank: public ArmyUnit {
+private:
+	static bool underSiege;
+	void attackSoldier(alienArmy* army);
+	void attackMonster(alienArmy* army);
 public:
 	earthTank(int ID, int* TimeStep, int Health, int Power, int atkCapacity);
 	earthTank(Data* data);
 	void attack(Army *army) override;
+	bool checkSiege(alienArmy* AA);
 };
 
 //Alien Units
