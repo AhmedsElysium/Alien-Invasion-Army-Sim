@@ -29,6 +29,7 @@ Game::~Game() {
 Queue<ArmyUnit*>* Game::getKilledList() {
     return killedList;
 }
+
 void Game::printKilledList() {
     cout << "[";
     Queue<ArmyUnit*> tempQueue;
@@ -42,15 +43,19 @@ void Game::printKilledList() {
         killedList->enqueue(tempUnit);
     }
 }
+
 gameMode Game::getMode() {
     return *Mode;
 }
+
 int Game::getTimeStep() {
     return *this->TimeStep;
 }
+
 earthArmy* Game::getEarthArmy() {
     return EA;
 }
+
 alienArmy* Game::getAlienArmy() {
     return AA;
 }
@@ -93,7 +98,7 @@ void Game::go() {
             //Begin attack simulations
             EA->attack(AA);
             AA->attack(EA);
-
+            EA->Heal();
             if (*TimeStep >= 40) {
                 //Check Win/Loss/Draw
                 break;
@@ -123,6 +128,9 @@ void Game::go() {
 
 
 }
+
+
+
 
 void Game::testCode() {
     // Generate units for both Earth and Alien armies
@@ -248,9 +256,9 @@ void Game::testCode() {
             }
 
 
-        //cout << "Earth Army Status:" << endl;
+        //cout << "Healers:" << endl;
         //// Print status of earth soldier
-        //EA->printSoldiers();
+        //EA->printHealers();
 
         //// Print status of earth tanks
         //EA->printTanks();

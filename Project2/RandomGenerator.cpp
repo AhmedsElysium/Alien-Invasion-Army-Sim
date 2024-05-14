@@ -45,6 +45,12 @@ ArmyUnit* RandomGenerator::Generate(UnitType unit)
         alienDrone* D = new alienDrone(data);
         return D;
     }
+    else if (unit == EarthHealer)
+    {
+        AssignAData(unit);
+        earthHealer* H = new earthHealer(data);
+        return H;
+    }
     else return nullptr;
 }
 
@@ -60,7 +66,11 @@ ArmyUnit* RandomGenerator::GenerateEU()
     {
         return Generate(EarthGunnery);
     }
-    else 
+    else if(B > p->ES + p->EG && B <= p->ES + p->EG + p->EH)
+    {
+        return Generate(EarthHealer);
+    }
+    else
     {
         return Generate(EarthTank);
     }
@@ -95,7 +105,6 @@ void RandomGenerator::AssignEData(UnitType unit)
     else
         return ;
     data->Health = (rand() % p->A_Health_Range_end) + p->A_Health_Range_start;
-    ;
     data->atkCapacity = (rand() % p->A_Capacity_Range_end) + p->A_Capacity_Range_start;
     data->Power = (rand() % p->A_Power_Range_end) + p->A_Power_Range_start;
     data->type = unit;
@@ -113,7 +122,7 @@ void RandomGenerator::AssignAData(UnitType unit)
     data->Health = (rand() % p->E_Health_Range_end) + p->E_Health_Range_start;
     data->atkCapacity = (rand() % p->E_Capacity_Range_end) + p->E_Capacity_Range_start;
     data->Power = (rand() % p->E_Power_Range_end) + p->E_Power_Range_start;
-    //data->type = unit;
+    data->type = unit;
     data->TimeStep = TimeStep;
 }
 
@@ -132,6 +141,8 @@ void RandomGenerator::GenerateEA(earthArmy* army)
                     army->addSoldier(dynamic_cast<earthSoldier*>(unit));
                 else if (unit->getType() == EarthGunnery)
                     army->addGunnery(dynamic_cast<earthGunnery*>(unit));
+                else if (unit->getType() == EarthHealer)
+                    army->addHealer(dynamic_cast<earthHealer*>(unit));
                 else
                     army->addTank(dynamic_cast<earthTank*>(unit));
             }

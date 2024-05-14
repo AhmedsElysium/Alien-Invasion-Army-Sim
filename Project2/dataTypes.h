@@ -7,7 +7,8 @@ enum UnitType {
 
 	AlienSoldier,
 	AlienDrone,
-	AlienMonster
+	AlienMonster,
+	EathHealer
 };
 
 struct Data {

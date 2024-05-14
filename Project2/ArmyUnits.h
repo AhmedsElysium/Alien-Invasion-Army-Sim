@@ -121,6 +121,8 @@ private:
 	 Stack<earthTank*>* Tanks;
 	 pQueue<earthGunnery*>* Gunnery;
 	 Stack<earthHealer*>* Healers;
+	 pQueue<earthSoldier*>* UMLs;
+	 Queue<earthTank*>* UMLt;
 public:
 	earthArmy(Game* game);
 	~earthArmy();
@@ -128,7 +130,8 @@ public:
 	void addTank(int ID, int* TimeStep, int Health, int Power, int atkCapacity);
 	void addGunnery(int ID, int* TimeStep, int Health, int Power, int atkCapacity);
 	void addHealer(int ID, int* TimeStep, int Health, int Power, int atkCapacity);
-
+	void addUMLs(earthSoldier*, int);
+	void addUMLt(earthTank*);
 	void addSoldier(earthSoldier* Unit);
 	void addTank(earthTank* Unit);
 	void addGunnery(earthGunnery* Unit);

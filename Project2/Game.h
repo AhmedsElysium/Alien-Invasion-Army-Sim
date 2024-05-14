@@ -19,7 +19,6 @@ public:
 	void go();
 	void printKilledList();
 	void testCode();
-
 	Queue<ArmyUnit*>* getKilledList();
 	int getTimeStep();
 	gameMode getMode();
