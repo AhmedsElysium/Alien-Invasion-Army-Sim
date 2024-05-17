@@ -40,7 +40,7 @@ public:
 //Earth Units
 class earthSoldier: public ArmyUnit {
 private:
-	int* Uj;
+	int Uj;
 	void attackSoldier(alienArmy* army);
 
 public:
@@ -70,7 +70,7 @@ public:
 
 class earthTank: public ArmyUnit {
 private:
-	int* Uj;
+	int Uj;
 	static bool underSiege;
 	void attackSoldier(alienArmy* army);
 	void attackMonster(alienArmy* army);

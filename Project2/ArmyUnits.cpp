@@ -482,46 +482,50 @@ void earthHealer::attack(Army* army) {
 	earthArmy* enemy = dynamic_cast <earthArmy*>(army);
 	earthSoldier* soldier;
 	earthTank* tank;
-	
 		for (int i = 0; i < this->getAtkCapacity(); i++)
 		{
-			if (enemy->getUMLs())
-			{
-				enemy->getUMLs()->dequeue(soldier);
-				if (*(soldier->getUj()) >= 10)
-				{	
-					*soldier->getTd() = enemy->getGame()->getTimeStep();
-					ArmyUnit* unit = soldier;
-					enemy->getGame()->getKilledList()->enqueue(unit);
-				}
-				else
+				if(enemy->getUMLs()->dequeue(soldier))
 				{
-					double health_improv = (*(this->getHealth()) * this->getPower() / 100) / sqrt(*(soldier->getHealth()));
-					*(soldier->getHealth()) += health_improv;
+					if (soldier->getUj())
+					{
+						if (*(soldier->getUj()) >= 10)
+						{
+							*soldier->getTd() = enemy->getGame()->getTimeStep();
+							ArmyUnit* unit = soldier;
+							enemy->getGame()->getKilledList()->enqueue(unit);
+						}
+						else
+						{
+							double health_improv = (*(this->getHealth()) * this->getPower() / 100) / sqrt(*(soldier->getHealth()));
+							*(soldier->getHealth()) += health_improv;
+						}
+						if (enemy->CheckUnitHealth(soldier))
+						{
+							enemy->getSoldiers()->enqueue(soldier);
+						}
+					}
 				}
-				if (enemy->CheckUnitHealth(soldier))
-				{
-					enemy->getSoldiers()->enqueue(soldier);
-				}
-				
-			}
+
 			else
 			{
-				enemy->getUMLt()->dequeue(tank);
-				if (*(tank->getUj()) >= 10)
+				if(enemy->getUMLt()->dequeue(tank))
 				{
-					*tank->getTd() = enemy->getGame()->getTimeStep();
-					ArmyUnit* unit = tank;
-					enemy->getGame()->getKilledList()->enqueue(unit);
-				}
-				else
-				{
-					double health_improv = (*(this->getHealth()) * this->getPower() / 100) / sqrt(*(tank->getHealth()));
-					*(tank->getHealth()) += health_improv;
-				}
-				if (enemy->CheckUnitHealth(tank))
-				{
-					enemy->getTanks()->push(tank);
+
+					if (*(tank->getUj()) >= 10)
+					{
+						*tank->getTd() = enemy->getGame()->getTimeStep();
+						ArmyUnit* unit = tank;
+						enemy->getGame()->getKilledList()->enqueue(unit);
+					}
+					else
+					{
+						double health_improv = (*(this->getHealth()) * this->getPower() / 100) / sqrt(*(tank->getHealth()));
+						*(tank->getHealth()) += health_improv;
+					}
+					if (enemy->CheckUnitHealth(tank))
+					{
+						enemy->getTanks()->push(tank);
+					}
 				}
 			}
 		}
@@ -539,12 +543,12 @@ void earthHealer::attack(Army* army) {
 
 int* earthSoldier::getUj()
 {
-	return this->Uj;
+	return &Uj;
 }
 
 int* earthTank::getUj()
 {
-	return this->Uj;
+	return &Uj;
 }
 #pragma endregion
 
