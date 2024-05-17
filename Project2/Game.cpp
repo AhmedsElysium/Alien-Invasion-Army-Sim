@@ -98,13 +98,7 @@ void Game::go() {
             //Begin attack simulations
             EA->attack(AA);
             AA->attack(EA);
-            while (EA->getHealers())
-            {
-                earthHealer* healer;
-                EA->getHealers()->pop(healer);
-                healer->attack(EA);
-                delete healer;
-            }
+            EA->Heal();
             if (*TimeStep >= 40) {
                 //Check Win/Loss/Draw
                 break;

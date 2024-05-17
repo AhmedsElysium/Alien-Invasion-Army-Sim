@@ -12,6 +12,7 @@ class ArmyUnit{
 private:
 	const int *TimeStep;
 	int *Tj,*Ta,*Td;
+	
 	int *ID;
 	UnitType type;
 	int *Health;
@@ -40,13 +41,11 @@ public:
 //Earth Units
 class earthSoldier: public ArmyUnit {
 private:
-	int* Uj;
 	void attackSoldier(alienArmy* army);
 
 public:
 	earthSoldier(int ID, int* TimeStep, int Health, int Power, int atkCapacity);
 	earthSoldier(Data* data);
-	int* getUj();
 	void attack(Army *army) override;
 
 };
@@ -70,7 +69,6 @@ public:
 
 class earthTank: public ArmyUnit {
 private:
-	int* Uj;
 	static bool underSiege;
 	void attackSoldier(alienArmy* army);
 	void attackMonster(alienArmy* army);
@@ -79,13 +77,10 @@ public:
 	earthTank(Data* data);
 	void attack(Army *army) override;
 	bool checkSiege(alienArmy* AA);
-	int* getUj();
-
 };
 
 //Alien Units
 class alienSoldier : public ArmyUnit {
-	void attackSoldier(earthArmy*);
 public:
 	alienSoldier(int ID, int* TimeStep, int Health, int Power, int atkCapacity);
 	alienSoldier(Data* data);
@@ -94,9 +89,6 @@ public:
 };
 
 class alienMonster : public ArmyUnit {
-	void attackSoldier(earthArmy*);
-	void attackTank(earthArmy*);
-
 public:
 	alienMonster(int ID, int* TimeStep, int Health, int Power, int atkCapacity);
 	alienMonster(Data* data);
@@ -149,8 +141,6 @@ public:
 	Stack<earthTank*>* getTanks();
 	pQueue<earthGunnery*>* getGunnery();
 	Stack<earthHealer*>* getHealers();
-	pQueue<earthSoldier*>* getUMLs();
-	Queue<earthTank*>* getUMLt();
 
 	bool CheckUnitHealth(ArmyUnit* Unit) override;
 
@@ -160,7 +150,7 @@ public:
 	void TanksAttack(alienArmy* Enemy);
 	void GunneryAttack(alienArmy* Enemy);
 
-	
+	void Heal();
 
 	void printSoldiers();
 	void printTanks();
