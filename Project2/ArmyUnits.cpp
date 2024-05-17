@@ -101,7 +101,7 @@ earthArmy::earthArmy(Game* game) :Army(game) {
 }
 alienArmy::alienArmy(Game* game) :Army(game) {
 	Soldiers = new Queue<alienSoldier*>;
-	Monsters = new Array<alienMonster*>(100);
+	Monsters = new Array<alienMonster*>(1000);
 	Drones = new dQueue<alienDrone*>;
 }
 
@@ -311,7 +311,12 @@ void earthArmy::TanksAttack(alienArmy* Enemy) {
 	return;
 }
 void earthArmy::GunneryAttack(alienArmy* Enemy) {
-
+	earthGunnery* gunnery;
+	if (this->Gunnery->dequeue(gunnery)) {
+		gunnery->attack(Enemy);
+		this->Gunnery->enqueue(gunnery, *gunnery->getHealth() + gunnery->getPower());
+	};
+	return;
 }
 
 void earthArmy::Heal() {
@@ -331,7 +336,7 @@ void earthSoldier::attack(Army* army) {
 	for (int i = 0; i < this->getAtkCapacity(); i++) {
 		attackSoldier(armyPtr);
 	};
-	cout << "] " << endl;
+	cout << "\b" << "] " << endl;
 
 }
 
