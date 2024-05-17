@@ -269,3 +269,20 @@ void Game::testCode() {
         //AA->printMonsters();
     }
 }
+
+void Game::TestingZone() {
+    for (int i = 0; i < 100; i++) {
+        ranGen->GenerateEA(EA);
+        ranGen->GenerateAA(AA);
+    };
+    //Stack<earthTank*>* tanks = EA->getTanks();
+    //earthTank* tank;
+    //tanks->pop(tank);
+    earthSoldier* gun;
+    EA->getSoldiers()->dequeue(gun);
+
+    for (int i = 0; i < 1000; i++) {
+        gun->attack(AA);
+
+    }
+}

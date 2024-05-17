@@ -42,11 +42,13 @@ public:
 class earthSoldier: public ArmyUnit {
 private:
 	void attackSoldier(alienArmy* army);
-
+	bool *Infected, *Immune;
 public:
 	earthSoldier(int ID, int* TimeStep, int Health, int Power, int atkCapacity);
 	earthSoldier(Data* data);
 	void attack(Army *army) override;
+	bool *isInfected();
+	bool *isImmune();
 
 };
 
@@ -121,6 +123,8 @@ private:
 	 Stack<earthTank*>* Tanks;
 	 pQueue<earthGunnery*>* Gunnery;
 	 Stack<earthHealer*>* Healers;
+
+	 int* Infected;
 public:
 	earthArmy(Game* game);
 	~earthArmy();
@@ -138,6 +142,9 @@ public:
 	Stack<earthTank*>* getTanks();
 	pQueue<earthGunnery*>* getGunnery();
 	Stack<earthHealer*>* getHealers();
+
+	int* countInfected();
+	void infect();
 
 	bool CheckUnitHealth(ArmyUnit* Unit) override;
 

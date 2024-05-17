@@ -98,6 +98,7 @@ earthArmy::earthArmy(Game* game) :Army(game) {
 	Tanks= new Stack<earthTank*>;
 	Gunnery = new pQueue<earthGunnery*>;
 	Healers = new Stack<earthHealer*>;
+	Infected = new int(0);
 }
 alienArmy::alienArmy(Game* game) :Army(game) {
 	Soldiers = new Queue<alienSoldier*>;
@@ -126,6 +127,7 @@ earthArmy::~earthArmy() {
 		delete temp4;
 	};
 
+	delete Infected;
 	delete Soldiers;
 	delete Tanks;
 	delete Gunnery;
@@ -158,12 +160,18 @@ alienArmy::~alienArmy() {
 
 #pragma region "Army Units Constructors"
 //Earth Units
-earthSoldier::earthSoldier(int ID, int* TimeStep, int Health, int Power, int atkCapacity) :ArmyUnit(ID, EarthSoldier, TimeStep, Health, Power, atkCapacity) {}
+earthSoldier::earthSoldier(int ID, int* TimeStep, int Health, int Power, int atkCapacity) :ArmyUnit(ID, EarthSoldier, TimeStep, Health, Power, atkCapacity) {
+	this->Infected = new bool(false);
+	this->Immune= new bool(false);
+}
 earthGunnery::earthGunnery(int ID, int* TimeStep, int Health, int Power, int atkCapacity) :ArmyUnit(ID, EarthGunnery, TimeStep, Health, Power, atkCapacity) {}
 earthTank::earthTank(int ID, int* TimeStep, int Health, int Power, int atkCapacity) :ArmyUnit(ID, EarthTank, TimeStep, Health, Power, atkCapacity) {}
 earthHealer::earthHealer(int ID, int* TimeStep, int Health, int Power, int atkCapacity) :ArmyUnit(ID, EarthHealer, TimeStep, Health, Power, atkCapacity) {}
 
-earthSoldier::earthSoldier(Data* data) :ArmyUnit(data,EarthSoldier) {}
+earthSoldier::earthSoldier(Data* data) :ArmyUnit(data,EarthSoldier) {
+	this->Infected = new bool(false);
+	this->Immune = new bool(false);
+}
 earthGunnery::earthGunnery(Data* data) :ArmyUnit(data,EarthGunnery) {}
 earthTank::earthTank(Data* data) :ArmyUnit(data, EarthTank) {}
 earthHealer::earthHealer(Data* data) :ArmyUnit(data, EarthHealer) {}
@@ -279,6 +287,13 @@ dQueue<alienDrone*>* alienArmy::getDrones() {
 #pragma endregion
 
 
+#pragma region "Army Getters"
+int* earthArmy::countInfected() {
+	return this->Infected;
+}
+
+#pragma endregion 
+
 
 #pragma region "Earth Army Attacks"
 //Earth Army Parent Attack Function
@@ -323,6 +338,32 @@ void earthArmy::Heal() {
 
 }
 
+void earthArmy::infect() {
+	Array<earthSoldier*> Uninfected_soldiers(Soldiers->getCount()-*Infected);
+	Queue<earthSoldier*> tempQ;
+	earthSoldier* tempSoldier;
+	while (Soldiers->dequeue(tempSoldier)) {
+		tempQ.enqueue(tempSoldier);
+		if (!(*tempSoldier->isInfected()) && !(*tempSoldier->isImmune())) {
+			Uninfected_soldiers.insert(tempSoldier);
+		};
+	};
+	int count = *Infected;
+	for (int i = 0; i < count; i++) {
+		if (rand() % 100 <= 2) {
+			if (Uninfected_soldiers.remove(tempSoldier)) {
+				*tempSoldier->isInfected() = true;
+				(*Infected)++;
+			}
+			else break;
+		};
+	};
+	while (tempQ.dequeue(tempSoldier)) {
+		Soldiers->enqueue(tempSoldier);
+	}
+
+}
+
 #pragma endregion
 
 
@@ -331,8 +372,10 @@ void earthArmy::Heal() {
 #pragma region "Earth Unit Attacks"
 //Earth Unit Attacks
 void earthSoldier::attack(Army* army) {
-	alienArmy* armyPtr=dynamic_cast <alienArmy*>(army);
-	cout << this->getID() << " shoots [ ";
+	alienArmy* armyPtr = dynamic_cast <alienArmy*>(army);
+	cout << this->getID();
+	if (*this->Infected) cout << "I";
+	cout << " shoots [ ";
 	for (int i = 0; i < this->getAtkCapacity(); i++) {
 		attackSoldier(armyPtr);
 	};
@@ -342,18 +385,41 @@ void earthSoldier::attack(Army* army) {
 
 #pragma region "Earth Soldier attacks"
 void earthSoldier::attackSoldier(alienArmy* army){
-	alienSoldier* enemy;
-	if (army->getSoldiers()->dequeue(enemy)) {
-		if (!*enemy->getTa()) *enemy->getTa() = this->getTimeStep();
-		
-		double damage = ((*this->getHealth()) * (this->getPower()) / 100.0) / sqrt(*enemy->getHealth());
-		(*enemy->getHealth()) -= damage;
-		cout << " "<<enemy->getID() << ",";
-		if (army->CheckUnitHealth(enemy)) {
-			army->getSoldiers()->enqueue(enemy);
-		};
+	if (!*this->Infected) {
+		alienSoldier* enemy;
+
+		if (army->getSoldiers()->dequeue(enemy)) {
+			if (!*enemy->getTa()) *enemy->getTa() = this->getTimeStep();
+
+			double damage = ((*this->getHealth()) * (this->getPower()) / 100.0) / sqrt(*enemy->getHealth());
+			(*enemy->getHealth()) -= damage;
+			cout << " " << enemy->getID() << ",";
+			if (army->CheckUnitHealth(enemy)) {
+				army->getSoldiers()->enqueue(enemy);
+			};
+		}
+	}
+	else {
+		earthSoldier* enemy;
+		if (army->getGame()->getEarthArmy()->getSoldiers()->dequeue(enemy)) {
+			if (!*enemy->getTa()) *enemy->getTa() = this->getTimeStep();
+
+			double damage = ((*this->getHealth()) * (this->getPower()) / 100.0) / sqrt(*enemy->getHealth());
+			(*enemy->getHealth()) -= damage;
+			cout << " " << enemy->getID() << ",";
+			if (army->getGame()->getEarthArmy()->CheckUnitHealth(enemy)) {
+				army->getGame()->getEarthArmy()->getSoldiers()->enqueue(enemy);
+			};
+		}
 	}
 }
+bool* earthSoldier::isInfected() {
+	return Infected;
+}
+bool* earthSoldier::isImmune() {
+	return Immune;
+}
+
 
 #pragma endregion
 
@@ -592,6 +658,12 @@ bool earthArmy::CheckUnitHealth(ArmyUnit* Unit) {
 		}
 	}
 	else {
+		if (Unit->getType() == EarthSoldier) {
+			earthSoldier* soldier = dynamic_cast<earthSoldier*>(Unit);
+			if (soldier->isInfected()) {
+				(*this->Infected)--;
+			}
+		};
 		*Unit->getTd() = this->getGame()->getTimeStep();
 		this->getGame()->getKilledList()->enqueue(Unit);
 		return false;

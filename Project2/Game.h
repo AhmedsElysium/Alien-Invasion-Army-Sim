@@ -20,6 +20,8 @@ public:
 	void printKilledList();
 	void testCode();
 
+	void TestingZone();
+
 	Queue<ArmyUnit*>* getKilledList();
 	int getTimeStep();
 	gameMode getMode();
