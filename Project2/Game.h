@@ -28,5 +28,6 @@ public:
 	earthArmy* getEarthArmy();
 	alienArmy* getAlienArmy();
 
+	int getInfProb();
 
 };

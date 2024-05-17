@@ -308,12 +308,17 @@ dQueue<alienDrone*>* alienArmy::getDrones() {
 #pragma endregion
 
 
+
+
 #pragma region "Army Getters"
 int* earthArmy::countInfected() {
 	return this->Infected;
 }
 
 #pragma endregion
+
+
+
 
 #pragma region "Sodiers & Tanks Uj getters & incrementers"
 
@@ -338,6 +343,8 @@ void earthTank::incrementUj()
 
 
 #pragma endregion 
+
+
 
 
 #pragma region "Earth Army Attacks"
@@ -588,7 +595,7 @@ bool earthTank::checkSiege(alienArmy* AA) {
 }
 #pragma endregion
 
-#pragma region "Heal unit attack"
+
 void earthHealer::attack(Army* army) {
 	earthArmy* enemy = dynamic_cast <earthArmy*>(army);
 	earthSoldier* soldier;
@@ -645,6 +652,8 @@ void earthHealer::attack(Army* army) {
 			}
 		}
 }
+
+#pragma region "Heal unit attack"
 #pragma endregion
 
 
@@ -707,7 +716,7 @@ void alienSoldier::attack(Army* army) {
 	{
 		this->attackSoldier(armyPtr);
 	}
-	cout << "] " << endl;
+	cout << "\b" << "] " << endl;
 }
 
 #pragma region "Alien Soldier Attacks"
@@ -749,7 +758,7 @@ void alienMonster::attack(Army* army) {
 		this->attackSoldier(armyPtr);
 		this->attackTank(armyPtr);
 	}
-	cout << "] " << endl;
+	cout << "\b" << "] " << endl;
 }
 
 #pragma region "Alien Monster Attacks"
@@ -761,7 +770,14 @@ void alienMonster::attackSoldier(earthArmy* army)
 
 		double damage = ((*this->getHealth()) * (this->getPower()) / 100.0) / sqrt(*enemy->getHealth());
 		(*enemy->getHealth()) -= damage;
-		cout << " " << enemy->getID() << ",";
+
+		if (!(*enemy->isInfected()) && (rand() % 1000 <= army->getGame()->getInfProb())) {
+			(*enemy->isInfected())=true;
+		}
+
+		cout << " " << enemy->getID();
+		if (*enemy->isInfected()) cout << "I";
+		cout << ",";
 		if (army->CheckUnitHealth(enemy)) {
 			army->getSoldiers()->enqueue(enemy);
 		}
@@ -787,6 +803,9 @@ void alienMonster::attackTank(earthArmy* army)
 #pragma endregion
 
 #pragma endregion
+
+
+
 
 #pragma region "Health Checkers"
 //Health Checkers

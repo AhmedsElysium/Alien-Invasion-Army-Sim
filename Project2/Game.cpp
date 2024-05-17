@@ -60,6 +60,10 @@ alienArmy* Game::getAlienArmy() {
     return AA;
 }
 
+int Game::getInfProb() {
+    return this->inputData->infection_probability;
+}
+
 void Game::go() {
     try {
         cout << "Select Mode:" << endl << "1.Interactive Mode"<<endl<<"2.Silent Mode"<<endl<<"Enter: ";
@@ -79,7 +83,7 @@ void Game::go() {
             //Generating army units
             ranGen->GenerateEA(EA);
             ranGen->GenerateAA(AA);
-            cout << *TimeStep<<endl;
+            cout << "Timestep: "<< * TimeStep << endl;
 
             if (*Mode == Interactive_Mode) {
 
@@ -99,16 +103,16 @@ void Game::go() {
             EA->attack(AA);
             AA->attack(EA);
 
-            #pragma region " test code of heal before"
-            cout << "Healers before:" << endl;
-            // Print status of earth soldier
-            EA->printHealers();
-            cout << "soldiers before healing: " << endl;
-            EA->printUMLs();
-            cout << "tanks before healing: " << endl;
-            EA->printUMLt();
-            //check for healers
-            #pragma endregion
+            //#pragma region " test code of heal before"
+            //cout << "Healers before:" << endl;
+            //// Print status of earth soldier
+            //EA->printHealers();
+            //cout << "soldiers before healing: " << endl;
+            //EA->printUMLs();
+            //cout << "tanks before healing: " << endl;
+            //EA->printUMLt();
+            ////check for healers
+            //#pragma endregion
 
             #pragma region "heal & increment Uj"
             earthHealer* healer;
