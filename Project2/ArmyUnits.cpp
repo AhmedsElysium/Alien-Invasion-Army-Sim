@@ -697,7 +697,15 @@ void alienArmy::MonstersAttack(earthArmy* Enemy) {
 
 void alienArmy::DronesAttack(earthArmy* Enemy) {
 
-
+	alienDrone* drone1;
+	alienDrone* drone2;
+	if (this->Drones->popHead(drone1)&& this->Drones->popHead(drone2)) {
+		drone1->attack(Enemy);
+		drone2->attack(Enemy);
+		this->Drones->pushHead(drone1);
+		this->Drones->pushRear(drone2);
+	};
+	return;
 }
 
 
@@ -740,12 +748,43 @@ void alienSoldier::attackSoldier(earthArmy* army) {
 
 void alienDrone::attack(Army* army) {
 	earthArmy* armyPtr = dynamic_cast <earthArmy*>(army);
-	if (!armyPtr) return;
+	cout << this->getID() << " shoots [ ";
+	for (int i = 0; i < this->getAtkCapacity(); i++) {
+		this->attackTanks(armyPtr);
+		//Maybe we need to write a cout here to distinguish between the two attacks.
+		this->attackGunnerys(armyPtr);
+	};
+
+	cout << "\b" << "] " << endl;
 	
 }
 
 #pragma region "Alien Drone Attacks"
+void alienDrone::attackTanks(earthArmy* army) {
+	earthTank* tank;
+	if (army->getTanks()->pop(tank)) {
+		if (!*tank->getTa()) *tank->getTa() = this->getTimeStep();
+		double damage = ((*this->getHealth()) * (this->getPower()) / 100.0) / sqrt(*tank->getHealth());
+		(*tank->getHealth()) -= damage;
+		cout << " " << tank->getID() << ",";
+		if (army->CheckUnitHealth(tank)) {
+			army->getTanks()->push(tank);
+		};
+	}
+}
 
+void alienDrone::attackGunnerys(earthArmy* army) {
+	earthGunnery* gunnery;
+	if (army->getGunnery()->dequeue(gunnery)) {
+		if (!*gunnery->getTa()) *gunnery->getTa() = this->getTimeStep();
+		double damage = ((*this->getHealth()) * (this->getPower()) / 100.0) / sqrt(*gunnery->getHealth());
+		(*gunnery->getHealth()) -= damage;
+		cout << " " << gunnery->getID() << ",";
+		if (army->CheckUnitHealth(gunnery)) {
+			army->getGunnery()->enqueue(gunnery, gunnery->getPower());
+		};
+	}
+}
 
 #pragma endregion
 

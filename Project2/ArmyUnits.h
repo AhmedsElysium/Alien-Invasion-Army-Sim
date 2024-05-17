@@ -110,6 +110,8 @@ public:
 };
 
 class alienDrone : public ArmyUnit {
+	void attackTanks(earthArmy*);
+	void attackGunnerys(earthArmy*);
 public:
 	alienDrone(int ID, int* TimeStep, int Health, int Power, int atkCapacity);
 	alienDrone(Data* data);
