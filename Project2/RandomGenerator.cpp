@@ -47,7 +47,7 @@ ArmyUnit* RandomGenerator::Generate(UnitType unit)
     }
     else if (unit == EarthHealer)
     {
-        AssignAData(unit);
+        AssignEData(unit);
         earthHealer* H = new earthHealer(data);
         return H;
     }

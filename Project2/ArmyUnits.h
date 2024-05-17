@@ -40,13 +40,14 @@ public:
 //Earth Units
 class earthSoldier: public ArmyUnit {
 private:
-	int Uj;
+	int Uj = -1;
 	void attackSoldier(alienArmy* army);
 
 public:
 	earthSoldier(int ID, int* TimeStep, int Health, int Power, int atkCapacity);
 	earthSoldier(Data* data);
 	int* getUj();
+	void incrementUj();
 	void attack(Army *army) override;
 
 };
@@ -70,7 +71,7 @@ public:
 
 class earthTank: public ArmyUnit {
 private:
-	int Uj;
+	int Uj = -1;
 	static bool underSiege;
 	void attackSoldier(alienArmy* army);
 	void attackMonster(alienArmy* army);
@@ -80,6 +81,8 @@ public:
 	void attack(Army *army) override;
 	bool checkSiege(alienArmy* AA);
 	int* getUj();
+	void incrementUj();
+
 
 };
 
@@ -168,6 +171,8 @@ public:
 	void printTanks();
 	void printGunnery();
 	void printHealers();
+	void printUMLs();
+	void printUMLt();
 };
 
 class alienArmy :public Army {
