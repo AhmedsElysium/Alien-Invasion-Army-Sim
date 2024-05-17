@@ -98,22 +98,70 @@ void Game::go() {
             //Begin attack simulations
             EA->attack(AA);
             AA->attack(EA);
-            cout << "Healers:" << endl;
+
+            #pragma region " test code of heal before"
+            cout << "Healers before:" << endl;
             // Print status of earth soldier
             EA->printHealers();
+            cout << "soldiers before healing: " << endl;
+            EA->printUMLs();
+            cout << "tanks before healing: " << endl;
+            EA->printUMLt();
             //check for healers
+            #pragma endregion
+
+            #pragma region "heal & increment Uj"
             earthHealer* healer;
-            while(EA->getHealers()->pop(healer))
+            if(!EA->getUMLs()->isEmpty() || !EA->getUMLt()->isEmpty())
             {
-                healer->attack(EA);
-                delete healer;
+                while (EA->getHealers()->pop(healer))
+                {
+                    healer->attack(EA);
+                    delete healer;
+                }
             }
-           
-            if (*TimeStep >= 40) {
+            pQueue<earthSoldier*> tempsoldierQ ;
+            earthSoldier* soldier;
+            while (!EA->getUMLs()->isEmpty())
+            {
+                EA->getUMLs()->dequeue(soldier);
+                soldier->incrementUj();
+                tempsoldierQ.enqueue(soldier, 100 - (*soldier->getHealth()));
+            }
+            while (!tempsoldierQ.isEmpty())
+            {
+                tempsoldierQ.dequeue(soldier);
+                EA->getUMLs()->enqueue(soldier, 100 - (*soldier->getHealth()));
+            }
+
+            Queue<earthTank*> temptankQ;
+            earthTank* tank;
+            while (!EA->getUMLt()->isEmpty())
+            {
+                EA->getUMLt()->dequeue(tank);
+                tank->incrementUj();
+                temptankQ.enqueue(tank);
+            }
+            while (!temptankQ.isEmpty())
+            {
+                temptankQ.dequeue(tank);
+                EA->getUMLt()->enqueue(tank);
+            }
+            #pragma endregion
+
+            #pragma region "test code of heal after"
+            EA->printHealers();
+            cout << "soldiers in uml after healing: " << endl;
+            EA->printUMLs();
+            cout << "tanks in uml after healing: " << endl;
+            EA->printUMLt();
+            #pragma endregion
+
+
+            if (*TimeStep >= 100) {
                 //Check Win/Loss/Draw
                 break;
             };
-
 
             (*this->TimeStep)++;
 
@@ -125,18 +173,12 @@ void Game::go() {
             };
         }
 
-
-
         cout << "End simulation" << endl;
         //produce output file
-
-
     }
     catch (string s) {
         cout << s;
     }
-
-
 }
 
 

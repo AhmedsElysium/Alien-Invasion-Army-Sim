@@ -96,7 +96,7 @@ earthArmy::earthArmy(Game* game) :Army(game) {
 }
 alienArmy::alienArmy(Game* game) :Army(game) {
 	Soldiers = new Queue<alienSoldier*>;
-	Monsters = new Array<alienMonster*>(100);
+	Monsters = new Array<alienMonster*>(1000);
 	Drones = new dQueue<alienDrone*>;
 }
 
@@ -289,6 +289,30 @@ dQueue<alienDrone*>* alienArmy::getDrones() {
 }
 #pragma endregion
 
+#pragma region "Sodiers & Tanks Uj getters & incrementers"
+
+int* earthSoldier::getUj()
+{
+	return &Uj;
+}
+
+int* earthTank::getUj()
+{
+	return &Uj;
+}
+
+void earthSoldier::incrementUj()
+{
+	Uj++;
+}
+
+void earthTank::incrementUj()
+{
+	Uj++;
+}
+
+#pragma endregion
+
 #pragma region "Earth Army Attacks"
 //Earth Army Parent Attack Function
 void earthArmy::attack(Army* army) {
@@ -318,10 +342,7 @@ void earthArmy::TanksAttack(alienArmy* Enemy) {
 	return;
 }
 void earthArmy::GunneryAttack(alienArmy* Enemy) {
-
 }
-
-
 
 #pragma endregion
 
@@ -424,7 +445,6 @@ void earthTank::attack(Army* army)  {
 	for (int i = 0; i < this->getAtkCapacity(); i++) {
 		if (checkSiege(armyPtr) && rand() % 2) {
 			this->attackSoldier(armyPtr);
-
 		}
 		else {
 			this->attackMonster(armyPtr);
@@ -476,8 +496,7 @@ bool earthTank::checkSiege(alienArmy* AA) {
 }
 #pragma endregion
 
-
-//Earth Unit Heals
+#pragma region "Heal unit attack"
 void earthHealer::attack(Army* army) {
 	earthArmy* enemy = dynamic_cast <earthArmy*>(army);
 	earthSoldier* soldier;
@@ -486,24 +505,25 @@ void earthHealer::attack(Army* army) {
 		{
 				if(enemy->getUMLs()->dequeue(soldier))
 				{
-					if (soldier->getUj())
-					{
 						if (*(soldier->getUj()) >= 10)
 						{
 							*soldier->getTd() = enemy->getGame()->getTimeStep();
 							ArmyUnit* unit = soldier;
 							enemy->getGame()->getKilledList()->enqueue(unit);
+							cout << " Soldier killed ): " << endl;
 						}
 						else
 						{
 							double health_improv = (*(this->getHealth()) * this->getPower() / 100) / sqrt(*(soldier->getHealth()));
 							*(soldier->getHealth()) += health_improv;
+							if (enemy->CheckUnitHealth(soldier))
+							{
+								cout << " Soldier Healed! ID: " << soldier->getID() << "  Health after:  " << *soldier->getHealth() << " initial health: " << soldier->getInitialHealth() << endl;
+
+								enemy->getSoldiers()->enqueue(soldier);
+							}
 						}
-						if (enemy->CheckUnitHealth(soldier))
-						{
-							enemy->getSoldiers()->enqueue(soldier);
-						}
-					}
+						
 				}
 
 			else
@@ -516,40 +536,25 @@ void earthHealer::attack(Army* army) {
 						*tank->getTd() = enemy->getGame()->getTimeStep();
 						ArmyUnit* unit = tank;
 						enemy->getGame()->getKilledList()->enqueue(unit);
+						cout << " Tank killed ): " << endl;
 					}
 					else
 					{
 						double health_improv = (*(this->getHealth()) * this->getPower() / 100) / sqrt(*(tank->getHealth()));
 						*(tank->getHealth()) += health_improv;
+						if (enemy->CheckUnitHealth(tank))
+						{
+							cout << " tank Healed! ID: " << tank->getID() << "  Health after:  " << *tank->getHealth() << " initial health: " << tank->getInitialHealth() << endl;
+							enemy->getTanks()->push(tank);
+						}
 					}
-					if (enemy->CheckUnitHealth(tank))
-					{
-						enemy->getTanks()->push(tank);
-					}
+					
 				}
 			}
 		}
 }
-
-#pragma region "Earth Healer Functions"
-//put any healer functions here
-
-
 #pragma endregion
 
-#pragma endregion
-
-#pragma region "Sodiers & Tanks Uj getters"
-
-int* earthSoldier::getUj()
-{
-	return &Uj;
-}
-
-int* earthTank::getUj()
-{
-	return &Uj;
-}
 #pragma endregion
 
 #pragma region "Alien Army Attacks"
@@ -576,8 +581,8 @@ void alienArmy::SoldiersAttack(earthArmy* Enemy) {
 
 void alienArmy::MonstersAttack(earthArmy* Enemy) {
 	alienMonster* monster;
-
-	if (this->Monsters->remove(monster)) {
+	if (this->Monsters->remove(monster))
+	{
 		monster->attack(Enemy);
 		this->Monsters->insert(monster);
 	}
@@ -811,6 +816,47 @@ void earthArmy::printHealers()	 {
 		Healers->push(ehTemp);
 	}
 }
+void earthArmy::printUMLs()
+{
+	Queue<earthSoldier*> tempUMLs; // Temporary queue to store elements
+
+	while (!UMLs->isEmpty()) {
+		earthSoldier* es = nullptr;
+		if (UMLs->dequeue(es)) {
+			cout << "Injured Earth Soldier " << es->getID() << ": Health: " << *(es->getHealth()) << ", Power: " << es->getPower() << ", Attack Capacity: " << es->getAtkCapacity() << endl;
+			tempUMLs.enqueue(es); // Store the element temporarily
+		}
+	}
+
+	// Re-enqueue the elements back to the original queue
+	while (!tempUMLs.isEmpty()) {
+		earthSoldier* esTemp = nullptr;
+		tempUMLs.dequeue(esTemp);
+		UMLs->enqueue(esTemp, 100 - (*esTemp->getHealth()));
+	}
+	cout << endl;
+}
+void earthArmy::printUMLt()
+{
+	Queue<earthTank*> tempUMLt; // Temporary queue to store elements
+
+	while (!UMLt->isEmpty()) {
+		earthTank* et = nullptr;
+		if (UMLt->dequeue(et)) {
+			cout << "Injured Earth Tank " << et->getID() << ": Health: " << *(et->getHealth()) << ", Power: " << et->getPower() << ", Attack Capacity: " << et->getAtkCapacity() << endl;
+			tempUMLt.enqueue(et); // Store the element temporarily
+		}
+	}
+
+	// Re-enqueue the elements back to the original queue
+	while (!tempUMLt.isEmpty()) {
+		earthTank* etTemp = nullptr;
+		tempUMLt.dequeue(etTemp);
+		UMLt->enqueue(etTemp);
+	}
+	cout << endl;
+}
+
 
 void alienArmy::printSoldiers() {
 	// Print status of alien soldiers
@@ -865,5 +911,3 @@ void alienArmy::printDrones() {
 
 }
 #pragma endregion
-
-
