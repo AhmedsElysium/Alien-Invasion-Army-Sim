@@ -100,7 +100,7 @@ void Game::go() {
             AA->attack(EA);
             while (EA->getHealers())
             {
-                earthHealer* healer;
+                earthHealer* healer ;
                 EA->getHealers()->pop(healer);
                 healer->attack(EA);
                 delete healer;

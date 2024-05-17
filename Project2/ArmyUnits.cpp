@@ -695,7 +695,7 @@ bool earthArmy::CheckUnitHealth(ArmyUnit* Unit) {
 				*(dynamic_cast<earthTank*> (Unit)->getUj()) = 0;
 				this->addUMLt(dynamic_cast<earthTank*> (Unit));
 			}
-			else
+			else if(Unit->getType() == EarthSoldier)
 			{
 				*(dynamic_cast<earthSoldier*> (Unit)->getUj()) = 0;
 				this->addUMLs(dynamic_cast<earthSoldier*> (Unit), 100 - *Unit->getHealth());
