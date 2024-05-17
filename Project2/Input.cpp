@@ -1,7 +1,7 @@
  #include "Input.h"
 
 
-void insert(string& line, string& variable, int(&values)[20], int& index, int& num) {
+void insert(string& line, string& variable, int(&values)[21], int& index, int& num) {
     for (int i = 0; i < line.size(); i++) {
         if (line[i] != ' ' && line[i] != '-') {
             variable += line[i];
@@ -20,10 +20,9 @@ void insert(string& line, string& variable, int(&values)[20], int& index, int& n
 }
 
 
-
 Input* input(string file_name) {
     string variable = "";
-    int values[20];
+    int values[21];
     values[0] = -1;
     int index = 0;
     int num;
@@ -41,6 +40,7 @@ Input* input(string file_name) {
     else return nullptr;
     int j = 0;
     Data->N = values[j++];
+    Data->EH = values[j++];
     Data->ES = values[j++];
     Data->ET = values[j++];
     Data->EG = values[j++];

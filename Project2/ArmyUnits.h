@@ -41,11 +41,14 @@ public:
 //Earth Units
 class earthSoldier: public ArmyUnit {
 private:
+	int Uj = -1;
 	void attackSoldier(alienArmy* army);
 	bool *Infected, *Immune;
 public:
 	earthSoldier(int ID, int* TimeStep, int Health, int Power, int atkCapacity);
 	earthSoldier(Data* data);
+	int* getUj();
+	void incrementUj();
 	void attack(Army *army) override;
 	bool *isInfected();
 	bool *isImmune();
@@ -71,6 +74,7 @@ public:
 
 class earthTank: public ArmyUnit {
 private:
+	int Uj = -1;
 	static bool underSiege;
 	void attackSoldier(alienArmy* army);
 	void attackMonster(alienArmy* army);
@@ -79,10 +83,15 @@ public:
 	earthTank(Data* data);
 	void attack(Army *army) override;
 	bool checkSiege(alienArmy* AA);
+	int* getUj();
+	void incrementUj();
+
+
 };
 
 //Alien Units
 class alienSoldier : public ArmyUnit {
+	void attackSoldier(earthArmy*);
 public:
 	alienSoldier(int ID, int* TimeStep, int Health, int Power, int atkCapacity);
 	alienSoldier(Data* data);
@@ -91,6 +100,9 @@ public:
 };
 
 class alienMonster : public ArmyUnit {
+	void attackSoldier(earthArmy*);
+	void attackTank(earthArmy*);
+
 public:
 	alienMonster(int ID, int* TimeStep, int Health, int Power, int atkCapacity);
 	alienMonster(Data* data);
@@ -123,6 +135,8 @@ private:
 	 Stack<earthTank*>* Tanks;
 	 pQueue<earthGunnery*>* Gunnery;
 	 Stack<earthHealer*>* Healers;
+	 pQueue<earthSoldier*>* UMLs;
+	 Queue<earthTank*>* UMLt;
 
 	 int* Infected;
 public:
@@ -132,7 +146,8 @@ public:
 	void addTank(int ID, int* TimeStep, int Health, int Power, int atkCapacity);
 	void addGunnery(int ID, int* TimeStep, int Health, int Power, int atkCapacity);
 	void addHealer(int ID, int* TimeStep, int Health, int Power, int atkCapacity);
-
+	void addUMLs(earthSoldier*, int);
+	void addUMLt(earthTank*);
 	void addSoldier(earthSoldier* Unit);
 	void addTank(earthTank* Unit);
 	void addGunnery(earthGunnery* Unit);
@@ -142,6 +157,8 @@ public:
 	Stack<earthTank*>* getTanks();
 	pQueue<earthGunnery*>* getGunnery();
 	Stack<earthHealer*>* getHealers();
+	pQueue<earthSoldier*>* getUMLs();
+	Queue<earthTank*>* getUMLt();
 
 	int* countInfected();
 	void infect();
@@ -154,12 +171,14 @@ public:
 	void TanksAttack(alienArmy* Enemy);
 	void GunneryAttack(alienArmy* Enemy);
 
-	void Heal();
+	
 
 	void printSoldiers();
 	void printTanks();
 	void printGunnery();
 	void printHealers();
+	void printUMLs();
+	void printUMLt();
 };
 
 class alienArmy :public Army {
