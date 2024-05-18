@@ -490,7 +490,7 @@ bool dQueue<T>::peekRear(T& rearEntry) {
 
 template<typename T>
 bool dQueue<T>::isEmpty() {
-	return !head;
+	return !(head&&rear);
 }
 
 template<typename T>

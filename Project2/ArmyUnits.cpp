@@ -357,6 +357,7 @@ void earthArmy::attack(Army* army) {
 	SoldiersAttack(armyPtr);
 	TanksAttack(armyPtr);
 	GunneryAttack(armyPtr);
+	infect();
 }
 
 //Earth Army Base Attack Functions
@@ -633,6 +634,7 @@ void earthHealer::attack(Army* army) {
 						{
 							*soldier->getTd() = enemy->getGame()->getTimeStep();
 							ArmyUnit* unit = soldier;
+							if (*soldier->isInfected()) (*army->getGame()->getEarthArmy()->countInfected())--;
 							enemy->getGame()->getKilledList()->enqueue(unit);
 							if (army->getGame()->getMode() == Interactive_Mode) 
 								cout << " Soldier Died in UML " << endl;
@@ -922,7 +924,7 @@ bool earthArmy::CheckUnitHealth(ArmyUnit* Unit) {
 	else {
 		if (Unit->getType() == EarthSoldier) {
 			earthSoldier* soldier = dynamic_cast<earthSoldier*>(Unit);
-			if (soldier->isInfected()) {
+			if (*soldier->isInfected()) {
 				(*this->Infected)--;
 			}
 		};
@@ -1193,7 +1195,9 @@ void earthArmy::printUMLsIDs()
 	while (!UMLs->isEmpty()) {
 		earthSoldier* es = nullptr;
 		if (UMLs->dequeue(es)) {
-			cout << " " << es->getID() << ",";
+			cout << " " << es->getID();
+			if (*es->isInfected()) cout << "I";
+			cout << ",";
 			tempUMLs.enqueue(es); // Store the element temporarily
 		}
 	}

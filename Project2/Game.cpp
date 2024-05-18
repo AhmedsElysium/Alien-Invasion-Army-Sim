@@ -41,7 +41,7 @@ void Game::printKilledList() {
         cout <<" "<< tempUnit->getID();
         if (tempUnit->getType() == EarthSoldier) {
             earthSoldier* soldier = dynamic_cast<earthSoldier*>(tempUnit);
-            if (soldier->isInfected()) {
+            if (*soldier->isInfected()) {
                 cout << "I";
             };
         };
@@ -190,7 +190,10 @@ void Game::go() {
                     //count of units and id's
                 cout << endl;
                 printKilledList();
-                cout << "Infection percentage: " <<100*(*EA->countInfected()) / EA->getSoldiers()->getCount() << "%"<<endl;
+                if(EA->getSoldiers()->getCount()+EA->getUMLs()->getCount())
+
+
+                    cout << "Infection percentage: " <<100*(*EA->countInfected()) /( EA->getSoldiers()->getCount() +EA->getUMLs()->getCount())<< "%"<<endl;
                 system("pause");
 
             };
@@ -199,6 +202,8 @@ void Game::go() {
 
 
         cout << "End simulation" << endl;
+        string s;
+        cin>>s;
         //produce output file
 
 
