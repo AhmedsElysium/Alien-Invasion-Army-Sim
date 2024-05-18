@@ -56,9 +56,11 @@ public:
 };
 
 class earthHealer: public ArmyUnit {
+	double* count = 0;
 public:
 	earthHealer(int ID, int* TimeStep, int Health, int Power, int atkCapacity);
 	earthHealer(Data* data);
+	double counter();
 	void attack(Army* army) override;
 };
 

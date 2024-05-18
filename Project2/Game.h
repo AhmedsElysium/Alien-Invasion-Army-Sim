@@ -2,6 +2,8 @@
 #include "ArmyUnits.h"
 #include "Input.h"
 #include "RandomGenerator.h"
+#include "Output.h"
+using namespace std;
 
 class Game {
 private:
@@ -28,7 +30,7 @@ public:
 	gameMode getMode();
 	earthArmy* getEarthArmy();
 	alienArmy* getAlienArmy();
-
+	string getresult();
 	int getInfProb();
 
 };

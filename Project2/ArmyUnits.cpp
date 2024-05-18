@@ -179,6 +179,11 @@ earthGunnery::earthGunnery(Data* data) :ArmyUnit(data,EarthGunnery) {}
 earthTank::earthTank(Data* data) :ArmyUnit(data, EarthTank) {}
 earthHealer::earthHealer(Data* data) :ArmyUnit(data, EarthHealer) {}
 
+double earthHealer::counter()
+{
+	return *count;
+}
+
 bool earthTank::underSiege = false;
 
 //Alien Units
@@ -390,7 +395,7 @@ void earthArmy::GunneryAttack(alienArmy* Enemy) {
 //}
 
 void earthArmy::infect() {
-	Array<earthSoldier*> Uninfected_soldiers(Soldiers->getCount()-*Infected);
+	Array<earthSoldier*> Uninfected_soldiers(Soldiers->getCount()+UMLs->getCount() - *Infected);
 	Queue<earthSoldier*> tempQ;
 	earthSoldier* tempSoldier;
 	while (Soldiers->dequeue(tempSoldier)) {
@@ -647,7 +652,7 @@ void earthHealer::attack(Army* army) {
 							{
 								if (army->getGame()->getMode() == Interactive_Mode)
 								cout << " Soldier Healed! ID: " << soldier->getID() << "  Health after:  " << *soldier->getHealth() << " initial health: " << soldier->getInitialHealth() << endl;
-
+								*count++;
 								enemy->getSoldiers()->enqueue(soldier);
 							}
 						}
