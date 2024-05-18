@@ -365,7 +365,15 @@ void earthArmy::SoldiersAttack(alienArmy* Enemy) {
 	earthSoldier* soldier;
 	if (this->Soldiers->dequeue(soldier)) {
 		soldier->attack(Enemy);
-		this->Soldiers->enqueue(soldier);
+
+		Queue<earthSoldier*> tempq;
+		tempq.enqueue(soldier);
+		while (this->Soldiers->dequeue(soldier)) {
+			tempq.enqueue(soldier);
+		}
+		while (tempq.dequeue(soldier)) {
+			this->Soldiers->enqueue(soldier);
+		}
 	}
 }
 void earthArmy::TanksAttack(alienArmy* Enemy) {
@@ -390,7 +398,7 @@ void earthArmy::GunneryAttack(alienArmy* Enemy) {
 //}
 
 void earthArmy::infect() {
-	Array<earthSoldier*> Uninfected_soldiers(Soldiers->getCount()-*Infected);
+	Array<earthSoldier*> Uninfected_soldiers(Soldiers->getCount()+UMLs->getCount() - (*Infected));
 	Queue<earthSoldier*> tempQ;
 	earthSoldier* tempSoldier;
 	while (Soldiers->dequeue(tempSoldier)) {
@@ -412,7 +420,7 @@ void earthArmy::infect() {
 	while (tempQ.dequeue(tempSoldier)) {
 		Soldiers->enqueue(tempSoldier);
 	}
-
+	
 }
 
 #pragma endregion
@@ -429,9 +437,7 @@ void earthSoldier::attack(Army* army) {
 		if (*this->Infected) cout << "I";
 		cout << " shoots [ ";
 	};
-	for (int i = 0; i < this->getAtkCapacity(); i++) {
 		attackSoldier(armyPtr);
-	};
 	if (army->getGame()->getMode() == Interactive_Mode)
 		cout << "\b" << "] " << endl;
 
@@ -441,39 +447,60 @@ void earthSoldier::attack(Army* army) {
 void earthSoldier::attackSoldier(alienArmy* army){
 	if (!*this->Infected) {
 		alienSoldier* enemy;
+		Queue<alienSoldier*> tempQ;
 
-		if (army->getSoldiers()->dequeue(enemy)) {
-			if (!*enemy->getTa()) *enemy->getTa() = this->getTimeStep();
+		for (int i = 0; i < this->getAtkCapacity(); i++) {
 
-			double damage = ((*this->getHealth()) * (this->getPower()) / 100.0) / sqrt(*enemy->getHealth());
-			(*enemy->getHealth()) -= damage;
+			if (army->getSoldiers()->dequeue(enemy)) {
+				if (!*enemy->getTa()) *enemy->getTa() = this->getTimeStep();
 
-			if (army->getGame()->getMode() == Interactive_Mode)
-			cout << " " << enemy->getID() << ",";
-			
-			if (army->CheckUnitHealth(enemy)) {
-				army->getSoldiers()->enqueue(enemy);
+				double damage = ((*this->getHealth()) * (this->getPower()) / 100.0) / sqrt(*enemy->getHealth());
+				(*enemy->getHealth()) -= damage;
+
+				if (army->getGame()->getMode() == Interactive_Mode)
+					cout << " " << enemy->getID() << ",";
+
+				if (army->CheckUnitHealth(enemy)) {
+					tempQ.enqueue(enemy);
+				};
 			};
-		}
+		};
+		while (army->getSoldiers()->dequeue(enemy)) {
+			tempQ.enqueue(enemy);
+		};
+		while (tempQ.dequeue(enemy)) {
+			army->getSoldiers()->enqueue(enemy);
+		};
 	}
 	else {
 		earthSoldier* enemy;
-		if (army->getGame()->getEarthArmy()->getSoldiers()->dequeue(enemy)) {
-			if (!*enemy->getTa()) *enemy->getTa() = this->getTimeStep();
+		Queue<earthSoldier*> tempQ;
 
-			double damage = ((*this->getHealth()) * (this->getPower()) / 100.0) / sqrt(*enemy->getHealth());
-			(*enemy->getHealth()) -= damage;
+		for (int i = 0; i < this->getAtkCapacity(); i++) {
 
-			if (army->getGame()->getMode() == Interactive_Mode) {
-				cout << " " << enemy->getID();
-				if (*enemy->isInfected()) cout << "I";
-				cout << ",";
-			};
+			if (army->getGame()->getEarthArmy()->getSoldiers()->dequeue(enemy)) {
+				if (!*enemy->getTa()) *enemy->getTa() = this->getTimeStep();
+
+				double damage = ((*this->getHealth()) * (this->getPower()) / 100.0) / sqrt(*enemy->getHealth());
+				(*enemy->getHealth()) -= damage;
+
+				if (army->getGame()->getMode() == Interactive_Mode) {
+					cout << " " << enemy->getID();
+					if (*enemy->isInfected()) cout << "I";
+					cout << ",";
+				};
 
 
-			if (army->getGame()->getEarthArmy()->CheckUnitHealth(enemy)) {
-				army->getGame()->getEarthArmy()->getSoldiers()->enqueue(enemy);
-			};
+				if (army->getGame()->getEarthArmy()->CheckUnitHealth(enemy)) {
+					tempQ.enqueue(enemy);
+				};
+			}
+		}
+		while (army->getGame()->getEarthArmy()->getSoldiers()->dequeue(enemy)) {
+			tempQ.enqueue(enemy);
+		}
+		while (tempQ.dequeue(enemy)) {
+			army->getGame()->getEarthArmy()->getSoldiers()->enqueue(enemy);
 		}
 	}
 }
@@ -581,6 +608,7 @@ void earthTank::attack(Army* army)  {
 #pragma region "Earth Tank attacks"
 void earthTank::attackSoldier(alienArmy* army) {
 	alienSoldier* enemy;
+	Queue<alienSoldier*> tempQ;
 	if (army->getSoldiers()->dequeue(enemy)) {
 		if (!*enemy->getTa()) *enemy->getTa() = this->getTimeStep();
 		double damage = ((*this->getHealth()) * (this->getPower()) / 100.0) / sqrt(*enemy->getHealth());
@@ -588,9 +616,15 @@ void earthTank::attackSoldier(alienArmy* army) {
 		if (army->getGame()->getMode() == Interactive_Mode)
 		cout << " "<<enemy->getID() << ",";
 		if (army->CheckUnitHealth(enemy)) {
-			army->getSoldiers()->enqueue(enemy);
+			tempQ.enqueue(enemy);
 		};
 	}
+	while (army->getSoldiers()->dequeue(enemy)) {
+		tempQ.enqueue(enemy);
+	};
+	while (tempQ.dequeue(enemy)) {
+		army->getSoldiers()->enqueue(enemy);
+	};
 }
 
 void earthTank::attackMonster(alienArmy* army) {
@@ -713,8 +747,18 @@ void alienArmy::SoldiersAttack(earthArmy* Enemy) {
 	alienSoldier* soldier;
 	if (this->Soldiers->dequeue(soldier)) {
 		soldier->attack(Enemy);
-		this->Soldiers->enqueue(soldier);
+
+		Queue<alienSoldier*> tempq;
+		tempq.enqueue(soldier);
+		while (this->Soldiers->dequeue(soldier)) {
+			tempq.enqueue(soldier);
+		}
+		while (tempq.dequeue(soldier)) {
+			this->Soldiers->enqueue(soldier);
+		}
+
 	}
+
 }
 
 void alienArmy::MonstersAttack(earthArmy* Enemy) {
@@ -752,10 +796,9 @@ void alienSoldier::attack(Army* army) {
 	if (!armyPtr) return;
 	if (army->getGame()->getMode() == Interactive_Mode)
 	cout << "AS " << this->getID() << " shoots [ ";
-	for (int i = 0; i < this->getAtkCapacity(); i++)
-	{
+
 		this->attackSoldier(armyPtr);
-	}
+
 	if (army->getGame()->getMode() == Interactive_Mode)
 	cout << "\b" << "] " << endl;
 }
@@ -763,19 +806,30 @@ void alienSoldier::attack(Army* army) {
 #pragma region "Alien Soldier Attacks"
 void alienSoldier::attackSoldier(earthArmy* army) {
 	earthSoldier* enemy;
-	if (army->getSoldiers()->dequeue(enemy)) {
-		if (!*enemy->getTa()) *enemy->getTa() = this->getTimeStep();
+	Queue<earthSoldier*> tempQ;
 
-		double damage = ((*this->getHealth()) * (this->getPower()) / 100.0) / sqrt(*enemy->getHealth());
-		(*enemy->getHealth()) -= damage;
-		if (army->getGame()->getMode() == Interactive_Mode) {
-			cout << " " << enemy->getID();
-			if (*enemy->isInfected()) cout << "I";
-			cout << ",";
+	for (int i = 0; i < this->getAtkCapacity(); i++) {
+
+		if (army->getSoldiers()->dequeue(enemy)) {
+			if (!*enemy->getTa()) *enemy->getTa() = this->getTimeStep();
+
+			double damage = ((*this->getHealth()) * (this->getPower()) / 100.0) / sqrt(*enemy->getHealth());
+			(*enemy->getHealth()) -= damage;
+			if (army->getGame()->getMode() == Interactive_Mode) {
+				cout << " " << enemy->getID();
+				if (*enemy->isInfected()) cout << "I";
+				cout << ",";
+			};
+			if (army->CheckUnitHealth(enemy)) {
+				tempQ.enqueue(enemy);
+			};
 		};
-	if (army->CheckUnitHealth(enemy)) {
-			army->getSoldiers()->enqueue(enemy);
-		}
+	}
+	while (army->getSoldiers()->dequeue(enemy)) {
+		tempQ.enqueue(enemy);
+	}
+	while (tempQ.dequeue(enemy)) {
+		army->getSoldiers()->enqueue(enemy);
 	}
 }
 
@@ -789,9 +843,12 @@ void alienDrone::attack(Army* army) {
 	if (army->getGame()->getMode() == Interactive_Mode)
 		cout << "AD " << this->getID() << " shoots [ ";
 	for (int i = 0; i < this->getAtkCapacity(); i++) {
-		this->attackTanks(armyPtr);
-		//Maybe we need to write a cout here to distinguish between the two attacks.
-		this->attackGunnerys(armyPtr);
+		if (rand() % 100 < 50) {
+			this->attackTanks(armyPtr);
+		}	//Maybe we need to write a cout here to distinguish between the two attacks.
+		else {
+			this->attackGunnerys(armyPtr);
+		};
 	};
 
 	if (army->getGame()->getMode() == Interactive_Mode)
@@ -837,8 +894,12 @@ void alienMonster::attack(Army* army) {
 		cout <<"AM "<< this->getID() << " shoots [ ";
 	for (int i = 0; i < this->getAtkCapacity(); i++)
 	{
-		this->attackSoldier(armyPtr);
-		this->attackTank(armyPtr);
+		if (rand() % 100 < 50) {
+			this->attackSoldier(armyPtr);
+		}
+		else {
+			this->attackTank(armyPtr);
+		};
 	}
 	if (army->getGame()->getMode() == Interactive_Mode)
 		cout << "\b" << "] " << endl;
@@ -848,13 +909,14 @@ void alienMonster::attack(Army* army) {
 void alienMonster::attackSoldier(earthArmy* army)
 {
 	earthSoldier* enemy;
+	Queue<earthSoldier*> tempQ;
 	if (army->getSoldiers()->dequeue(enemy)) {
 		if (!*enemy->getTa()) *enemy->getTa() = this->getTimeStep();
 
 		double damage = ((*this->getHealth()) * (this->getPower()) / 100.0) / sqrt(*enemy->getHealth());
 		(*enemy->getHealth()) -= damage;
 
-		if (!(*enemy->isInfected()) && (rand() % 1000 <= army->getGame()->getInfProb())) {
+		if (!(*enemy->isInfected()) && (rand() % 1000 < army->getGame()->getInfProb())) {
 			(*enemy->isInfected())=true;
 			(*army->countInfected())++;
 		}
@@ -866,10 +928,17 @@ void alienMonster::attackSoldier(earthArmy* army)
 			cout << ",";
 		};
 		if (army->CheckUnitHealth(enemy)) {
-			army->getSoldiers()->enqueue(enemy);
+			tempQ.enqueue(enemy);
 		}
 
 	}
+	while (army->getSoldiers()->dequeue(enemy)) {
+		tempQ.enqueue(enemy);
+	}
+	while (tempQ.dequeue(enemy)) {
+		army->getSoldiers()->enqueue(enemy);
+	}
+
 }
 void alienMonster::attackTank(earthArmy* army)
 {
