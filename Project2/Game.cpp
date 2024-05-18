@@ -47,7 +47,7 @@ void Game::printKilledList() {
         };
         cout<< ",";
     }
-    cout << "]" << endl;
+    cout << "\b]" << endl;
     while (tempQueue.dequeue(tempUnit)) {
         killedList->enqueue(tempUnit);
     }
@@ -188,7 +188,9 @@ void Game::go() {
             if (*Mode == Interactive_Mode) {
                 //Print killed/destructed list
                     //count of units and id's
+                cout << endl;
                 printKilledList();
+                cout << "Infection percentage: " <<100*(*EA->countInfected()) / EA->getSoldiers()->getCount() << "%"<<endl;
                 system("pause");
 
             };
