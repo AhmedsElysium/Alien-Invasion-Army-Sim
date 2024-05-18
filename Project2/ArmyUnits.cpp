@@ -423,13 +423,16 @@ void earthArmy::infect() {
 //Earth Unit Attacks
 void earthSoldier::attack(Army* army) {
 	alienArmy* armyPtr = dynamic_cast <alienArmy*>(army);
-	cout << this->getID();
-	if (*this->Infected) cout << "I";
-	cout << " shoots [ ";
+	if (army->getGame()->getMode() == Interactive_Mode) {
+		cout << this->getID();
+		if (*this->Infected) cout << "I";
+		cout << " shoots [ ";
+	};
 	for (int i = 0; i < this->getAtkCapacity(); i++) {
 		attackSoldier(armyPtr);
 	};
-	cout << "\b" << "] " << endl;
+	if (army->getGame()->getMode() == Interactive_Mode)
+		cout << "\b" << "] " << endl;
 
 }
 
@@ -443,7 +446,10 @@ void earthSoldier::attackSoldier(alienArmy* army){
 
 			double damage = ((*this->getHealth()) * (this->getPower()) / 100.0) / sqrt(*enemy->getHealth());
 			(*enemy->getHealth()) -= damage;
+
+			if (army->getGame()->getMode() == Interactive_Mode)
 			cout << " " << enemy->getID() << ",";
+			
 			if (army->CheckUnitHealth(enemy)) {
 				army->getSoldiers()->enqueue(enemy);
 			};
@@ -456,7 +462,14 @@ void earthSoldier::attackSoldier(alienArmy* army){
 
 			double damage = ((*this->getHealth()) * (this->getPower()) / 100.0) / sqrt(*enemy->getHealth());
 			(*enemy->getHealth()) -= damage;
-			cout << " " << enemy->getID() << ",";
+
+			if (army->getGame()->getMode() == Interactive_Mode) {
+				cout << " " << enemy->getID();
+				if (*enemy->isInfected()) cout << "I";
+				cout << ",";
+			};
+
+
 			if (army->getGame()->getEarthArmy()->CheckUnitHealth(enemy)) {
 				army->getGame()->getEarthArmy()->getSoldiers()->enqueue(enemy);
 			};
@@ -476,6 +489,7 @@ bool* earthSoldier::isImmune() {
 
 void earthGunnery::attack(Army* army)  {
 	alienArmy* armyPtr = dynamic_cast <alienArmy*>(army);
+	if(army->getGame()->getMode()==Interactive_Mode)
 	cout << this->getID() << " shoots [ ";
 	for (int i = 0; i < this->getAtkCapacity(); i++) {
 		if (rand() % 2) {
@@ -488,6 +502,7 @@ void earthGunnery::attack(Army* army)  {
 		};
 	};
 
+	if (army->getGame()->getMode() == Interactive_Mode)
 	cout << "\b" << "] " << endl;
 
 }
@@ -499,6 +514,8 @@ void earthGunnery::attackMonster(alienArmy* army) {
 		if (!*enemy->getTa()) *enemy->getTa() = this->getTimeStep();
 		double damage = ((*this->getHealth()) * (this->getPower()) / 100.0) / sqrt(*enemy->getHealth());
 		(*enemy->getHealth()) -= damage;
+
+		if (army->getGame()->getMode() == Interactive_Mode)
 		cout << " " << enemy->getID() << ",";
 		if (army->CheckUnitHealth(enemy)) {
 			army->getMonsters()->insert(enemy);
@@ -514,14 +531,17 @@ void earthGunnery::attackDrones(alienArmy* army) {
 
 		double damage = ((*this->getHealth()) * (this->getPower()) / 100.0) / sqrt(*enemy1->getHealth());
 		(*enemy1->getHealth()) -= damage;
-		cout << " " << enemy1->getID() << ",";
+
+		if (army->getGame()->getMode() == Interactive_Mode)
+			cout << " " << enemy1->getID() << ",";
 
 		if (army->getDrones()->popRear(enemy2)) {
 			if (!*enemy2->getTa()) *enemy2->getTa() = this->getTimeStep();
 			
 			damage = ((*this->getHealth()) * (this->getPower()) / 100.0) / sqrt(*enemy2->getHealth());
 			(*enemy2->getHealth()) -= damage;
-			cout << " " << enemy2->getID() << ",";
+			if (army->getGame()->getMode() == Interactive_Mode)
+				cout << " " << enemy2->getID() << ",";
 
 			if (army->CheckUnitHealth(enemy2)) {
 				army->getDrones()->pushRear(enemy2);
@@ -539,7 +559,9 @@ void earthGunnery::attackDrones(alienArmy* army) {
 
 void earthTank::attack(Army* army)  {
 	alienArmy* armyPtr = dynamic_cast <alienArmy*>(army);
-	cout << this->getID() << " shoots [ ";
+	if (army->getGame()->getMode() == Interactive_Mode)
+		cout << this->getID() << " shoots [ ";
+	
 	for (int i = 0; i < this->getAtkCapacity(); i++) {
 		if (checkSiege(armyPtr) && rand() % 2) {
 			this->attackSoldier(armyPtr);
@@ -550,8 +572,9 @@ void earthTank::attack(Army* army)  {
 
 		};
 	};
-	
-	cout <<"\b"<< "] " << endl;
+
+	if (army->getGame()->getMode() == Interactive_Mode)
+		cout <<"\b"<< "] " << endl;
 }
 
 #pragma region "Earth Tank attacks"
@@ -561,6 +584,7 @@ void earthTank::attackSoldier(alienArmy* army) {
 		if (!*enemy->getTa()) *enemy->getTa() = this->getTimeStep();
 		double damage = ((*this->getHealth()) * (this->getPower()) / 100.0) / sqrt(*enemy->getHealth());
 		(*enemy->getHealth()) -= damage;
+		if (army->getGame()->getMode() == Interactive_Mode)
 		cout << " "<<enemy->getID() << ",";
 		if (army->CheckUnitHealth(enemy)) {
 			army->getSoldiers()->enqueue(enemy);
@@ -575,6 +599,7 @@ void earthTank::attackMonster(alienArmy* army) {
 
 		double damage = ((*this->getHealth()) * (this->getPower()) / 100.0) / sqrt(*enemy->getHealth());
 		(*enemy->getHealth()) -= damage;
+		if (army->getGame()->getMode() == Interactive_Mode)
 		cout << " " << enemy->getID() << ",";
 		if (army->CheckUnitHealth(enemy)) {
 			army->getMonsters()->insert(enemy);
@@ -609,7 +634,8 @@ void earthHealer::attack(Army* army) {
 							*soldier->getTd() = enemy->getGame()->getTimeStep();
 							ArmyUnit* unit = soldier;
 							enemy->getGame()->getKilledList()->enqueue(unit);
-							cout << " Soldier killed ): " << endl;
+							if (army->getGame()->getMode() == Interactive_Mode) 
+								cout << " Soldier Died in UML " << endl;
 						}
 						else
 						{
@@ -617,6 +643,7 @@ void earthHealer::attack(Army* army) {
 							*(soldier->getHealth()) += health_improv;
 							if (enemy->CheckUnitHealth(soldier))
 							{
+								if (army->getGame()->getMode() == Interactive_Mode)
 								cout << " Soldier Healed! ID: " << soldier->getID() << "  Health after:  " << *soldier->getHealth() << " initial health: " << soldier->getInitialHealth() << endl;
 
 								enemy->getSoldiers()->enqueue(soldier);
@@ -635,7 +662,8 @@ void earthHealer::attack(Army* army) {
 						*tank->getTd() = enemy->getGame()->getTimeStep();
 						ArmyUnit* unit = tank;
 						enemy->getGame()->getKilledList()->enqueue(unit);
-						cout << " Tank killed ): " << endl;
+						if (army->getGame()->getMode() == Interactive_Mode)
+						cout << " Tank Destroyed in UML " << endl;
 					}
 					else
 					{
@@ -643,6 +671,7 @@ void earthHealer::attack(Army* army) {
 						*(tank->getHealth()) += health_improv;
 						if (enemy->CheckUnitHealth(tank))
 						{
+							if (army->getGame()->getMode() == Interactive_Mode)
 							cout << " tank Healed! ID: " << tank->getID() << "  Health after:  " << *tank->getHealth() << " initial health: " << tank->getInitialHealth() << endl;
 							enemy->getTanks()->push(tank);
 						}
@@ -719,11 +748,13 @@ void alienArmy::DronesAttack(earthArmy* Enemy) {
 void alienSoldier::attack(Army* army) {
 	earthArmy* armyPtr = dynamic_cast <earthArmy*>(army);
 	if (!armyPtr) return;
+	if (army->getGame()->getMode() == Interactive_Mode)
 	cout << this->getID() << " shoots [ ";
 	for (int i = 0; i < this->getAtkCapacity(); i++)
 	{
 		this->attackSoldier(armyPtr);
 	}
+	if (army->getGame()->getMode() == Interactive_Mode)
 	cout << "\b" << "] " << endl;
 }
 
@@ -735,8 +766,12 @@ void alienSoldier::attackSoldier(earthArmy* army) {
 
 		double damage = ((*this->getHealth()) * (this->getPower()) / 100.0) / sqrt(*enemy->getHealth());
 		(*enemy->getHealth()) -= damage;
-		cout << " " << enemy->getID() << ",";
-		if (army->CheckUnitHealth(enemy)) {
+		if (army->getGame()->getMode() == Interactive_Mode) {
+			cout << " " << enemy->getID();
+			if (*enemy->isInfected()) cout << "I";
+			cout << ",";
+		};
+	if (army->CheckUnitHealth(enemy)) {
 			army->getSoldiers()->enqueue(enemy);
 		}
 	}
@@ -749,14 +784,16 @@ void alienSoldier::attackSoldier(earthArmy* army) {
 void alienDrone::attack(Army* army) {
 	earthArmy* armyPtr = dynamic_cast <earthArmy*>(army);
 	if (!armyPtr) return;
-	cout << this->getID() << " shoots [ ";
+	if (army->getGame()->getMode() == Interactive_Mode)
+		cout << this->getID() << " shoots [ ";
 	for (int i = 0; i < this->getAtkCapacity(); i++) {
 		this->attackTanks(armyPtr);
 		//Maybe we need to write a cout here to distinguish between the two attacks.
 		this->attackGunnerys(armyPtr);
 	};
 
-	cout << "\b" << "] " << endl;
+	if (army->getGame()->getMode() == Interactive_Mode)
+		cout << "\b" << "] " << endl;
 	
 }
 
@@ -767,7 +804,8 @@ void alienDrone::attackTanks(earthArmy* army) {
 		if (!*tank->getTa()) *tank->getTa() = this->getTimeStep();
 		double damage = ((*this->getHealth()) * (this->getPower()) / 100.0) / sqrt(*tank->getHealth());
 		(*tank->getHealth()) -= damage;
-		cout << " " << tank->getID() << ",";
+		if (army->getGame()->getMode() == Interactive_Mode)
+			cout << " " << tank->getID() << ",";
 		if (army->CheckUnitHealth(tank)) {
 			army->getTanks()->push(tank);
 		};
@@ -780,7 +818,8 @@ void alienDrone::attackGunnerys(earthArmy* army) {
 		if (!*gunnery->getTa()) *gunnery->getTa() = this->getTimeStep();
 		double damage = ((*this->getHealth()) * (this->getPower()) / 100.0) / sqrt(*gunnery->getHealth());
 		(*gunnery->getHealth()) -= damage;
-		cout << " " << gunnery->getID() << ",";
+		if (army->getGame()->getMode() == Interactive_Mode)
+			cout << " " << gunnery->getID() << ",";
 		if (army->CheckUnitHealth(gunnery)) {
 			army->getGunnery()->enqueue(gunnery, gunnery->getPower());
 		};
@@ -792,13 +831,15 @@ void alienDrone::attackGunnerys(earthArmy* army) {
 void alienMonster::attack(Army* army) {
 	earthArmy* armyPtr = dynamic_cast <earthArmy*>(army);
 	if (!armyPtr) return;
-	cout << this->getID() << " shoots [ ";
+	if (army->getGame()->getMode() == Interactive_Mode)
+		cout << this->getID() << " shoots [ ";
 	for (int i = 0; i < this->getAtkCapacity(); i++)
 	{
 		this->attackSoldier(armyPtr);
 		this->attackTank(armyPtr);
 	}
-	cout << "\b" << "] " << endl;
+	if (army->getGame()->getMode() == Interactive_Mode)
+		cout << "\b" << "] " << endl;
 }
 
 #pragma region "Alien Monster Attacks"
@@ -815,9 +856,12 @@ void alienMonster::attackSoldier(earthArmy* army)
 			(*enemy->isInfected())=true;
 		}
 
-		cout << " " << enemy->getID();
-		if (*enemy->isInfected()) cout << "I";
-		cout << ",";
+		if (army->getGame()->getMode() == Interactive_Mode) {
+
+			cout << " " << enemy->getID();
+			if (*enemy->isInfected()) cout << "I";
+			cout << ",";
+		};
 		if (army->CheckUnitHealth(enemy)) {
 			army->getSoldiers()->enqueue(enemy);
 		}
@@ -832,6 +876,7 @@ void alienMonster::attackTank(earthArmy* army)
 
 		double damage = ((*this->getHealth()) * (this->getPower()) / 100.0) / sqrt(*enemy->getHealth());
 		(*enemy->getHealth()) -= damage;
+		if (army->getGame()->getMode() == Interactive_Mode)
 		cout << " " << enemy->getID() << ",";
 		if (army->CheckUnitHealth(enemy)) {
 			army->getTanks()->push(enemy);
@@ -902,7 +947,13 @@ bool alienArmy::CheckUnitHealth(ArmyUnit* Unit) {
 
 
 #pragma region "Printers"
-//Printers
+
+//Earth Printers
+void earthArmy::print() {
+
+}
+
+#pragma region "Earth Unit Full Data"
 void earthArmy::printSoldiers() {
 	// Print status of earth soldiers
 
@@ -911,7 +962,9 @@ void earthArmy::printSoldiers() {
 	while (!Soldiers->isEmpty()) {
 		earthSoldier* es = nullptr;
 		if (Soldiers->dequeue(es)) {
-			cout << "Earth Soldier " << es->getID() << ": Health: " << *(es->getHealth()) << ", Power: " << es->getPower() << ", Attack Capacity: " << es->getAtkCapacity() << endl;
+			cout << "Earth Soldier " << es->getID();
+			if (*es->isInfected()) cout << "I";
+			cout<< ": Health: " << *(es->getHealth()) << ", Power: " << es->getPower() << ", Attack Capacity: " << es->getAtkCapacity() << endl;
 			tempEarthSoldiers.enqueue(es); // Store the element temporarily
 		}
 	}
@@ -1026,8 +1079,161 @@ void earthArmy::printUMLt()
 	}
 	cout << endl;
 }
+#pragma endregion
+
+void earthArmy::printIDs() {
+	cout << "============== Earth Army Units Alive =============="<<endl;
+	printSoldiersIDs();
+	printTanksIDs();
+	printGunneryIDs();
+	printHealersIDs();
+	printUMLsIDs();
+	printUMLtIDs();
+	cout << endl;
+}
+
+#pragma region "Earth unit IDs"
+void earthArmy::printSoldiersIDs() {
+	// Print status of earth soldiers
+
+	Queue<earthSoldier*> tempEarthSoldiers; // Temporary queue to store elements
+
+	cout << Soldiers->getCount() << " ES [ ";
+	while (!Soldiers->isEmpty()) {
+		earthSoldier* es = nullptr;
+		if (Soldiers->dequeue(es)) {
+			cout << es->getID();
+			if (*this->Infected) cout << "I";
+			cout << ",";
+			tempEarthSoldiers.enqueue(es); // Store the element temporarily
+		}
+	}
+	cout << "\b" << "]" << endl;
+
+	// Re-enqueue the elements back to the original queue
+	while (!tempEarthSoldiers.isEmpty()) {
+		earthSoldier* esTemp = nullptr;
+		tempEarthSoldiers.dequeue(esTemp);
+		Soldiers->enqueue(esTemp);
+	}
+}
+void earthArmy::printTanksIDs() {
+
+	// Print status of earth tanks
+	Stack<earthTank*> tempEarthTanks; // Temporary stack to store elements
+	earthTank* et = nullptr;
+	cout << Tanks->getCount() << " ET [ ";
+
+	while (!Tanks->isEmpty()) {
+		if (Tanks->pop(et)) {
+			cout << et->getID() << ",";
+			tempEarthTanks.push(et); // Store the element temporarily
+		}
+	}
+	cout << "\b" << "]" << endl;
 
 
+	// Re-push the elements back to the original stack
+	while (!tempEarthTanks.isEmpty()) {
+		earthTank* etTemp = nullptr;
+		tempEarthTanks.pop(etTemp);
+		Tanks->push(etTemp);
+	}
+}
+void earthArmy::printGunneryIDs() {
+	// Print status of earth gunnery
+	pQueue<earthGunnery*> tempEarthGunnery; // Temporary priority queue to store elements
+	cout << Gunnery->getCount() << " EG [ ";
+	while (!Gunnery->isEmpty()) {
+		earthGunnery* eg = nullptr;
+		if (Gunnery->dequeue(eg)) {
+			cout << eg->getID() << ",";
+			tempEarthGunnery.enqueue(eg, *eg->getHealth() + eg->getPower()); // Store the element temporarily
+		}
+	}
+	cout << "\b" << "]" << endl;
+
+	// Re-enqueue the elements back to the original priority queue
+	while (!tempEarthGunnery.isEmpty()) {
+		earthGunnery* egTemp = nullptr;
+		tempEarthGunnery.dequeue(egTemp);
+		Gunnery->enqueue(egTemp, egTemp->getPower() + *egTemp->getHealth());
+	}
+
+}
+
+void earthArmy::printHealersIDs() {
+
+	// Print status of earth tanks
+	Stack<earthHealer*> tempEarthHealList; // Temporary stack to store elements
+	earthHealer* ehu = nullptr;
+	cout << Healers->getCount() << " EH [ ";
+	while (!Healers->isEmpty()) {
+		if (Healers->pop(ehu)) {
+			cout << ehu->getID() << ",";
+			tempEarthHealList.push(ehu); // Store the element temporarily
+		}
+	}
+	cout << "\b" << "]" << endl;
+
+
+	// Re-push the elements back to the original stack
+	while (!tempEarthHealList.isEmpty()) {
+		earthHealer* ehTemp = nullptr;
+		tempEarthHealList.pop(ehTemp);
+		Healers->push(ehTemp);
+	}
+}
+void earthArmy::printUMLsIDs()
+{
+	Queue<earthSoldier*> tempUMLs; // Temporary queue to store elements
+	cout << UMLs->getCount() << " UMLS [ ";
+
+	while (!UMLs->isEmpty()) {
+		earthSoldier* es = nullptr;
+		if (UMLs->dequeue(es)) {
+			cout << es->getID() << ",";
+			tempUMLs.enqueue(es); // Store the element temporarily
+		}
+	}
+
+	// Re-enqueue the elements back to the original queue
+	while (!tempUMLs.isEmpty()) {
+		earthSoldier* esTemp = nullptr;
+		tempUMLs.dequeue(esTemp);
+		UMLs->enqueue(esTemp, 100 - (*esTemp->getHealth()));
+	}
+	cout << "\b" << "]" << endl;
+}
+void earthArmy::printUMLtIDs()
+{
+	Queue<earthTank*> tempUMLt; // Temporary queue to store elements
+	cout << UMLt->getCount() << " UMLT [ ";
+
+	while (!UMLt->isEmpty()) {
+		earthTank* et = nullptr;
+		if (UMLt->dequeue(et)) {
+			cout << et->getID() << ",";
+			tempUMLt.enqueue(et); // Store the element temporarily
+		}
+	}
+
+	// Re-enqueue the elements back to the original queue
+	while (!tempUMLt.isEmpty()) {
+		earthTank* etTemp = nullptr;
+		tempUMLt.dequeue(etTemp);
+		UMLt->enqueue(etTemp);
+	}
+	cout << "\b" << "]" << endl;
+}
+#pragma endregion
+
+
+//Alien Printers
+void alienArmy::print() {
+
+}
+#pragma region "Alien Unit Full Data"
 void alienArmy::printSoldiers() {
 	// Print status of alien soldiers
 	Queue<alienSoldier*> tempAlienSoldiers; // Temporary queue to store elements
@@ -1080,6 +1286,81 @@ void alienArmy::printDrones() {
 	cout << endl;
 
 }
+#pragma endregion
+
+void alienArmy::printIDs() {
+	cout << "============== Alien Army Units Alive ==============" << endl;
+	printSoldiersIDs();
+	printMonstersIDs();
+	printDronesIDs();
+	cout << endl;
+}
+#pragma region "Alien Unit Full Data"
+
+
+void alienArmy::printSoldiersIDs() {
+	// Print status of alien soldiers
+	Queue<alienSoldier*> tempAlienSoldiers; // Temporary queue to store elements
+
+	cout << Soldiers->getCount() << " AS [ ";
+	while (!Soldiers->isEmpty()) {
+		alienSoldier* as = nullptr;
+		if (Soldiers->dequeue(as)) {
+			cout <<" "<< as->getID() << ",";
+			tempAlienSoldiers.enqueue(as); // Store the element temporarily
+		}
+	}
+	cout <<"\b"<<"]"<< endl;
+
+	// Re-enqueue the elements back to the original queue
+	while (!tempAlienSoldiers.isEmpty()) {
+		alienSoldier* asTemp = nullptr;
+		tempAlienSoldiers.dequeue(asTemp);
+		Soldiers->enqueue(asTemp);
+	}
+}
+void alienArmy::printMonstersIDs() {
+	// Print status of alien monsters
+	alienMonster* am = nullptr;
+	cout << Monsters->getCount() << " AM [ ";
+	for (int i = 0; i < Monsters->getCount(); i++) {
+		if (Monsters->peekIndex(am, i)) {
+			cout << " " << am->getID() << ",";
+		}
+	}
+	cout << "\b" << "]" << endl;
+}
+void alienArmy::printDronesIDs() {
+	// Print status of alien drones
+	dQueue<alienDrone*> tempAlienDrones; // Temporary double-ended queue to store elements
+	
+	cout << Drones->getCount() << " AD [ ";
+
+	while (!Drones->isEmpty()) {
+		alienDrone* ad = nullptr;
+		Drones->popRear(ad);
+		if (ad) {
+			cout << " " << ad->getID() << ",";
+			tempAlienDrones.pushRear(ad); // Store the element temporarily
+		}
+	}
+
+	// Re-push the elements back to the original double-ended queue
+	while (!tempAlienDrones.isEmpty()) {
+		alienDrone* adTemp = nullptr;
+		tempAlienDrones.popRear(adTemp);
+		Drones->pushRear(adTemp);
+	}
+
+	cout << "\b" << "]" << endl;
+
+}
+
+
+#pragma endregion
+
+
+
 #pragma endregion
 
 

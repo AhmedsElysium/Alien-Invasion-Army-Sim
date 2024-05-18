@@ -31,12 +31,21 @@ Queue<ArmyUnit*>* Game::getKilledList() {
 }
 
 void Game::printKilledList() {
-    cout << "[";
+    cout << "============== Killed/Destroyed Units ==============" << endl;
+
+    cout <<killedList->getCount()<< " Units [ ";
     Queue<ArmyUnit*> tempQueue;
     ArmyUnit* tempUnit=nullptr;
     while (killedList->dequeue(tempUnit)) {
         tempQueue.enqueue(tempUnit);
-        cout << tempUnit->getID() << " ";
+        cout <<" "<< tempUnit->getID();
+        if (tempUnit->getType() == EarthSoldier) {
+            earthSoldier* soldier = dynamic_cast<earthSoldier*>(tempUnit);
+            if (soldier->isInfected()) {
+                cout << "I";
+            };
+        };
+        cout<< ",";
     }
     cout << "]" << endl;
     while (tempQueue.dequeue(tempUnit)) {
@@ -44,6 +53,7 @@ void Game::printKilledList() {
     }
 }
 
+#pragma region "Getters"
 gameMode Game::getMode() {
     return *Mode;
 }
@@ -63,6 +73,8 @@ alienArmy* Game::getAlienArmy() {
 int Game::getInfProb() {
     return this->inputData->infection_probability;
 }
+#pragma endregion
+
 
 void Game::go() {
     try {
@@ -83,19 +95,22 @@ void Game::go() {
             //Generating army units
             ranGen->GenerateEA(EA);
             ranGen->GenerateAA(AA);
-            cout << "Timestep: "<< * TimeStep << endl;
 
             if (*Mode == Interactive_Mode) {
+                cout << "Current Timestep: "<< * TimeStep << endl;
 
                 //Print Current Timestep
                 //Print all the alive units in each Army
                     //Print count, unit type, list of id's 
-
+                EA->printIDs();
+                AA->printIDs();
 
                 //Print "units fighting at current time step
                     //IMPLEMENT THIS PRINT FUNCTION IN THE ATTACK FUNCTIONS 
                     //IMPLEMENT THE PRINT ONLY IF GAME MODE IS INTERACTIVE
                         //USE getMode BY THE GAME POINTER STORED IN THE ARMY
+                //cout << "============== Alien Army Units Alive ==============" << endl;
+                cout << "======== Units fighting at current timestep ========" << endl;
 
             };
                 
@@ -153,13 +168,13 @@ void Game::go() {
             }
             #pragma endregion
 
-            #pragma region "test code of heal after"
-            EA->printHealers();
-            cout << "soldiers in uml after healing: " << endl;
-            EA->printUMLs();
-            cout << "tanks in uml after healing: " << endl;
-            EA->printUMLt();
-            #pragma endregion
+            //#pragma region "test code of heal after"
+            //EA->printHealers();
+            //cout << "soldiers in uml after healing: " << endl;
+            //EA->printUMLs();
+            //cout << "tanks in uml after healing: " << endl;
+            //EA->printUMLt();
+            //#pragma endregion
 
 
             if (*TimeStep >= 40) {
@@ -173,6 +188,7 @@ void Game::go() {
             if (*Mode == Interactive_Mode) {
                 //Print killed/destructed list
                     //count of units and id's
+                printKilledList();
                 system("pause");
 
             };
@@ -340,18 +356,32 @@ void Game::testCode() {
 }
 
 void Game::TestingZone() {
-    for (int i = 0; i < 100; i++) {
+    for (int i = 0; i < 10; i++) {
         ranGen->GenerateEA(EA);
         ranGen->GenerateAA(AA);
     };
+
+    //AA->printDronesIDs();
+    //AA->printMonstersIDs();
+    //AA->printSoldiersIDs();
+     
+    //EA->printSoldiersIDs();
+    //EA->printTanksIDs();
+    //EA->printGunneryIDs();
+    //EA->printHealersIDs();
+    //EA->printUMLsIDs();
+    //EA->printUMLtIDs();
+
+    EA->printIDs();
+    AA->printIDs();
     //Stack<earthTank*>* tanks = EA->getTanks();
     //earthTank* tank;
     //tanks->pop(tank);
-    earthSoldier* gun;
-    EA->getSoldiers()->dequeue(gun);
+    //earthSoldier* gun;
+    //EA->getSoldiers()->dequeue(gun);
 
-    for (int i = 0; i < 1000; i++) {
-        gun->attack(AA);
+    //for (int i = 0; i < 1000; i++) {
+    //    gun->attack(AA);
 
-    }
+    //}
 }
