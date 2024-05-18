@@ -390,7 +390,7 @@ void earthArmy::GunneryAttack(alienArmy* Enemy) {
 //}
 
 void earthArmy::infect() {
-	Array<earthSoldier*> Uninfected_soldiers(Soldiers->getCount()-*Infected);
+	Array<earthSoldier*> Uninfected_soldiers(Soldiers->getCount()+UMLs->getCount() - *Infected);
 	Queue<earthSoldier*> tempQ;
 	earthSoldier* tempSoldier;
 	while (Soldiers->dequeue(tempSoldier)) {
