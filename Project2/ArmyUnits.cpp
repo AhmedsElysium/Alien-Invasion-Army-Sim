@@ -748,6 +748,7 @@ void alienSoldier::attackSoldier(earthArmy* army) {
 
 void alienDrone::attack(Army* army) {
 	earthArmy* armyPtr = dynamic_cast <earthArmy*>(army);
+	if (!armyPtr) return;
 	cout << this->getID() << " shoots [ ";
 	for (int i = 0; i < this->getAtkCapacity(); i++) {
 		this->attackTanks(armyPtr);
