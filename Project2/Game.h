@@ -12,6 +12,7 @@ private:
 	RandomGenerator* ranGen;
 	int* TimeStep;
 	gameMode* Mode;
+	gameResult* Result;
 
 public:
 	Game();

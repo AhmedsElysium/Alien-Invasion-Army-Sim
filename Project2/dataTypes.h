@@ -21,3 +21,9 @@ enum gameMode
 	Interactive_Mode=1,
 	Silent_Mode
 };
+
+enum gameResult {
+	Draw,
+	EarthWon,
+	AliensWon
+};

@@ -9,6 +9,7 @@ Game::Game() {
     TimeStep=new int(0);
     ranGen = new RandomGenerator(inputData,TimeStep);
     Mode = new gameMode(Interactive_Mode);
+    Result = new gameResult(Draw);
 }
 
 Game::~Game() {
@@ -24,6 +25,7 @@ Game::~Game() {
     delete inputData;
     delete TimeStep;
     delete Mode;
+    delete Result;
 }
 
 Queue<ArmyUnit*>* Game::getKilledList() {
@@ -51,7 +53,7 @@ void Game::printKilledList() {
     while (tempQueue.dequeue(tempUnit)) {
         killedList->enqueue(tempUnit);
     }
-}
+}  
 
 #pragma region "Getters"
 gameMode Game::getMode() {
@@ -179,7 +181,28 @@ void Game::go() {
 
             if (*TimeStep >= 40) {
                 //Check Win/Loss/Draw
-                break;
+                if ((EA->getGunnery()->getCount() + EA->getSoldiers()->getCount() + EA->getTanks()->getCount()) == 0) {
+                    if ((AA->getDrones()->getCount() + AA->getMonsters()->getCount() + AA->getSoldiers()->getCount()) >= 1) {
+                        *Result = EarthWon;
+                        break;
+                    }
+                    else {
+                        break;
+                    }
+
+                }
+                else if ((AA->getDrones()->getCount() + AA->getMonsters()->getCount() + AA->getSoldiers()->getCount()) == 0) {
+                    if ((EA->getGunnery()->getCount() + EA->getSoldiers()->getCount() + EA->getTanks()->getCount()) >= 1) {
+                        *Result = AliensWon;
+                        break;
+                    }
+                    else {
+                        break;
+                    }
+                }
+                else if (*TimeStep > 500) {
+                    break;
+                }
             };
 
 
@@ -200,7 +223,7 @@ void Game::go() {
         }
 
 
-
+        
         cout << "End simulation" << endl;
         string s;
         cin>>s;
