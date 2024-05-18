@@ -126,21 +126,21 @@ private:
 	Game* gamePtr;
 public:
 	Army(Game* game);
-	virtual bool CheckUnitHealth(ArmyUnit* Unit)=0;
+	virtual bool CheckUnitHealth(ArmyUnit* Unit) = 0;
 	Game* getGame();
 	virtual void attack(Army* army) = 0;
 };
 
-class earthArmy:public Army {
+class earthArmy :public Army {
 private:
-	 Queue<earthSoldier*>* Soldiers;
-	 Stack<earthTank*>* Tanks;
-	 pQueue<earthGunnery*>* Gunnery;
-	 Stack<earthHealer*>* Healers;
-	 pQueue<earthSoldier*>* UMLs;
-	 Queue<earthTank*>* UMLt;
+	Queue<earthSoldier*>* Soldiers;
+	Stack<earthTank*>* Tanks;
+	pQueue<earthGunnery*>* Gunnery;
+	Stack<earthHealer*>* Healers;
+	pQueue<earthSoldier*>* UMLs;
+	Queue<earthTank*>* UMLt;
 
-	 int* Infected;
+	int* Infected;
 public:
 	earthArmy(Game* game);
 	~earthArmy();
@@ -173,7 +173,7 @@ public:
 	void TanksAttack(alienArmy* Enemy);
 	void GunneryAttack(alienArmy* Enemy);
 
-	
+
 
 	void printSoldiers();
 	void printTanks();
