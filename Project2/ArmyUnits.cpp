@@ -503,28 +503,29 @@ void earthHealer::attack(Army* army) {
 	earthTank* tank;
 		for (int i = 0; i < this->getAtkCapacity(); i++)
 		{
-				if(enemy->getUMLs()->dequeue(soldier))
-				{
-						if (*(soldier->getUj()) >= 10)
+			if(enemy->getUMLs()->dequeue(soldier))
+			{
+					if (*(soldier->getUj()) >= 10)
+					{
+						*soldier->getTd() = enemy->getGame()->getTimeStep();
+						ArmyUnit* unit = soldier;
+						enemy->getGame()->getKilledList()->enqueue(unit);
+						cout << " Soldier killed ): " << endl;
+						i--;
+					}
+					else
+					{
+						double health_improv = (*(this->getHealth()) * this->getPower() / 100) / sqrt(*(soldier->getHealth()));
+						*(soldier->getHealth()) += health_improv;
+						if (enemy->CheckUnitHealth(soldier))
 						{
-							*soldier->getTd() = enemy->getGame()->getTimeStep();
-							ArmyUnit* unit = soldier;
-							enemy->getGame()->getKilledList()->enqueue(unit);
-							cout << " Soldier killed ): " << endl;
+							cout << " Soldier Healed! ID: " << soldier->getID() << "  Health after:  " << *soldier->getHealth() << " initial health: " << soldier->getInitialHealth() << endl;
+							*(soldier->getUj()) = -1;
+							enemy->getSoldiers()->enqueue(soldier);
 						}
-						else
-						{
-							double health_improv = (*(this->getHealth()) * this->getPower() / 100) / sqrt(*(soldier->getHealth()));
-							*(soldier->getHealth()) += health_improv;
-							if (enemy->CheckUnitHealth(soldier))
-							{
-								cout << " Soldier Healed! ID: " << soldier->getID() << "  Health after:  " << *soldier->getHealth() << " initial health: " << soldier->getInitialHealth() << endl;
-
-								enemy->getSoldiers()->enqueue(soldier);
-							}
-						}
+					}
 						
-				}
+			}
 
 			else
 			{
@@ -701,13 +702,29 @@ bool earthArmy::CheckUnitHealth(ArmyUnit* Unit) {
 		else {
 			if (Unit->getType() == EarthTank)
 			{
-				*(dynamic_cast<earthTank*> (Unit)->getUj()) = 0;
-				this->addUMLt(dynamic_cast<earthTank*> (Unit));
+				earthTank* tank = dynamic_cast<earthTank*> (Unit);
+				if(*(tank->getUj()) = -1)
+				{
+					*(tank->getUj()) = 0;
+					this->addUMLt(tank);
+				}
+				else
+				{
+					this->getGame()->gettemptankQ()->enqueue(tank);
+				}
 			}
 			else if(Unit->getType() == EarthSoldier)
 			{
-				*(dynamic_cast<earthSoldier*> (Unit)->getUj()) = 0;
-				this->addUMLs(dynamic_cast<earthSoldier*> (Unit), 100 - *Unit->getHealth());
+				earthSoldier* soldier = dynamic_cast<earthSoldier*> (Unit);
+				if (*(soldier->getUj()) = -1)
+				{
+					*(soldier->getUj()) = 0;
+					this->addUMLs(dynamic_cast<earthSoldier*> (Unit), 100 - *Unit->getHealth());
+				}
+				else
+				{
+					this->getGame()->gettempsoldierQ()->enqueue(soldier, 100 - *soldier->getHealth());
+				}
 			}
 			return false;
 		}

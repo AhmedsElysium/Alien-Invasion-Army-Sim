@@ -6,6 +6,8 @@
 class Game {
 private:
 	Queue<ArmyUnit*>* killedList;
+	pQueue<earthSoldier*>* tempsoldierQ;
+	Queue<earthTank*>* temptankQ;
 	earthArmy* EA;
 	alienArmy* AA;
 	Input* inputData;
@@ -24,6 +26,7 @@ public:
 	gameMode getMode();
 	earthArmy* getEarthArmy();
 	alienArmy* getAlienArmy();
-
+	pQueue<earthSoldier*>* gettempsoldierQ();
+	Queue<earthTank*>* gettemptankQ();
 
 };

@@ -9,6 +9,8 @@ Game::Game() {
     TimeStep=new int(0);
     ranGen = new RandomGenerator(inputData,TimeStep);
     Mode = new gameMode(Interactive_Mode);
+    tempsoldierQ = new pQueue<earthSoldier*>;
+    temptankQ = new Queue<earthTank*>;
 }
 
 Game::~Game() {
@@ -24,6 +26,8 @@ Game::~Game() {
     delete inputData;
     delete TimeStep;
     delete Mode;
+    delete tempsoldierQ;
+    delete temptankQ;
 }
 
 Queue<ArmyUnit*>* Game::getKilledList() {
@@ -60,15 +64,28 @@ alienArmy* Game::getAlienArmy() {
     return AA;
 }
 
+pQueue<earthSoldier*>* Game::gettempsoldierQ()
+{
+    return tempsoldierQ;
+}
+
+Queue<earthTank*>* Game::gettemptankQ()
+{
+        return temptankQ;
+}
+
 void Game::go() {
     try {
         cout << "Select Mode:" << endl << "1.Interactive Mode"<<endl<<"2.Silent Mode"<<endl<<"Enter: ";
         int temp;
         cin >> temp;
+
+        //valid answer checker
         while (temp != 1 && temp!= 2) {
             cout << "Please enter a valid game mode" << endl << "Enter: ";
             cin >> temp;
         };
+
         *Mode = gameMode(temp);
         *TimeStep = 1;
         if (*Mode == Interactive_Mode) cout << "Interactive Mode" << endl;
@@ -112,39 +129,36 @@ void Game::go() {
 
             #pragma region "heal & increment Uj"
             earthHealer* healer;
-            if(!EA->getUMLs()->isEmpty() || !EA->getUMLt()->isEmpty())
+            while (!EA->getHealers()->isEmpty() && (!EA->getUMLs()->isEmpty() || !EA->getUMLt()->isEmpty()))
             {
-                while (EA->getHealers()->pop(healer))
-                {
-                    healer->attack(EA);
-                    delete healer;
-                }
+                EA->getHealers()->pop(healer);
+                healer->attack(EA);
+                delete healer;
             }
-            pQueue<earthSoldier*> tempsoldierQ ;
+           
             earthSoldier* soldier;
             while (!EA->getUMLs()->isEmpty())
             {
                 EA->getUMLs()->dequeue(soldier);
-                soldier->incrementUj();
-                tempsoldierQ.enqueue(soldier, 100 - (*soldier->getHealth()));
+                tempsoldierQ->enqueue(soldier, 100 - (*soldier->getHealth()));
             }
-            while (!tempsoldierQ.isEmpty())
+            while (!tempsoldierQ->isEmpty())
             {
-                tempsoldierQ.dequeue(soldier);
+                tempsoldierQ->dequeue(soldier);
+                soldier->incrementUj();
                 EA->getUMLs()->enqueue(soldier, 100 - (*soldier->getHealth()));
             }
 
-            Queue<earthTank*> temptankQ;
             earthTank* tank;
             while (!EA->getUMLt()->isEmpty())
             {
                 EA->getUMLt()->dequeue(tank);
-                tank->incrementUj();
-                temptankQ.enqueue(tank);
+                temptankQ->enqueue(tank);
             }
-            while (!temptankQ.isEmpty())
+            while (!temptankQ->isEmpty())
             {
-                temptankQ.dequeue(tank);
+                temptankQ->dequeue(tank);
+                tank->incrementUj();
                 EA->getUMLt()->enqueue(tank);
             }
             #pragma endregion
