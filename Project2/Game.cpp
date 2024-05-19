@@ -166,7 +166,7 @@ void Game::go() {
                 //Check Win/Loss/Draw
                 if ((EA->getGunnery()->getCount() + EA->getSoldiers()->getCount() + EA->getTanks()->getCount()) == 0) {
                     if ((AA->getDrones()->getCount() + AA->getMonsters()->getCount() + AA->getSoldiers()->getCount()) >= 1) {
-                        *Result = EarthWon;
+                        *Result = AliensWon;
                         break;
                     }
                     else {
@@ -176,7 +176,7 @@ void Game::go() {
                 }
                 else if ((AA->getDrones()->getCount() + AA->getMonsters()->getCount() + AA->getSoldiers()->getCount()) == 0) {
                     if ((EA->getGunnery()->getCount() + EA->getSoldiers()->getCount() + EA->getTanks()->getCount()) >= 1) {
-                        *Result = AliensWon;
+                        *Result = EarthWon;
                         break;
                     }
                     else {
@@ -196,10 +196,14 @@ void Game::go() {
                     //count of units and id's
                 cout << endl;
                 printKilledList();
-                if(EA->getSoldiers()->getCount()+EA->getUMLs()->getCount())
+                cout << "Infection percentage: ";
+                if (EA->getSoldiers()->getCount() + EA->getUMLs()->getCount()) {
+                    cout << 100 * (*EA->countInfected()) / (EA->getSoldiers()->getCount() + EA->getUMLs()->getCount());
+                }
+                else cout << "0";
+                cout<< "%" << endl;
 
 
-                    cout << "Infection percentage: " <<100*(*EA->countInfected()) /( EA->getSoldiers()->getCount() +EA->getUMLs()->getCount())<< "%"<<endl;
                 system("pause");
 
             };
