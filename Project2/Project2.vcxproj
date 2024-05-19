@@ -134,6 +134,7 @@
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Input.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="ME_WA.txt" />
     <ClCompile Include="RandomGenerator.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -146,6 +147,10 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="input.txt" />
+    <Text Include="ME_MA.txt" />
+    <Text Include="WE_MA.txt" />
+    <Text Include="WE_SA.txt" />
+    <Text Include="WE_WA.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
