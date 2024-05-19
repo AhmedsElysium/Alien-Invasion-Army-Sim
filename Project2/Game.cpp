@@ -76,6 +76,16 @@ alienArmy* Game::getAlienArmy() {
     return AA;
 }
 
+string Game::getresult()
+{
+    if (*Result == EarthWon)
+        return "Earth Won!";
+    else if (*Result == Draw)
+        return "Draw";
+    else
+        return "Aliens Won!";
+}
+
 int Game::getInfProb() {
     return this->inputData->infection_probability;
 }
@@ -177,6 +187,7 @@ void Game::go() {
 
 
             if (*TimeStep >= 40) {
+
                 //Check Win/Loss/Draw
                 if ((EA->getGunnery()->getCount() + EA->getSoldiers()->getCount() + EA->getTanks()->getCount()) == 0) {
                     if ((AA->getDrones()->getCount() + AA->getMonsters()->getCount() + AA->getSoldiers()->getCount()) >= 1) {
@@ -246,6 +257,8 @@ void Game::go() {
     catch (string s) {
         cout << s;
     }
+    writing(this);
+
 }
 
 
@@ -395,6 +408,7 @@ void Game::testCode() {
         //// Print status of alien monsters
         //AA->printMonsters();
     }
+
 }
 
 void Game::TestingZone() {

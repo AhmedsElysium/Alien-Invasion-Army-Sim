@@ -179,6 +179,11 @@ earthGunnery::earthGunnery(Data* data) :ArmyUnit(data,EarthGunnery) {}
 earthTank::earthTank(Data* data) :ArmyUnit(data, EarthTank) {}
 earthHealer::earthHealer(Data* data) :ArmyUnit(data, EarthHealer) {}
 
+double earthHealer::counter()
+{
+	return *count;
+}
+
 bool earthTank::underSiege = false;
 
 //Alien Units
@@ -655,6 +660,7 @@ void earthHealer::attack(Army* army) {
 									(*soldier->isImmune()) = true;
 									(*army->getGame()->getEarthArmy()->countInfected())--;
 								}
+								*count++;
 								enemy->getSoldiers()->enqueue(soldier);
 							}
 						}
