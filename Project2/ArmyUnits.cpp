@@ -642,12 +642,17 @@ void earthHealer::attack(Army* army) {
 						else
 						{
 							double health_improv = (*(this->getHealth()) * this->getPower() / 100) / sqrt(*(soldier->getHealth()));
+							if (*soldier->isInfected()) health_improv *= 0.5;
 							*(soldier->getHealth()) += health_improv;
 							if (enemy->CheckUnitHealth(soldier))
 							{
 								if (army->getGame()->getMode() == Interactive_Mode)
 								cout << " Soldier Healed! ID: " << soldier->getID() << "  Health after:  " << *soldier->getHealth() << " initial health: " << soldier->getInitialHealth() << endl;
-
+								if (*soldier->isInfected()) {
+									(*soldier->isInfected()) = false;
+									(*soldier->isImmune()) = true;
+									(*army->getGame()->getEarthArmy()->countInfected())--;
+								}
 								enemy->getSoldiers()->enqueue(soldier);
 							}
 						}

@@ -170,13 +170,7 @@ void Game::go() {
             }
             #pragma endregion
 
-            //#pragma region "test code of heal after"
-            //EA->printHealers();
-            //cout << "soldiers in uml after healing: " << endl;
-            //EA->printUMLs();
-            //cout << "tanks in uml after healing: " << endl;
-            //EA->printUMLt();
-            //#pragma endregion
+
 
 
             if (*TimeStep >= 40) {
