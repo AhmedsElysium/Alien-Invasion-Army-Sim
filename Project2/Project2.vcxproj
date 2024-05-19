@@ -135,7 +135,7 @@
     <ClCompile Include="Input.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Output.cpp" />
-    <ClCompile Include="ME_WA.txt" />
+    <ClCompile Include="SE_WA.txt" />
     <ClCompile Include="RandomGenerator.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -149,7 +149,8 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="input.txt" />
-    <Text Include="ME_MA.txt" />
+    <Text Include="SE_MA.txt" />
+    <Text Include="SE_SA.txt" />
     <Text Include="WE_MA.txt" />
     <Text Include="WE_SA.txt" />
     <Text Include="WE_WA.txt" />
