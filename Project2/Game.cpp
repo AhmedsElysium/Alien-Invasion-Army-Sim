@@ -99,7 +99,7 @@ void Game::go() {
             ranGen->GenerateAA(AA);
 
             if (*Mode == Interactive_Mode) {
-                cout << "Current Timestep: "<< * TimeStep << endl;
+                cout <<endl<< "Current Timestep: "<< * TimeStep << endl;
 
                 //Print Current Timestep
                 //Print all the alive units in each Army
@@ -111,7 +111,6 @@ void Game::go() {
                     //IMPLEMENT THIS PRINT FUNCTION IN THE ATTACK FUNCTIONS 
                     //IMPLEMENT THE PRINT ONLY IF GAME MODE IS INTERACTIVE
                         //USE getMode BY THE GAME POINTER STORED IN THE ARMY
-                //cout << "============== Alien Army Units Alive ==============" << endl;
                 cout << "======== Units fighting at current timestep ========" << endl;
 
             };
@@ -120,16 +119,6 @@ void Game::go() {
             EA->attack(AA);
             AA->attack(EA);
 
-            //#pragma region " test code of heal before"
-            //cout << "Healers before:" << endl;
-            //// Print status of earth soldier
-            //EA->printHealers();
-            //cout << "soldiers before healing: " << endl;
-            //EA->printUMLs();
-            //cout << "tanks before healing: " << endl;
-            //EA->printUMLt();
-            ////check for healers
-            //#pragma endregion
 
             #pragma region "heal & increment Uj"
             earthHealer* healer;
@@ -219,6 +208,17 @@ void Game::go() {
 
         
         cout << "End simulation" << endl;
+        switch (*this->Result){
+        case 0: cout << "=============== Game ended in a draw ==============="<<endl;
+            break;
+
+        case 1:cout << "=============== Earth has won the war ===============" << endl;
+            break;
+
+        case 2:cout << "============== Aliens have won the war ==============" << endl;
+            break;
+
+        }
         string s;
         cin>>s;
         //produce output file
