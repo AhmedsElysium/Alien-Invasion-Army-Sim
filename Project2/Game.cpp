@@ -248,6 +248,7 @@ void Game::go() {
             break;
 
         }
+        writing(this);
         string s;
         cin>>s;
         //produce output file
@@ -257,7 +258,6 @@ void Game::go() {
     catch (string s) {
         cout << s;
     }
-    writing(this);
 
 }
 
